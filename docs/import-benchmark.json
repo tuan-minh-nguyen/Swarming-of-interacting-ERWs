@@ -1,0 +1,50 @@
+[
+  {
+    "variant": "full",
+    "run": 1,
+    "wall_seconds": 24.92,
+    "peak_rss_kib": 5690860,
+    "import_profile": "20s",
+    "exit_code": 0
+  },
+  {
+    "variant": "full",
+    "run": 2,
+    "wall_seconds": 21.28,
+    "peak_rss_kib": 5675908,
+    "import_profile": "17.3s",
+    "exit_code": 0
+  },
+  {
+    "variant": "full",
+    "run": 3,
+    "wall_seconds": 23.95,
+    "peak_rss_kib": 5630760,
+    "import_profile": "19.9s",
+    "exit_code": 0
+  },
+  {
+    "variant": "narrow",
+    "run": 1,
+    "wall_seconds": 4.96,
+    "peak_rss_kib": 1859808,
+    "import_profile": "1.04s",
+    "exit_code": 0
+  },
+  {
+    "variant": "narrow",
+    "run": 2,
+    "wall_seconds": 4.97,
+    "peak_rss_kib": 1851728,
+    "import_profile": "846ms",
+    "exit_code": 0
+  },
+  {
+    "variant": "narrow",
+    "run": 3,
+    "wall_seconds": 4.83,
+    "peak_rss_kib": 1860804,
+    "import_profile": "907ms",
+    "exit_code": 0
+  }
+]
