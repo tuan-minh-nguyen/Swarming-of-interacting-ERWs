@@ -18,10 +18,11 @@ $$
 | Module | Main result |
 | --- | --- |
 | [ArithmeticRenewal.lean](../SwarmDiameter/ArithmeticRenewal.lean) | `renewalMass_tendsto` and `renewalReward_tendsto_mean` prove the renewal limit and its convolution with an absolutely summable sequence. |
-| [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | `occupationLaw_real_apply` identifies the normalized occupation measure on every measurable set. |
+| [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | `occupationLaw_real_apply` identifies the normalized occupation measure on every measurable set. `occupationLaw_real_apply_lintegral` represents its numerator as the expected number of visits. |
 | [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean) | `renewalMass_eq_sum_renewalTime_prob` identifies the renewal mass with the arrival probabilities. The last-renewal partition in `observation_prob_eq_renewalReward` leads to `tendstoInDistribution_occupationLaw`. |
-| [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean) | `observation_prob_tendsto_of_first_interval` proves the occupation limit from the first-regeneration factorization. |
+| [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean) | `observation_prob_tendsto_of_first_interval` proves the occupation limit from the first-regeneration factorization. `observation_prob_le_occupation_of_first_interval` also bounds the probability of each observation by the expected count. |
 | [DelayedRenewal.lean](../SwarmDiameter/DelayedRenewal.lean) | `observation_prob_tendsto_of_delay` transfers the limiting probabilities through an almost surely finite initial regeneration. |
+| [TailBounds.lean](../SwarmDiameter/TailBounds.lean) | `ae_log_pow_upper_of_tail` proves the logarithmic upper bound from a stretched-exponential probability bound for the running maximum. |
 | [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | `KacFormula.iIndepFun_of_fresh` proves mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
 
 For the swarm application, the intervals and observations must be identified
@@ -41,9 +42,9 @@ With the pinned Mathlib artifacts available, run
 bash scripts/verify_diameter_support.sh
 ```
 
-[GitHub Actions run 44884167585](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44884167585)
+[GitHub Actions run 44885617630](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44885617630)
 built the support modules with Lean 4.33.1 and Mathlib
-`0df444a360eaa60ab8c11dca51a86af692955474`. Lean replayed and audited 217
+`0df444a360eaa60ab8c11dca51a86af692955474`. Lean replayed and audited 235
 declarations at trust level zero. The source inventory check and all ten
 verification-tool tests passed. The swarm-specific proof of the diameter
 theorem is in development.

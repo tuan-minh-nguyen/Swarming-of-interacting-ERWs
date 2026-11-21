@@ -11,6 +11,7 @@ modules=(
   SwarmDiameter/DelayedRenewal
   SwarmDiameter/FirstInterval
   SwarmDiameter/FirstIntervalOccupation
+  SwarmDiameter/TailBounds
   SwarmDiameter/RenewalProcess
   SwarmDiameter/RegenerationBlocks
 )
