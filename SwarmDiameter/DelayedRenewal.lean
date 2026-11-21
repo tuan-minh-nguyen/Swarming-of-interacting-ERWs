@@ -33,8 +33,56 @@ private theorem measureReal_delay_tail_tendsto {μ : Measure Ω} [IsProbabilityM
   have h := tendsto_measure_iInter_atTop (μ := μ) (fun n => (hm n).nullMeasurableSet)
     hanti ⟨0, measure_ne_top _ _⟩
   rw [hi, measure_empty] at h
-  simpa only [Function.comp_apply, measureReal_def, ENNReal.toReal_zero, A] using
+  have hreal : Tendsto (fun n => (μ (A n)).toReal) atTop (𝓝 ((0 : ℝ≥0∞).toReal)) :=
     (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp h
+  simpa only [measureReal_def, ENNReal.toReal_zero, A] using hreal
+
+/-- Partition the probability at time `n` by the first renewal time. -/
+theorem observation_prob_eq_delay {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {ν : Measure Ω'} [IsProbabilityMeasure ν] {T : Ω → ℕ} {X : ℕ → Ω → E}
+    {Y : ℕ → Ω' → E} {A : Set E}
+    (hT : Measurable T) (hX : ∀ n, Measurable (X n)) (hA : MeasurableSet A)
+    (hfactor : ∀ t k : ℕ, μ.real {ω | T ω = t ∧ X (t + k) ω ∈ A} =
+      μ.real {ω | T ω = t} * ν.real {ω | Y k ω ∈ A})
+    (n : ℕ) :
+    μ.real {ω | X n ω ∈ A} = μ.real {ω | n < T ω ∧ X n ω ∈ A} +
+      ∑ t ∈ range (n + 1), μ.real {ω | T ω = t} * ν.real {ω | Y (n - t) ω ∈ A} := by
+  let r := μ.real {ω | n < T ω ∧ X n ω ∈ A}
+  let f (t : ℕ) := μ.real {ω | T ω = t}
+  let u (t : ℕ) := ν.real {ω | Y t ω ∈ A}
+  change _ = r + ∑ t ∈ range (n + 1), f t * u (n - t)
+  let B (t : ℕ) := {ω | T ω = t ∧ X n ω ∈ A}
+  have hp : {ω | X n ω ∈ A} =
+      {ω | n < T ω ∧ X n ω ∈ A} ∪ ⋃ t ∈ range (n + 1), B t := by
+    ext ω
+    simp only [Set.mem_ofPred_eq, Set.mem_union, Set.mem_iUnion, Finset.mem_range, B]
+    constructor
+    · intro h
+      by_cases ht : n < T ω
+      · exact Or.inl ⟨ht, h⟩
+      · exact Or.inr ⟨T ω, by omega, rfl, h⟩
+    · rintro (⟨_, h⟩ | ⟨t, ht, he, h⟩) <;> exact h
+  have hd : Disjoint {ω | n < T ω ∧ X n ω ∈ A}
+      (⋃ t ∈ range (n + 1), B t) := by
+    apply Set.disjoint_left.mpr
+    intro ω hlate hearly
+    have hgt : n < T ω := hlate.1
+    simp only [Set.mem_iUnion, Finset.mem_range, B, Set.mem_ofPred_eq] at hearly
+    obtain ⟨t, ht, heq, _⟩ := hearly
+    omega
+  have hm (t : ℕ) : MeasurableSet (B t) :=
+    (measurableSet_singleton t).preimage hT |>.inter (hX n hA)
+  have hdisj : PairwiseDisjoint (↑(range (n + 1))) B := by
+    intro t _ v _ hne
+    exact Set.disjoint_left.mpr (fun ω ht hv => hne (ht.1.symm.trans hv.1))
+  have hmeas : MeasurableSet (⋃ t ∈ range (n + 1), B t) :=
+    MeasurableSet.iUnion (fun t => MeasurableSet.iUnion (fun _ => hm t))
+  rw [hp, measureReal_union hd hmeas (measure_ne_top _ _) (measure_ne_top _ _),
+    measureReal_biUnion_finset hdisj (fun t _ => hm t) (fun _ _ => measure_ne_top _ _)]
+  refine congrArg (r + ·) (sum_congr rfl fun t ht => ?_)
+  have htn : t ≤ n := by simpa only [Finset.mem_range, Nat.lt_succ_iff] using ht
+  have htadd : t + (n - t) = n := by omega
+  simpa only [B, htadd, f, u] using hfactor t (n - t)
 
 /-- Transfer a limit of event probabilities through a random finite initial delay. -/
 theorem observation_prob_tendsto_of_delay {μ : Measure Ω} [IsProbabilityMeasure μ]
@@ -68,40 +116,9 @@ theorem observation_prob_tendsto_of_delay {μ : Measure Ω} [IsProbabilityMeasur
     tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
       (measureReal_delay_tail_tendsto hT) (fun _ => measureReal_nonneg)
       (fun n => measureReal_mono (fun _ h => h.1))
-  have heq (n : ℕ) : μ.real {ω | X n ω ∈ A} =
-      r n + ∑ t ∈ range (n + 1), f t * u (n - t) := by
-    let B (t : ℕ) := {ω | T ω = t ∧ X n ω ∈ A}
-    have hp : {ω | X n ω ∈ A} =
-        {ω | n < T ω ∧ X n ω ∈ A} ∪ ⋃ t ∈ range (n + 1), B t := by
-      ext ω
-      simp only [Set.mem_ofPred_eq, Set.mem_union, Set.mem_iUnion, Finset.mem_range, B]
-      constructor
-      · intro h
-        by_cases ht : n < T ω
-        · exact Or.inl ⟨ht, h⟩
-        · exact Or.inr ⟨T ω, by omega, rfl, h⟩
-      · rintro (⟨_, h⟩ | ⟨t, ht, he, h⟩) <;> exact h
-    have hd : Disjoint {ω | n < T ω ∧ X n ω ∈ A}
-        (⋃ t ∈ range (n + 1), B t) := by
-      apply Set.disjoint_left.mpr
-      intro ω hlate hearly
-      have hgt : n < T ω := hlate.1
-      simp only [Set.mem_iUnion, Finset.mem_range, B, Set.mem_ofPred_eq] at hearly
-      obtain ⟨t, ht, heq, _⟩ := hearly
-      omega
-    have hm (t : ℕ) : MeasurableSet (B t) :=
-      (measurableSet_singleton t).preimage hT |>.inter (hX n hA)
-    have hdisj : PairwiseDisjoint (↑(range (n + 1))) B := by
-      intro t _ v _ hne
-      exact Set.disjoint_left.mpr (fun ω ht hv => hne (ht.1.symm.trans hv.1))
-    have hmeas : MeasurableSet (⋃ t ∈ range (n + 1), B t) :=
-      MeasurableSet.iUnion (fun t => MeasurableSet.iUnion (fun _ => hm t))
-    rw [hp, measureReal_union hd hmeas, measureReal_biUnion_finset hdisj (fun t _ => hm t)]
-    refine congrArg (r n + ·) (sum_congr rfl fun t ht => ?_)
-    have htn : t ≤ n := by simpa only [Finset.mem_range, Nat.lt_succ_iff] using ht
-    have htadd : t + (n - t) = n := by omega
-    simpa only [B, htadd, f, u] using hfactor t (n - t)
-  simpa only [← heq, zero_add] using hr.add hconv
+  have h := hr.add hconv
+  rw [zero_add] at h
+  exact h.congr (fun n => (observation_prob_eq_delay hT hX hA hfactor n).symm)
 
 /-- Setwise convergence of observation laws entails convergence in distribution. -/
 theorem tendstoInDistribution_of_observation_prob_tendsto [TopologicalSpace E]
