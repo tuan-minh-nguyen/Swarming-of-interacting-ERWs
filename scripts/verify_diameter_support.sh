@@ -19,6 +19,7 @@ modules=(
   SwarmDiameter/BinomialEndpoint
   SwarmDiameter/ReflectionExcursion
   SwarmDiameter/SymmetricConfinement
+  SwarmDiameter/TrialBounds
   SwarmDiameter/RenewalProcess
   SwarmDiameter/RegenerationBlocks
 )
