@@ -26,13 +26,13 @@ refer to that version. An edge lists a result used in the indicated proof.
 | `Swarming.swarm_diameter` | 112–126, `maxdistance` | Both almost sure bounds, limiting diameter law, both tails, common constants |
 
 The [renewal and occupation modules](DIAMETER-SUPPORT.md) establish the
-general renewal results. To apply them to this model, we can factor at the
-first regeneration time, sum over its level and duration, and solve the
-renewal equation for each diameter event. For the mean duration, the
-existing `SwarmActualNeutral.integrable_selectedT_zero_of_hfull` also
-applies once the selected first block is identified with the first
-regeneration. We can construct its invariant record law from
-`M4Blk.dT_tight` and use `ActualNeutralCapstone.actual_neutral_regenLaw_of_invariant_derived_level`.
+limiting law for the actual swarm. The first regeneration factorization
+applies separately to its level and time. The mean duration follows
+from the existing finite-mean theorem for selected regeneration blocks.
+The lower bounds use positive density of simultaneous records and the
+conditional finite-path estimates in each of the three regimes. The
+conditional failure estimate sums over the first eligible record and
+then removes the time interval covered by that trial.
 
 The existing bound in `M4Blk.paperBadBlockProfile` has exponent $1/16$.
 The sharp record tails and cycle occupation estimates require the
@@ -44,7 +44,7 @@ Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
 Let $\nu$ be the probability measure in equation (4.13) and let $u_s$
 be the probability of a regeneration at time $s$. For every $x\ge0$,
 the last-renewal identity and $0\le u_s\le1$, we have
-$
+$$
 \mathbb P^*(\Delta_n\ge x)
 \le \sum_{t\ge0}\mathbb P^*(T>t,\Delta_t\ge x)
 = \mu\,\nu([x,\infty)).

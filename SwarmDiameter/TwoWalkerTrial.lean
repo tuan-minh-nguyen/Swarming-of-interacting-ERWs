@@ -13,7 +13,7 @@ namespace Swarming.Diameter
 
 variable {p : ℝ} {m : ℕ}
 
-private theorem posPath_eq_of_mem_evWord {N n k : ℕ} [Nonempty (Fin N)]
+theorem posPath_eq_of_mem_evWord {N n k : ℕ} [Nonempty (Fin N)]
     {U : Array N} {ε f : ℕ → Fin N → ℤ}
     (h : U ∈ evWord p m n univ ε k)
     (h₀ : ∀ i, posPath p m U n i = f 0 i)
@@ -62,6 +62,31 @@ private theorem preparation_endpoint (L : ℕ) (hL : 0 < L) :
   · unfold preparation
     simp only [show (1 : Fin 2) ≠ 0 by decide, false_or]
     split_ifs <;> omega
+
+/-- The prescribed displacement at age `t` during the initial `4 * L` steps. -/
+def trialPreparation (L t : ℕ) (trailing : Bool) : ℤ :=
+  preparation L t (if trailing then 1 else 0)
+
+theorem trialPreparation_succ_sub (L t : ℕ) (trailing : Bool) :
+    trialPreparation L (t + 1) trailing - trialPreparation L t trailing = 1 ∨
+    trialPreparation L (t + 1) trailing - trialPreparation L t trailing = -1 := by
+  cases trailing
+  · exact preparationStep_is_unit L t 0
+  · exact preparationStep_is_unit L t 1
+
+@[simp] theorem trialPreparation_false (L t : ℕ) : trialPreparation L t false = (t : ℤ) := by
+  simp [trialPreparation, preparation]
+
+@[simp] theorem trialPreparation_zero (L : ℕ) (trailing : Bool) : trialPreparation L 0 trailing = 0 := by
+  simp [trialPreparation, preparation]
+
+theorem trialPreparation_true_le (L t : ℕ) (ht : t ≤ 4 * L) :
+    trialPreparation L t true ≤ 2 * (L : ℤ) :=
+  preparation_left_le L t ht
+
+theorem trialPreparation_true_end (L : ℕ) (hL : 0 < L) :
+    trialPreparation L (4 * L) true = 2 * (L : ℤ) :=
+  (preparation_endpoint L hL).2
 
 private def pairSteps (k : ℕ) : ((Fin k → Bool) × (Fin k → Bool)) ↪ (Fin k → Fin 2 → Bool) where
   toFun q u i := if i = 0 then !(q.1 u) else q.2 u

@@ -7,7 +7,9 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.linear_trial_at_stopping_time_mass_ge
 #print axioms Swarming.Diameter.two_walker_trial_at_stopping_time_mass_ge
 #print axioms Swarming.Diameter.exists_positive_simultaneousRecordDensity
-#print axioms Swarming.Diameter.exists_diameter_lower_bounds_of_two_or_lt
+#print axioms Swarming.Diameter.exists_leading_walk_trial_mass_ge
+#print axioms Swarming.Diameter.exists_cubic_trial_mass_ge
+#print axioms Swarming.Diameter.exists_diameter_lower_bounds
 
 elab "#audit_swarm_renewal_axioms" : command => do
   let env ← getEnv
