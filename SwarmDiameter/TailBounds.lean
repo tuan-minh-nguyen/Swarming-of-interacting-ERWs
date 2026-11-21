@@ -4,7 +4,6 @@ import Mathlib.MeasureTheory.OuterMeasure.BorelCantelli
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
 
 open Filter MeasureTheory
 open scoped ENNReal Topology
@@ -57,7 +56,6 @@ theorem ae_log_pow_upper_of_tail {μ : Measure Ω} [IsProbabilityMeasure μ]
       congr 1
       dsimp only [b, a]
       field_simp
-      <;> ring
     calc
       _ ≤ ((n : ℝ) + 1) * Real.exp (-c * ((b n) ^ β) ^ (1 / (β : ℝ))) :=
         h₀ _ (hlarge n hn) n

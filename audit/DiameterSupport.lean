@@ -2,6 +2,7 @@ import SwarmDiameter.RenewalProcess
 import SwarmDiameter.FirstIntervalOccupation
 import SwarmDiameter.RegenerationBlocks
 import SwarmDiameter.TailBounds
+import SwarmDiameter.BinomialEndpoint
 import Lean
 
 open Lean Elab Command
@@ -17,6 +18,7 @@ open Lean Elab Command
 #print axioms Swarming.CycleOccupation.observation_prob_tendsto_of_first_interval
 #print axioms Swarming.CycleOccupation.observation_prob_le_occupation_of_first_interval
 #print axioms Swarming.Diameter.ae_log_pow_upper_of_tail
+#print axioms Swarming.Diameter.exp_neg_le_binomial_mass_mul
 
 /-- Check the transitive axiom dependencies in the renewal and regeneration modules. -/
 elab "#audit_diameter_support_axioms" : command => do
@@ -28,7 +30,8 @@ elab "#audit_diameter_support_axioms" : command => do
     `SwarmDiameter.ArithmeticRenewal, `SwarmDiameter.CycleOccupation,
     `SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,
     `SwarmDiameter.DelayedRenewal, `SwarmDiameter.FirstInterval,
-    `SwarmDiameter.FirstIntervalOccupation, `SwarmDiameter.TailBounds]
+    `SwarmDiameter.FirstIntervalOccupation, `SwarmDiameter.TailBounds,
+    `SwarmDiameter.BinomialEndpoint]
   unless project.size == expected.size && project.all (fun name => expected.contains name) do
     throwError "Unexpected project imports {project}"
   let mut checked : Nat := 0

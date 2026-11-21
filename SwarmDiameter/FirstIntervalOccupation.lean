@@ -96,4 +96,24 @@ theorem observation_prob_le_occupation_of_first_interval {μ : Measure Ω} [IsPr
       mul_le_of_le_one_right (show 0 ≤ f t from measureReal_nonneg) (hb (n - t)).2)
     _ ≤ _ := hf.sum_le_tsum _ (fun _ _ => measureReal_nonneg)
 
+/-- The probability of a visit by time `n` is bounded by `n+1` times the
+expected visit count in the first interval. -/
+theorem observation_exceeds_before_prob_le_occupation {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {T : Ω → ℕ} {X : ℕ → Ω → E} (hT : Measurable T) (hX : ∀ t, Measurable (X t))
+    (hfin : (∫⁻ ω, (↑(T ω + 1) : ℝ≥0∞) ∂μ) ≠ ∞) {A : Set E} (hA : MeasurableSet A)
+    (hfactor : ∀ t k : ℕ, μ.real {ω | T ω = t ∧ X (t + 1 + k) ω ∈ A} =
+      μ.real {ω | T ω = t} * μ.real {ω | X k ω ∈ A}) (n : ℕ) :
+    μ.real {ω | ∃ t : ℕ, t ≤ n ∧ X t ω ∈ A} ≤
+      ((n : ℝ) + 1) * ∑' t : ℕ, μ.real {ω | t ≤ T ω ∧ X t ω ∈ A} := by
+  have heq : {ω : Ω | ∃ t : ℕ, t ≤ n ∧ X t ω ∈ A} =
+      ⋃ t ∈ range (n + 1), {ω | X t ω ∈ A} := by
+    ext ω
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Finset.mem_range, Nat.lt_succ_iff]
+  rw [heq]
+  calc
+    _ ≤ ∑ t ∈ range (n + 1), μ.real {ω | X t ω ∈ A} := measureReal_biUnion_finset_le _ _
+    _ ≤ ∑ _ ∈ range (n + 1), ∑' t : ℕ, μ.real {ω | t ≤ T ω ∧ X t ω ∈ A} :=
+      sum_le_sum (fun t _ => observation_prob_le_occupation_of_first_interval hT hX hfin hA hfactor t)
+    _ = _ := by simp [nsmul_eq_mul, Nat.cast_add]
+
 end Swarming.CycleOccupation

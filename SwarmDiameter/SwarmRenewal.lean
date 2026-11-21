@@ -70,8 +70,10 @@ private theorem real_prob_firstTime_factor {μ : Measure (Array N)} [IsProbabili
     apply propext
     change ((U ∈ {V : Array N | firstTime p m V = t}) ∧
       pathDiameter (t + k) (posPath p m U) ∈ A) ↔ U ∈ ⋃ d, R d
-    rw [hU]
-    simp only [Set.mem_iUnion, R, rawFirstCell_with_diameter, Set.mem_inter_iff,
+    have htime : firstTime p m U = t ↔ U ∈ ⋃ d, S d := Iff.of_eq hU
+    change (firstTime p m U = t ∧ pathDiameter (t + k) (posPath p m U) ∈ A) ↔ U ∈ ⋃ d, R d
+    rw [htime]
+    simp only [Set.mem_iUnion, R, B, rawFirstCell_with_diameter, Set.mem_inter_iff,
       Set.mem_ofPred_eq]
     change ((∃ d, U ∈ S d) ∧ pathDiameter (t + k) (posPath p m U) ∈ A) ↔
       ∃ d, U ∈ S d ∧ pathDiameter (t + k) (posPath p m U) ∈ A
@@ -99,14 +101,14 @@ private theorem seedCond_firstCell_factor (hN : 0 < N)
     (hV : arrayMeasure N (SwarmFB.seedSet (p := p) (m := m) (N := N)) ≠ 0)
     (q : LevelTime) {B : Set (ℕ → Fin N → ℤ)} (hB : MeasurableSet B) :
     SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q B) =
-      SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q univ) *
+      SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q Set.univ) *
         normalizedStrictLaw p m N B := by
   let ν := SwarmFB.seedCond (p := p) (m := m) (N := N)
   letI : IsProbabilityMeasure ν := SwarmFB.seedCond_isProbabilityMeasure hV
   have hf (A : Set (ℕ → Fin N → ℤ)) (hA : MeasurableSet A) :
       ν (rawFirstCell p m q A) =
         firstBlockLowMass (N := N) p m q * normalizedStrictLaw p m N A := by
-    change SwarmFB.seedCond (rawFirstCell p m q A) = _
+    change SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q A) = _
     rw [SwarmFB.seedCond_apply SwarmFB.measurableSet_seedSet, rawFirstCell_inter_seed q hN,
       FirstBlockFuture, SwarmRawTimeStrict.array_firstBlock_future_mass p m q.1.1 q.1.2 q.2 hA,
       normalizedStrictLaw_apply p m N hA]
@@ -184,7 +186,7 @@ private theorem seedCond_firstTime_eq_one_pos (hN : 0 < N)
   have hlow : 0 < firstBlockLowMass (N := N) p m q :=
     (pos_iff_ne_zero.mpr hV).trans_le (measure_mono hC)
   have hcell : ν (rawFirstCell p m q Set.univ) = firstBlockLowMass (N := N) p m q := by
-    change SwarmFB.seedCond (rawFirstCell p m q Set.univ) = _
+    change SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q Set.univ) = _
     rw [SwarmFB.seedCond_apply SwarmFB.measurableSet_seedSet, rawFirstCell_inter_seed q hN,
       FirstBlockFuture, SwarmRawTimeStrict.array_firstBlock_future_mass p m q.1.1 q.1.2 q.2
         MeasurableSet.univ]
