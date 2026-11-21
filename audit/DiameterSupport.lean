@@ -1,4 +1,5 @@
 import SwarmDiameter.RenewalProcess
+import SwarmDiameter.FirstInterval
 import SwarmDiameter.RegenerationBlocks
 import Lean
 
@@ -9,6 +10,8 @@ open Lean Elab Command
 #print axioms Swarming.CycleOccupation.observation_prob_eq_renewalReward
 #print axioms Swarming.CycleOccupation.tendstoInDistribution_occupationLaw
 #print axioms KacFormula.iIndepFun_of_fresh
+#print axioms Swarming.ArithmeticRenewal.eq_renewalReward_of_first_interval
+#print axioms Swarming.CycleOccupation.observation_prob_tendsto_of_delay
 
 /-- Check the transitive axiom dependencies in the renewal and regeneration modules. -/
 elab "#audit_diameter_support_axioms" : command => do
@@ -18,7 +21,8 @@ elab "#audit_diameter_support_axioms" : command => do
   let expected := #[
     `Swarm.Imports, `Swarm.KacDisjoint, `Swarm.RegenIid,
     `SwarmDiameter.ArithmeticRenewal, `SwarmDiameter.CycleOccupation,
-    `SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks]
+    `SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,
+    `SwarmDiameter.DelayedRenewal, `SwarmDiameter.FirstInterval]
   unless project.size == expected.size && project.all (fun name => expected.contains name) do
     throwError "Unexpected project imports {project}"
   let mut checked : Nat := 0
