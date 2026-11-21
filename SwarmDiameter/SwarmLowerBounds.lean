@@ -1,3 +1,4 @@
+import SwarmDiameter.CubicTrial
 import SwarmDiameter.LinearTrial
 import SwarmDiameter.MaxGrowth
 import SwarmDiameter.RecordDensity
@@ -35,11 +36,11 @@ private theorem measurable_diameter_enl (t : ℕ) :
 
 private theorem ae_log_pow_lower_of_swarm_trials
     (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N)
-    (β : ℕ) {C P : ℝ} (hC : 0 < C) (hP : 0 < P) (L₀ : ℕ)
+    (β : ℕ) {a C P : ℝ} (ha : 0 < a) (hC : 0 < C) (hP : 0 < P) (L₀ : ℕ)
     (d : ℕ → ℕ) (hd₀ : ∀ L ≥ L₀, 0 < d L) (hd : ∀ L ≥ L₀, (d L : ℝ) ≤ P * (L : ℝ) ^ 3)
     (htrial : ∀ L ≥ L₀, ∀ t {G}, MeasurableSet[enlMeas p m t] G →
       G ⊆ recordEvent p m N t → Real.exp (-C * (L : ℝ)) * (arrayMeasure N).real G ≤
-        (arrayMeasure N).real (G ∩ {U | (L : ℝ) ^ β ≤ pathDiameter (t + d L) (posPath p m U)})) :
+        (arrayMeasure N).real (G ∩ {U | a * (L : ℝ) ^ β ≤ pathDiameter (t + d L) (posPath p m U)})) :
     ∃ a : ℝ, 0 < a ∧ ∀ᵐ U ∂arrayMeasure N, ∀ᶠ n : ℕ in atTop,
       a * (Real.log (n : ℝ)) ^ β ≤ runningDiameter n (posPath p m U) := by
   obtain ⟨ρ, hρ, _, hρraw⟩ := exists_positive_simultaneousRecordDensity hp₀ hp₁ hm hN
@@ -50,9 +51,15 @@ private theorem ae_log_pow_lower_of_swarm_trials
     (fun t => measurableSet_simultaneousRecordAt_enl p m t) hρ hρ'
     measurable_diameter_enl (fun n k U h => runningDiameter_mono h (posPath p m U))
     (fun n U => pathDiameter_le_runningDiameter (t := n) le_rfl (posPath p m U))
-    β (a := 1) one_pos hC hP L₀ d hd₀ hd ?_
-  intro L hL t G hG hsub
-  simpa only [one_mul] using htrial L hL t hG hsub
+    β ha hC hP L₀ d hd₀ hd htrial
+
+private theorem cubic_duration_le (L : ℕ) (hL : 1 ≤ L) :
+    (↑(4 * L + L ^ 3 : ℕ) : ℝ) ≤ 5 * (L : ℝ) ^ 3 := by
+  have h₁ : (1 : ℝ) ≤ L := by exact_mod_cast hL
+  have h : (L : ℝ) ≤ (L : ℝ) ^ (3 : ℕ) := by
+    simpa only [pow_one] using pow_le_pow_right₀ h₁ (by decide : (1 : ℕ) ≤ 3)
+  push_cast
+  linarith
 
 /-- The almost sure lower bound in Theorem 1.2 for two walkers or for a threshold
 below the population. -/
@@ -66,26 +73,24 @@ theorem ae_log_pow_lower_of_two_or_lt
   rcases hregime with htwo | hlt
   · subst N
     apply ae_log_pow_lower_of_swarm_trials hp₀ hp₁ hm hN 2
-      (C := 16 - 8 * Real.log (1 - p)) (P := 5) (by linarith) (by norm_num) 8 (fun L => 4 * L + L ^ 3)
+      (a := 1) (C := 16 - 8 * Real.log (1 - p)) (P := 5)
+      one_pos (by linarith) (by norm_num) 8 (fun L => 4 * L + L ^ 3)
     · intro L hL
       positivity
     · intro L hL
-      have h₁ : (1 : ℝ) ≤ L := by exact_mod_cast (show 1 ≤ L by omega)
-      have h : (L : ℝ) ≤ (L : ℝ) ^ (3 : ℕ) := by
-        simpa only [pow_one] using pow_le_pow_right₀ h₁ (by decide : (1 : ℕ) ≤ 3)
-      push_cast
-      linarith
+      exact cubic_duration_le L (by omega)
     · intro L hL t G hG hsub
       have h := two_walker_exp_trial_mass_ge hp₀ hp₁ hm t hL hG (fun U hU => by
         obtain ⟨r, hr⟩ := hsub hU
         exact ⟨r, hr⟩)
       apply h.trans (measureReal_mono ?_ (measure_ne_top _ _))
       rintro U ⟨hU, hD⟩
-      exact ⟨hU, (le_add_of_nonneg_right (Nat.cast_nonneg (α := ℝ) L)).trans hD⟩
+      exact ⟨hU, by simpa only [Set.mem_ofPred_eq, one_mul] using
+        (le_add_of_nonneg_right (Nat.cast_nonneg (α := ℝ) L)).trans hD⟩
   · have hne : N ≠ 2 := by omega
     simp only [if_neg hne]
     apply ae_log_pow_lower_of_swarm_trials hp₀ hp₁ hm hN 1
-      (C := -2 * Real.log (1 - p)) (P := 1) (by linarith) one_pos 1 id
+      (a := 1) (C := -2 * Real.log (1 - p)) (P := 1) one_pos (by linarith) one_pos 1 id
     · intro L hL
       exact zero_lt_one.trans_le hL
     · intro L hL
@@ -104,16 +109,43 @@ theorem ae_log_pow_lower_of_two_or_lt
       apply h'.trans (measureReal_mono ?_ (measure_ne_top _ _))
       rintro U ⟨hU, hD⟩
       refine ⟨hU, ?_⟩
-      change (L : ℝ) ^ (1 : ℕ) ≤ pathDiameter (t + L) (posPath p m U)
+      change 1 * (L : ℝ) ^ (1 : ℕ) ≤ pathDiameter (t + L) (posPath p m U)
       change 2 * (L : ℝ) ≤ pathDiameter (t + L) (posPath p m U) at hD
       rw [pow_one]
       linarith [Nat.cast_nonneg (α := ℝ) L]
 
-/-- The lower bounds for the running maximum and the limiting tail in the
-two-walker and below-population regimes. The two bounds share one constant. -/
-theorem exists_diameter_lower_bounds_of_two_or_lt
-    (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N) (hregime : N = 2 ∨ m < N) :
-    let β : ℕ := if N = 2 then 2 else 1
+/-- The almost sure logarithmic lower bound in all three regimes of Theorem 1.2. -/
+theorem ae_log_pow_lower
+    (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N) :
+    let β : ℕ := if N = 2 then 2 else if m < N then 1 else 3
+    ∃ a : ℝ, 0 < a ∧ ∀ᵐ U ∂arrayMeasure N, ∀ᶠ n : ℕ in atTop,
+      a * (Real.log (n : ℝ)) ^ β ≤ runningDiameter n (posPath p m U) := by
+  by_cases ht : N = 2
+  · simpa only [if_pos ht] using ae_log_pow_lower_of_two_or_lt hp₀ hp₁ hm hN (Or.inl ht)
+  by_cases hl : m < N
+  · simpa only [if_neg ht, if_pos hl] using ae_log_pow_lower_of_two_or_lt hp₀ hp₁ hm hN (Or.inr hl)
+  simp only [if_neg ht, if_neg hl]
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero (show N ≠ 0 by omega)
+  have hn : 2 ≤ n := by omega
+  obtain ⟨a, C, ha, hc, h⟩ := exists_cubic_trial_mass_ge (N := n) hp₀ hp₁ hn (by omega : n + 1 ≤ m)
+  obtain ⟨J, hJ⟩ := eventually_atTop.mp h
+  apply ae_log_pow_lower_of_swarm_trials hp₀ hp₁ hm hN 3 ha hc
+    (P := 5) (by norm_num) (max J 1) (fun L => 4 * L + L ^ 3)
+  · intro L hL
+    have h₁ := (le_max_right J 1).trans hL
+    positivity
+  · intro L hL
+    exact cubic_duration_le L ((le_max_right _ _).trans hL)
+  · intro L hL t G hG hGrec
+    exact hJ L ((le_max_left _ _).trans hL) t hG (fun U hU => by
+      obtain ⟨r, hr⟩ := hGrec hU
+      exact ⟨r, hr⟩)
+
+/-- The lower bounds for the running maximum and the limiting tail in
+Theorem 1.2, with a common constant. -/
+theorem exists_diameter_lower_bounds
+    (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N) :
+    let β : ℕ := if N = 2 then 2 else if m < N then 1 else 3
     let Δ := fun n (U : Array N) => pathDiameter n (posPath p m U)
     ∃ (C : ℝ) (ν : ProbabilityMeasure ℝ), 1 ≤ C ∧
       (∀ᵐ U ∂arrayMeasure N, ∀ᶠ n : ℕ in atTop,
@@ -121,14 +153,14 @@ theorem exists_diameter_lower_bounds_of_two_or_lt
       (∀ᵐ x ∂ν.toMeasure, 0 ≤ x) ∧
       TendstoInDistribution Δ atTop (id : ℝ → ℝ) (fun _ => arrayMeasure N) ν.toMeasure ∧
       ∀ᶠ x : ℝ in atTop, Real.exp (-C * x ^ (1 / (β : ℝ))) ≤ ν.toMeasure.real (Set.Ici x) := by
-  let β : ℕ := if N = 2 then 2 else 1
+  let β : ℕ := if N = 2 then 2 else if m < N then 1 else 3
   let Δ := fun n (U : Array N) => pathDiameter n (posPath p m U)
   let M := fun n (U : Array N) => runningDiameter n (posPath p m U)
   let μstar := SwarmFB.seedCond (p := p) (m := m) (N := N)
   have hV : arrayMeasure N (SwarmFB.seedSet (p := p) (m := m) (N := N)) ≠ 0 :=
     SwarmSeed.strictPos_measure_ne_zero hp₀ hp₁ hm hN
   let _ : IsProbabilityMeasure μstar := SwarmFB.seedCond_isProbabilityMeasure hV
-  obtain ⟨a, ha, hlow⟩ := ae_log_pow_lower_of_two_or_lt hp₀ hp₁ hm hN hregime
+  obtain ⟨a, ha, hlow⟩ := ae_log_pow_lower hp₀ hp₁ hm hN
   obtain ⟨ν, hnonneg, hweak, hformula⟩ := exists_diameter_occupationLaw hp₀ hp₁ hm hN
   let K := (∫⁻ U, (↑(RawStrictTransport.firstTime p m U) : ℝ≥0∞) ∂μstar).toReal
   have hK : 0 < K := by
@@ -186,5 +218,22 @@ theorem exists_diameter_lower_bounds_of_two_or_lt
           Real.exp_add, Real.exp_log hK]
       _ ≤ Real.exp (-c * x ^ r) := Real.exp_le_exp.mpr (by nlinarith)
       _ ≤ _ := hx
+
+/-- The lower bounds specialized to two walkers or a threshold below the population. -/
+theorem exists_diameter_lower_bounds_of_two_or_lt
+    (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N) (hregime : N = 2 ∨ m < N) :
+    let β : ℕ := if N = 2 then 2 else 1
+    let Δ := fun n (U : Array N) => pathDiameter n (posPath p m U)
+    ∃ (C : ℝ) (ν : ProbabilityMeasure ℝ), 1 ≤ C ∧
+      (∀ᵐ U ∂arrayMeasure N, ∀ᶠ n : ℕ in atTop,
+        C⁻¹ * (Real.log (n : ℝ)) ^ β ≤ runningDiameter n (posPath p m U)) ∧
+      (∀ᵐ x ∂ν.toMeasure, 0 ≤ x) ∧
+      TendstoInDistribution Δ atTop (id : ℝ → ℝ) (fun _ => arrayMeasure N) ν.toMeasure ∧
+      ∀ᶠ x : ℝ in atTop, Real.exp (-C * x ^ (1 / (β : ℝ))) ≤ ν.toMeasure.real (Set.Ici x) := by
+  have h := exists_diameter_lower_bounds hp₀ hp₁ hm hN
+  rcases hregime with ht | hl
+  · simpa only [if_pos ht] using h
+  · have ht : N ≠ 2 := by omega
+    simpa only [if_neg ht, if_pos hl] using h
 
 end Swarming.Diameter

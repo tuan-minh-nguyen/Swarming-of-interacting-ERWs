@@ -27,13 +27,14 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | Mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
 | [RecordDensity.lean](../SwarmDiameter/RecordDensity.lean) | Positive lower density of simultaneous records under both laws. |
 | [TwoWalkerTrial.lean](../SwarmDiameter/TwoWalkerTrial.lean) | At a simultaneous record the conditional probability of diameter at least $L^2+L$ after $4L+L^3$ steps is at least $e^{-CL}$ for $L\ge8$. |
-| [SwarmLowerBounds.lean](../SwarmDiameter/SwarmLowerBounds.lean) | The almost sure lower bound and lower tail of Theorem 1.2 for $N=2$ and for $m<N$, with one constant for both lower bounds. |
+| [CubicTrial.lean](../SwarmDiameter/CubicTrial.lean) | For $m\ge N\ge3$, the conditional probability of diameter at least $aL^3$ after $4L+L^3$ steps from a simultaneous record is at least $e^{-CL}$ for large $L$. |
+| [SwarmLowerBounds.lean](../SwarmDiameter/SwarmLowerBounds.lean) | The almost sure lower bound and limiting lower tail of Theorem 1.2 in all three regimes, with one constant for both lower bounds. |
 | [LinearTrial.lean](../SwarmDiameter/LinearTrial.lean) | From a common position at a stopping time $S$, the probability of $\Delta_{S+L}\ge2L$ conditional on the past is at least $(1-p)^{2L}$, expressed by integration on each past event. |
 | [SymmetricConfinement.lean](../SwarmDiameter/SymmetricConfinement.lean), [ReflectionExcursion.lean](../SwarmDiameter/ReflectionExcursion.lean) | Finite symmetric-walk path counts for confinement and for an excursion to $L^2$ in $L^3$ steps above $-L$. |
 | [TailBounds.lean](../SwarmDiameter/TailBounds.lean) | Borel–Cantelli upper bound and lower-tail transfer from an almost sure lower bound, with the finite-horizon probability estimates stated as premises. |
 
-The remaining parts of Theorem 1.2 are the sharp upper estimate on the
-occupation count in all regimes and the lower bounds when $N\ge3$ and $m\ge N$. The earlier estimate in
+The upper-bound part of Theorem 1.2 remains open in Lean. The sharp upper
+estimates for the record intervals are needed for the occupation count. The earlier estimate in
 `M4Blk.paperBadBlockProfile` has exponent $1/16$ and supplies the tightness
 used for the qualitative limit.
 
@@ -50,11 +51,11 @@ bash scripts/verify_diameter_support.sh
 
 With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
 the replay checked 525 declarations in the renewal, trial bounds and
-symmetric-walk modules and 374 in the swarm model check. Every imported
+symmetric-walk modules and 450 in the swarm model check. Every imported
 declaration in the audited modules depends only on standard Lean axioms.
 The source inventory check and all ten verification-tool tests passed.
-[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44934210280/job/136937195643).
-[Swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44934210280/job/136937196002).
+[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436842).
+[Swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436251).
 
 ## References
 
