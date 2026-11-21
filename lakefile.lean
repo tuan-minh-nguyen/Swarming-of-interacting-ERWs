@@ -8,3 +8,6 @@ require mathlib from git
 
 @[default_target]
 lean_lib Swarm
+
+lean_lib SwarmDiameter where
+  roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks]

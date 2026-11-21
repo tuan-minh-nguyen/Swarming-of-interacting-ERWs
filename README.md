@@ -55,6 +55,12 @@ axiom coverage, and [release review](docs/RELEASE-REVIEW.md). The
 [elaboration report](docs/ELABORATION_REPORT_2026-11-14.md) records the measured
 import improvement and the full-build methodology.
 
+## Diameter theorem
+
+The [renewal and occupation proofs](docs/DIAMETER-SUPPORT.md) support the
+formalisation of Theorem 1.2. The swarm-specific application and the sharp
+diameter estimates remain to be proved in Lean.
+
 ## Source correspondence
 
 The reference is the supplied `main_1d_revised.tex`, identified by SHA-256
