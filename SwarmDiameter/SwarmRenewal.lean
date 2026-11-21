@@ -33,7 +33,9 @@ private theorem rawFirstCell_inter_seed (q : LevelTime) (hN : 0 < N)
       U ∈ rawFirstCell p m q Set.univ ∧ relFuture p m U q.1.2 (q.1.1 : ℤ) ∈ B := by
     rw [mem_rawFirstCell p m q B U, mem_rawFirstCell p m q Set.univ U]
     simp only [Set.mem_univ, and_true, and_assoc]
-  rw [Set.mem_inter_iff, h, rawFirstCell_univ_iff_D_tau p m q hN U] <;> rfl
+  rw [Set.mem_inter_iff, h, rawFirstCell_univ_iff_D_tau p m q hN U,
+    FirstBlockFuture, Set.mem_ofPred_eq, SwarmFB.seedSet, Set.mem_ofPred_eq]
+  exact and_congr_right (fun _ => and_assoc)
 
 private theorem real_prob_firstTime_factor {μ : Measure (Array N)} [IsProbabilityMeasure μ]
     (hN : 0 < N) (hD : ∀ᵐ U ∂μ, RegenPath.D (posPath p m U) ≠ ⊤)
@@ -104,7 +106,7 @@ private theorem seedCond_firstCell_factor (hN : 0 < N)
       SwarmFB.seedCond (p := p) (m := m) (N := N) (rawFirstCell p m q Set.univ) *
         normalizedStrictLaw p m N B := by
   let ν := SwarmFB.seedCond (p := p) (m := m) (N := N)
-  letI : IsProbabilityMeasure ν := SwarmFB.seedCond_isProbabilityMeasure hV
+  let _ : IsProbabilityMeasure ν := SwarmFB.seedCond_isProbabilityMeasure hV
   have hf (A : Set (ℕ → Fin N → ℤ)) (hA : MeasurableSet A) :
       ν (rawFirstCell p m q A) =
         firstBlockLowMass (N := N) p m q * normalizedStrictLaw p m N A := by
@@ -119,6 +121,7 @@ private theorem seedCond_firstCell_factor (hN : 0 < N)
   change ν (rawFirstCell p m q B) = ν (rawFirstCell p m q Set.univ) * _
   rw [hf B hB, hu]
 
+omit [Nonempty (Fin N)] in
 private theorem firstTime_pos_of_regen {U : Array N} (hN : 0 < N)
     (hU : RegenPath.D (posPath p m U) ≠ ⊤) : 1 ≤ firstTime p m U := by
   obtain ⟨d, t, hd, hD, ht⟩ := (D_ne_top_iff_exists_firstBlock _).mp hU
@@ -163,7 +166,7 @@ private theorem seedCond_firstTime_eq_one_pos (hN : 0 < N)
     (hV : arrayMeasure N (SwarmFB.seedSet (p := p) (m := m) (N := N)) ≠ 0) :
     0 < (SwarmFB.seedCond (p := p) (m := m) (N := N)).real {U | firstTime p m U = 1} := by
   let ν := SwarmFB.seedCond (p := p) (m := m) (N := N)
-  letI : IsProbabilityMeasure ν := SwarmFB.seedCond_isProbabilityMeasure hV
+  let _ : IsProbabilityMeasure ν := SwarmFB.seedCond_isProbabilityMeasure hV
   let q : LevelTime := ⟨(1, 1), by omega⟩
   have hC : SwarmFB.seedSet (p := p) (m := m) (N := N) ⊆
       {U | RegenPath.Cdt (posPath p m U) 1 1} := by
@@ -221,11 +224,11 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
   have hN₀ : 0 < N := by omega
   have hV : arrayMeasure N (SwarmFB.seedSet (p := p) (m := m) (N := N)) ≠ 0 :=
     SwarmSeed.strictPos_measure_ne_zero hp₀ hp₁ hm hN
-  letI : IsProbabilityMeasure μstar := SwarmFB.seedCond_isProbabilityMeasure hV
+  let _ : IsProbabilityMeasure μstar := SwarmFB.seedCond_isProbabilityMeasure hV
   have htight := M4Blk.dT_tight p m hp₀ hp₁ hm N hN
   obtain ⟨π, hπ, hinv⟩ := SwarmDTR.exists_invariant_of_dT_tight hp₀ hp₁
     (by omega : 1 ≤ m) hN₀ htight
-  letI : IsProbabilityMeasure π := hπ
+  let _ : IsProbabilityMeasure π := hπ
   obtain ⟨hfull, _, hreg, _⟩ :=
     ActualNeutralCapstone.actual_neutral_regenLaw_of_invariant_derived_level hp₀ hp₁ hm hN π hinv
   have hfinite : ∀ᵐ U ∂arrayMeasure N, RegenPath.D (posPath p m U) ≠ ⊤ := by
@@ -267,7 +270,7 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     simpa only [Real.enorm_natCast] using h.ne
   have hone : 0 < μstar.real {U | T U = 0} := by
     apply (seedCond_firstTime_eq_one_pos hN₀ hV).trans_le
-    apply measureReal_mono
+    refine measureReal_mono (μ := μstar) ?_ (measure_ne_top μstar _)
     intro U hU
     change firstTime p m U - 1 = 0
     change firstTime p m U = 1 at hU
@@ -290,20 +293,21 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     rw [measureReal_congr heA, measureReal_congr (he t)]
     exact real_prob_firstTime_factor hN₀ hfiniteStar (t + 1) k hA (μstar {U | Δ k U ∈ A})
       (fun q => by
+        change SwarmFB.seedCond (p := p) (m := m) (N := N)
+          (rawFirstCell p m q (pathDiameter k ⁻¹' A)) = _
         rw [seedCond_firstCell_factor hN₀ hV q (measurable_pathDiameter k hA),
           normalizedStrictLaw_eq_seedCond_map,
-          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)]
-        rfl)
+          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)] <;> rfl)
   have hraw (A : Set ℝ) (hA : MeasurableSet A) :
       Tendsto (fun n => (arrayMeasure N).real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) := by
     apply CycleOccupation.observation_prob_tendsto_of_delay htime hΔ hA ?_ (hstar A hA)
     intro t k
     exact real_prob_firstTime_factor hN₀ hfinite t k hA (μstar {U | Δ k U ∈ A})
       (fun q => by
+        change arrayMeasure N (rawFirstCell p m q (pathDiameter k ⁻¹' A)) = _
         rw [rawFirstCell_normalized_mass p m N q hV (measure_ne_top _ _) (measurable_pathDiameter k hA),
           normalizedStrictLaw_eq_seedCond_map,
-          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)]
-        rfl)
+          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)] <;> rfl)
   have hformula (A : Set ℝ) (hA : MeasurableSet A) :
       ν.toMeasure.real A =
         (∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A}) /
