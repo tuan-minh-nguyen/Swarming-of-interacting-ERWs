@@ -1,0 +1,43 @@
+name: Diameter proof checks
+
+on:
+  push:
+    branches: [diameter-proof-development]
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install Lean 4.33.1
+        run: |
+          curl -fsSLo "$RUNNER_TEMP/lean.tar.zst" 'https://github.com/leanprover/lean4/releases/download/v4.33.1/lean-4.33.1-linux.tar.zst'
+          printf '%s  %s\n' '890afd185370f85666025b883914ab4f4b339136f8c96167b69cfb62aecaf235' "$RUNNER_TEMP/lean.tar.zst" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/lean"
+          tar --zstd -xf "$RUNNER_TEMP/lean.tar.zst" --strip-components=1 -C "$RUNNER_TEMP/lean"
+          echo "$RUNNER_TEMP/lean/bin" >> "$GITHUB_PATH"
+      - name: Check source inventory and draft isolation
+        run: |
+          python3 scripts/check_sources.py
+          python3 -m unittest discover -s tests
+          python3 draft/check.py
+      - name: Fetch pinned dependency artifacts
+        run: |
+          lake exe cache get $(awk '/^import Mathlib\./ {print $2}' Swarm/Imports.lean Swarm/Swarming.lean SwarmDiameter/*.lean draft/DiameterAnchor.lean | sort -u)
+      - name: Replay renewal and occupation proofs
+        run: bash scripts/verify_diameter_support.sh
+      - name: Elaborate the approved diameter statement
+        run: |
+          output="$RUNNER_TEMP/diameter-model"
+          mkdir -p "$output/Swarm"
+          export LEAN_PATH="$output:$(lake env printenv LEAN_PATH)"
+          for module in Imports Swarming LocalTime UniformArray Trajectory LeaderDescent; do
+            lean -j1 -o "$output/Swarm/$module.olean" "Swarm/$module.lean"
+          done
+          lean -j1 draft/DiameterAnchor.lean
