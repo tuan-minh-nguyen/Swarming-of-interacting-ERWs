@@ -50,7 +50,8 @@ private theorem sum_range_le_one {p : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k)
   rw [← h]
   exact hs.sum_le_tsum _ (fun k _ => hp k)
 
-private theorem renewalMass_bounds {p : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k)
+/-- Every renewal mass lies in the probability interval. -/
+theorem renewalMass_bounds {p : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k)
     (hs : Summable p) (hsum : ∑' k, p k = 1) :
     ∀ n, 0 ≤ renewalMass p n ∧ renewalMass p n ≤ 1 := by
   intro n

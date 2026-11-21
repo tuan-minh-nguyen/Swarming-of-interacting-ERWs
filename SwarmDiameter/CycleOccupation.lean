@@ -86,7 +86,8 @@ theorem occupationLaw_real_apply (μ : Measure Ω) [IsProbabilityMeasure μ] {T 
     ENNReal.tsum_toReal_eq (fun _ => measure_ne_top μ _), div_eq_mul_inv, mul_comm]
   rfl
 
-private theorem tsum_duration_prob (μ : Measure Ω) [IsProbabilityMeasure μ]
+/-- The masses of the possible durations sum to one. -/
+theorem tsum_duration_prob (μ : Measure Ω) [IsProbabilityMeasure μ]
     {T : Ω → ℕ} (hT : Measurable T) : ∑' t : ℕ, μ {ω | T ω = t} = 1 := by
   let A (t : ℕ) := T ⁻¹' {t}
   change ∑' t : ℕ, μ (A t) = 1
