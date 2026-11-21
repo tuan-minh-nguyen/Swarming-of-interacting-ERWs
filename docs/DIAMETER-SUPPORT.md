@@ -20,6 +20,8 @@ $$
 | [ArithmeticRenewal.lean](../SwarmDiameter/ArithmeticRenewal.lean) | `renewalMass_tendsto` and `renewalReward_tendsto_mean` prove the renewal limit and its convolution with an absolutely summable sequence. |
 | [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | `occupationLaw_real_apply` identifies the normalized occupation measure on every measurable set. |
 | [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean) | `renewalMass_eq_sum_renewalTime_prob` identifies the renewal mass with the arrival probabilities. The last-renewal partition in `observation_prob_eq_renewalReward` leads to `tendstoInDistribution_occupationLaw`. |
+| [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean) | `observation_prob_tendsto_of_first_interval` proves the occupation limit from the first-regeneration factorization. |
+| [DelayedRenewal.lean](../SwarmDiameter/DelayedRenewal.lean) | `observation_prob_tendsto_of_delay` transfers the limiting probabilities through an almost surely finite initial regeneration. |
 | [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | `KacFormula.iIndepFun_of_fresh` proves mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
 
 For the swarm application, the intervals and observations must be identified
@@ -39,13 +41,12 @@ With the pinned Mathlib artifacts available, run
 bash scripts/verify_diameter_support.sh
 ```
 
-All four new proof modules compiled individually with Lean 4.33.1 and Mathlib
-`0df444a360eaa60ab8c11dca51a86af692955474`. The arithmetic renewal module
-passed a trust-level-zero replay and an axiom check of all 54 declarations
-before the source was recovered from the compilation session. The ten
-verification-tool tests passed. A fresh replay of the combined checkout
-remains pending. The source inventory and full build of the original
-formalisation require its complete checkout.
+[GitHub Actions run 44884167585](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44884167585)
+built the support modules with Lean 4.33.1 and Mathlib
+`0df444a360eaa60ab8c11dca51a86af692955474`. Lean replayed and audited 217
+declarations at trust level zero. The source inventory check and all ten
+verification-tool tests passed. The swarm-specific proof of the diameter
+theorem is in development.
 
 ## References
 

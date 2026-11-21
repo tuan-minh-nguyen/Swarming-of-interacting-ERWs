@@ -1,4 +1,5 @@
 import SwarmDiameter.CycleOccupation
+import SwarmDiameter.DelayedRenewal
 import Mathlib.MeasureTheory.Function.ConvergenceInDistribution
 import Mathlib.Probability.IdentDistrib
 
@@ -282,27 +283,8 @@ theorem tendstoInDistribution_occupationLaw [TopologicalSpace E] [OpensMeasurabl
     (h₁ : 0 < μ.real {ω | T (Z 0 ω) = 0}) :
     TendstoInDistribution X atTop (id : E → E) (fun _ => μ)
       (occupationLaw μ (hT.comp (hZ 0)) (fun t => (hY t).comp (hZ 0)) hfin).toMeasure := by
-  let ν := occupationLaw μ (hT.comp (hZ 0)) (fun t => (hY t).comp (hZ 0)) hfin
-  let μs (n : ℕ) : ProbabilityMeasure E :=
-    ⟨μ.map (X n), Measure.isProbabilityMeasure_map (hX n).aemeasurable⟩
-  have hid' : AEMeasurable (id : E → E) ν.toMeasure := measurable_id.aemeasurable
-  refine ⟨fun n => (hX n).aemeasurable, hid', ?_⟩
-  change Tendsto μs atTop (𝓝 (⟨ν.toMeasure.map id,
-    Measure.isProbabilityMeasure_map hid'⟩ : ProbabilityMeasure E))
-  rw [show (⟨ν.toMeasure.map id, Measure.isProbabilityMeasure_map hid'⟩ :
-    ProbabilityMeasure E) = ν from Subtype.ext Measure.map_id]
-  apply tendsto_of_forall_isOpen_le_liminf_nat'
+  apply tendstoInDistribution_of_observation_prob_tendsto hX
   intro A hA
-  have hp := observation_prob_tendsto hZ hT hY hind hid hcycle hfin h₁ hA.measurableSet
-  have hprob (n : ℕ) : (μs n).toMeasure.real A = μ.real {ω | X n ω ∈ A} := by
-    change (μ.map (X n)).real A = _
-    rw [measureReal_def, Measure.map_apply (hX n) hA.measurableSet]
-    rfl
-  have hreal : Tendsto (fun n => (μs n).toMeasure.real A) atTop (𝓝 (ν.toMeasure.real A)) :=
-    hp.congr (fun n => (hprob n).symm)
-  have hlim : Tendsto (fun n => (μs n).toMeasure A) atTop (𝓝 (ν.toMeasure A)) := by
-    simpa only [measureReal_def, ENNReal.ofReal_toReal (measure_ne_top _ _)] using
-      ENNReal.tendsto_ofReal hreal
-  rw [hlim.liminf_eq]
+  exact observation_prob_tendsto hZ hT hY hind hid hcycle hfin h₁ hA
 
 end Swarming.CycleOccupation

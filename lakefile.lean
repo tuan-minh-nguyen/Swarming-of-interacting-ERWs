@@ -10,4 +10,5 @@ require mathlib from git
 lean_lib Swarm
 
 lean_lib SwarmDiameter where
-  roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks]
+  roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,
+    `SwarmDiameter.FirstIntervalOccupation]

@@ -8,6 +8,9 @@ modules=(
   Swarm/RegenIid
   SwarmDiameter/ArithmeticRenewal
   SwarmDiameter/CycleOccupation
+  SwarmDiameter/DelayedRenewal
+  SwarmDiameter/FirstInterval
+  SwarmDiameter/FirstIntervalOccupation
   SwarmDiameter/RenewalProcess
   SwarmDiameter/RegenerationBlocks
 )
