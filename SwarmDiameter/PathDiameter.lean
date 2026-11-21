@@ -15,6 +15,13 @@ theorem pathDiameter_nonneg (n : ℕ) (X : ℕ → Fin N → ℤ) :
   unfold pathDiameter
   exact_mod_cast LeaderDescent.spreadZ_nonneg (fun i t => X t i) n
 
+theorem sub_le_pathDiameter (n : ℕ) (X : ℕ → Fin N → ℤ) (i j : Fin N) :
+    ((X n i - X n j : ℤ) : ℝ) ≤ pathDiameter n X := by
+  unfold pathDiameter LeaderDescent.spreadZ
+  exact_mod_cast sub_le_sub
+    (Finset.le_sup' (X n) (Finset.mem_univ i))
+    (Finset.inf'_le (X n) (Finset.mem_univ j))
+
 theorem measurable_pathDiameter (n : ℕ) :
     Measurable (pathDiameter (N := N) n) := by
   exact (measurable_of_countable (fun f : Fin N → ℤ => pathDiameter 0 (fun _ => f))).comp

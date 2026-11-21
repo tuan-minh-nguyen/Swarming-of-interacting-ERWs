@@ -24,6 +24,7 @@ private theorem rawFirstCell_with_diameter (q : LevelTime) (k : ℕ) (A : Set �
   rw [Set.mem_inter_iff, mem_rawFirstCell p m q _ U, mem_rawFirstCell p m q _ U]
   simp only [Set.mem_univ, and_true, Set.mem_ofPred_eq, pathDiameter_relFuture, and_assoc]
 
+omit [Nonempty (Fin N)] in
 private theorem rawFirstCell_inter_seed (q : LevelTime) (hN : 0 < N)
     (B : Set (ℕ → Fin N → ℤ)) :
     SwarmFB.seedSet (p := p) (m := m) (N := N) ∩ rawFirstCell p m q B =
@@ -203,8 +204,9 @@ private theorem seedCond_firstTime_eq_one_pos (hN : 0 < N)
     (hcell.symm ▸ hlow).trans_le (measure_mono hsub)
   exact ENNReal.toReal_pos hp.ne' (measure_ne_top _ _)
 
-/-- The limiting occupation law in equation (4.13), with convergence
-of the diameter probabilities under both the conditional and original laws. -/
+/-- The limiting occupation law in equation (4.13). The diameter probabilities
+converge under both laws, and the expected visit count in the first interval
+bounds the probability of an observation by a fixed time under the conditional law. -/
 theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1)
     (hm : 2 ≤ m) (hN : 2 ≤ N) :
     let μstar := SwarmFB.seedCond (p := p) (m := m) (N := N)
@@ -213,11 +215,11 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
       (∀ᵐ x ∂ν.toMeasure, 0 ≤ x) ∧
       TendstoInDistribution Δ atTop (id : ℝ → ℝ) (fun _ => arrayMeasure N) ν.toMeasure ∧
       ∀ A : Set ℝ, MeasurableSet A →
-        ν.toMeasure.real A =
-          (∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A}) /
-            (∫⁻ U, (↑(firstTime p m U) : ℝ≥0∞) ∂μstar).toReal ∧
+        let visits := ∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A}
+        ν.toMeasure.real A = visits / (∫⁻ U, (↑(firstTime p m U) : ℝ≥0∞) ∂μstar).toReal ∧
         Tendsto (fun n => μstar.real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) ∧
-        Tendsto (fun n => (arrayMeasure N).real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) := by
+        Tendsto (fun n => (arrayMeasure N).real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) ∧
+        ∀ n : ℕ, μstar.real {U | ∃ t ≤ n, Δ t U ∈ A} ≤ ((n : ℝ) + 1) * visits := by
   let μstar := SwarmFB.seedCond (p := p) (m := m) (N := N)
   let Δ := fun n (U : Array N) => pathDiameter n (posPath p m U)
   change ∃ ν : ProbabilityMeasure ℝ, _
@@ -276,10 +278,9 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     change firstTime p m U = 1 at hU
     rw [hU]
   let ν := CycleOccupation.occupationLaw μstar hT hΔ hfin
-  have hstar (A : Set ℝ) (hA : MeasurableSet A) :
-      Tendsto (fun n => μstar.real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) := by
-    apply CycleOccupation.observation_prob_tendsto_of_first_interval hT hΔ hfin hone hA
-    intro t k
+  have hstar_factor (A : Set ℝ) (hA : MeasurableSet A) (t k : ℕ) :
+      μstar.real {U | T U = t ∧ Δ (t + 1 + k) U ∈ A} =
+        μstar.real {U | T U = t} * μstar.real {U | Δ k U ∈ A} := by
     have he (t : ℕ) : {U | T U = t} =ᵐ[μstar] {U | firstTime p m U = t + 1} := by
       filter_upwards [hTeq] with U hU
       apply propext
@@ -297,7 +298,11 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
           (rawFirstCell p m q (pathDiameter k ⁻¹' A)) = _
         rw [seedCond_firstCell_factor hN₀ hV q (measurable_pathDiameter k hA),
           normalizedStrictLaw_eq_seedCond_map,
-          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)] <;> rfl)
+          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)]
+        rfl)
+  have hstar (A : Set ℝ) (hA : MeasurableSet A) :
+      Tendsto (fun n => μstar.real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) :=
+    CycleOccupation.observation_prob_tendsto_of_first_interval hT hΔ hfin hone hA (hstar_factor A hA)
   have hraw (A : Set ℝ) (hA : MeasurableSet A) :
       Tendsto (fun n => (arrayMeasure N).real {U | Δ n U ∈ A}) atTop (𝓝 (ν.toMeasure.real A)) := by
     apply CycleOccupation.observation_prob_tendsto_of_delay htime hΔ hA ?_ (hstar A hA)
@@ -307,7 +312,19 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
         change arrayMeasure N (rawFirstCell p m q (pathDiameter k ⁻¹' A)) = _
         rw [rawFirstCell_normalized_mass p m N q hV (measure_ne_top _ _) (measurable_pathDiameter k hA),
           normalizedStrictLaw_eq_seedCond_map,
-          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)] <;> rfl)
+          Measure.map_apply (measurable_posPath p m N) (measurable_pathDiameter k hA)]
+        rfl)
+  have hcount (A : Set ℝ) :
+      (∑' t : ℕ, μstar.real {U | t ≤ T U ∧ Δ t U ∈ A}) =
+        ∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A} := by
+    apply tsum_congr
+    intro t
+    apply measureReal_congr
+    filter_upwards [hTeq] with U he
+    apply propext
+    change T U + 1 = firstTime p m U at he
+    change (t ≤ T U ∧ Δ t U ∈ A) ↔ (t < firstTime p m U ∧ Δ t U ∈ A)
+    exact and_congr (by omega) Iff.rfl
   have hformula (A : Set ℝ) (hA : MeasurableSet A) :
       ν.toMeasure.real A =
         (∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A}) /
@@ -317,16 +334,12 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     have hI : (∫⁻ U, (↑(T U + 1) : ℝ≥0∞) ∂μstar) =
         ∫⁻ U, (↑(firstTime p m U) : ℝ≥0∞) ∂μstar :=
       lintegral_congr_ae (hTeq.mono (fun _ he => congrArg (fun n : ℕ => (n : ℝ≥0∞)) he))
-    rw [hI]
-    congr 1
-    apply tsum_congr
-    intro t
-    apply measureReal_congr
-    filter_upwards [hTeq] with U he
-    apply propext
-    change T U + 1 = firstTime p m U at he
-    change (t ≤ T U ∧ Δ t U ∈ A) ↔ (t < firstTime p m U ∧ Δ t U ∈ A)
-    exact and_congr (by omega) Iff.rfl
+    rw [hI, hcount]
+  have hmax (A : Set ℝ) (hA : MeasurableSet A) (n : ℕ) :
+      μstar.real {U | ∃ t ≤ n, Δ t U ∈ A} ≤ ((n : ℝ) + 1) *
+        ∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ Δ t U ∈ A} := by
+    rw [← hcount]
+    exact CycleOccupation.observation_exceeds_before_prob_le_occupation hT hΔ hfin hA (hstar_factor A hA) n
   have hnonneg : ∀ᵐ x ∂ν.toMeasure, 0 ≤ x := by
     rw [ae_iff]
     apply (measureReal_eq_zero_iff (measure_ne_top _ _)).mp
@@ -340,6 +353,6 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
       exact fun h => (not_lt_of_ge (pathDiameter_nonneg t (posPath p m U))) h.2
     simp only [hzero, measureReal_empty, tsum_zero, zero_div]
   exact ⟨ν, hnonneg, CycleOccupation.tendstoInDistribution_of_observation_prob_tendsto hΔ hraw,
-    fun A hA => ⟨hformula A hA, hstar A hA, hraw A hA⟩⟩
+    fun A hA => ⟨hformula A hA, hstar A hA, hraw A hA, hmax A hA⟩⟩
 
 end Swarming.Diameter

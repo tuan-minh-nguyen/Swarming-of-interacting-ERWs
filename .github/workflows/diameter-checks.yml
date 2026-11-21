@@ -103,7 +103,7 @@ jobs:
             export LEAN_PATH="$(cat .scratch/diameter-swarm/lean-path.txt)"
             build=.scratch/diameter-swarm/lib/SwarmDiameter
             mkdir -p "$build"
-            for module in ArithmeticRenewal CycleOccupation DelayedRenewal FirstInterval FirstIntervalOccupation PathDiameter SwarmRenewal; do
+            for module in ArithmeticRenewal CycleOccupation DelayedRenewal FirstInterval FirstIntervalOccupation PathDiameter SwarmRenewal LinearTrial; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean

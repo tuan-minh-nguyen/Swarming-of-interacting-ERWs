@@ -1,14 +1,16 @@
 import SwarmDiameter.SwarmRenewal
+import SwarmDiameter.LinearTrial
 import Lean
 
 open Lean Elab Command
 
 #print axioms Swarming.Diameter.exists_diameter_occupationLaw
+#print axioms Swarming.Diameter.linear_trial_at_stopping_time_mass_ge
 
 elab "#audit_swarm_renewal_axioms" : command => do
   let env ← getEnv
   let modules := env.header.moduleNames
-  let mut checked := 0
+  let mut checked : Nat := 0
   for (name, _) in env.constants.toList do
     if let some idx := env.getModuleIdxFor? name then
       if modules[idx.toNat]!.getRoot == `SwarmDiameter then
