@@ -14,9 +14,9 @@ refer to that version. An edge lists a result used in the indicated proof.
 | Linear record estimate | 1152–1585, `max-linear-block` | Record geometry, minimum occupation estimate, martingale deviation bounds |
 | Record diameter and duration tails | 1586–1638, `record-tail`, `record-duration-tail` | Cubic and linear record estimates, positive speed |
 | First regeneration and translated future | 1640–1771, `regen`, `freshlaw` | Record tightness, strict positivity, finite first regeneration, stopped uniform-array factorization |
-| Mean duration and record occupation | 1772–1818, `record-average`, `record-moment` | Regeneration, record duration tails, strong law, Tonelli |
+| Mean duration and record occupation | 1772–1818, `record-average`, `record-moment` | First-regeneration factorization in levels, arithmetic renewal, record duration tails |
 | Two-walker diameter estimate | 1850–1993, `max-two-local-bound` | Dominating potentials, spatial sum bounds, optional stopping, martingale deviation bounds |
-| Upper bound for cycle occupation | 1997–2070, `max-regeneration-occupation` | Record diameter and duration tails, two-walker estimate, record occupation identity |
+| Upper bound for cycle occupation | 1997–2070, `max-regeneration-occupation` | Record interval exceedance and duration tails, record occupation identity |
 | Lower bound on a finite excursion | 2076–2161, `max-trial` | Simultaneous records, uniform jump lower bound, symmetric-walk confinement and reflection, positive speed for fewer walkers |
 | Limiting diameter law | 2165–2189, `max-diameter-distribution` | First regeneration and translated future, finite mean duration, positive mass at time one, arithmetic renewal |
 | Upper tail of the limiting diameter | 2190–2196, `max-diameter-upper` | Limiting diameter law, upper cycle occupation bound |
@@ -34,16 +34,32 @@ conditional finite-path estimates in each of the three regimes. The
 conditional failure estimate sums over the first eligible record and
 then removes the time interval covered by that trial.
 
+The record occupation identity in `tendsto_record_event_occupation` follows
+from arithmetic renewal in the level variable. The limit is also the
+Cesàro limit in `record-average-bound`. Using the partition into intervals
+before the first regeneration, `first_regeneration_diameter_occupation_le_record_limsup`
+bounds the expected visit count by
+$$
+\mathbb E^*D\left(
+u\limsup_{r\to\infty}\mathbb P(\mathcal E_r(x))
++ \sum_{v\ge0}\limsup_{r\to\infty}\mathbb P(W_r>u+v)
+\right),
+$$
+where $\mathcal E_r(x)=\{\exists\,t\in[\tau_r,\tau_{r+1})\colon\Delta_t\ge x\}$,
+$W_r=\tau_{r+1}-\tau_r$, and $u$ is any nonnegative integer.
+The logarithmic upper bound follows from a stretched exponential bound
+on the expected visit count by `ae_log_pow_upper_of_regeneration_occupation`.
+
 The existing bound in `M4Blk.paperBadBlockProfile` has exponent $1/16$.
-The sharp record tails and cycle occupation estimates require the
-separate bounds of Sections 3.1, 3.2 and 4.1.
+The sharp record probability bounds of Sections 3.1, 3.2 and 4.1 remain
+to be proved and applied to the visit count.
 
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
 Let $\nu$ be the probability measure in equation (4.13) and let $u_s$
-be the probability of a regeneration at time $s$. For every $x\ge0$,
-the last-renewal identity and $0\le u_s\le1$, we have
+be the probability of a regeneration at time $s$. Using the last-renewal
+identity and $0\le u_s\le1$, we have for every $x\ge0$
 $$
 \mathbb P^*(\Delta_n\ge x)
 \le \sum_{t\ge0}\mathbb P^*(T>t,\Delta_t\ge x)

@@ -1,51 +1,81 @@
-# Renewal and occupation for the swarm diameter theorem
+# Swarm diameter formalisation
 
-The reference is Theorem 1.2 of `main_1d_regeneration_revised.tex`, with
+The source is Theorem 1.2 of `main_1d_regeneration_revised.tex`, with
 SHA-256 `1ea00e1c34ca56655cf84d8307d74247cb135dbbda61295038256505f2b44e6b`.
-Here we formalise the renewal argument in Section 4, including the calculation
-in equation (4.13) for an observation from independent and identically
-distributed intervals.
 
-For intervals of positive integer duration $D$, write $p_j=\mathbb P(D=j+1)$
-and $u_n=\sum_{k\ge0}\mathbb P(S_k=n)$, where $S_k$ is the start time of interval
-$k$ and $S_0=0$. The proofs assume $p_0>0$ and $\mathbb E D<\infty$. For an
-observation $Y_t$ at age $t$ in one interval and a measurable set $A$, the
-limiting probability is
+Write $\Delta_t$ for the diameter at time $t$ and $T=\tau_D$ for the first
+positive regeneration time. Under the law $\mathbb P^*$ conditioned on strict
+positivity, $\mathbb P^*(T=1)>0$ and $\mathbb E^*T<\infty$.
+For every Borel set $A\subseteq\mathbb R$, the formalised limiting law satisfies
 $$
-\frac{1}{\mathbb E D}\sum_{t\ge0}\mathbb P(D>t,\ Y_t\in A).
+\nu(A)=\frac{1}{\mathbb E^*T}\sum_{t\ge0}\mathbb P^*(T>t,\ \Delta_t\in A).
 $$
+The probabilities of $\{\Delta_n\in A\}$ under $\mathbb P$ and $\mathbb P^*$
+both converge to $\nu(A)$. Under $\mathbb P^*$, for each $n$,
+$$
+\mathbb P^*(\exists t\le n,\ \Delta_t\in A)
+\le (n+1)\sum_{t\ge0}\mathbb P^*(T>t,\ \Delta_t\in A).
+$$
+These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 
-| Module | Main result |
+| Module | Result |
 | --- | --- |
-| [ArithmeticRenewal.lean](../SwarmDiameter/ArithmeticRenewal.lean) | `renewalMass_tendsto` and `renewalReward_tendsto_mean` prove the renewal limit and its convolution with an absolutely summable sequence. |
-| [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | `occupationLaw_real_apply` identifies the normalized occupation measure on every measurable set. |
-| [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean) | `renewalMass_eq_sum_renewalTime_prob` identifies the renewal mass with the arrival probabilities. The last-renewal partition in `observation_prob_eq_renewalReward` leads to `tendstoInDistribution_occupationLaw`. |
-| [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | `KacFormula.iIndepFun_of_fresh` proves mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
+| [SwarmRenewal.lean](../SwarmDiameter/SwarmRenewal.lean) | Weak convergence to a law on $[0,\infty)$, the first-regeneration occupation formula, and the finite-horizon bound above. |
+| [ArithmeticRenewal.lean](../SwarmDiameter/ArithmeticRenewal.lean) | The arithmetic renewal limit and its convolution with an absolutely summable sequence. |
+| [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | The normalized occupation law, with its numerator as the expected visit count. |
+| [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean), [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean), [DelayedRenewal.lean](../SwarmDiameter/DelayedRenewal.lean) | Occupation limits from the renewal process or just the first-regeneration factorization, and passage through an almost surely finite initial delay. |
+| [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | Mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
+| [RegenerationProbability.lean](../SwarmDiameter/RegenerationProbability.lean) | First-regeneration factorization in time and level and the law of the translated future. |
+| [RecordIntervals.lean](../SwarmDiameter/RecordIntervals.lean) | First hitting times, invariance by translation at a simultaneous record, and the diameter bound inside each record interval. |
+| [RecordOccupation.lean](../SwarmDiameter/RecordOccupation.lean) | Occupation limits for record-interval events, including exceedances and duration tails. |
+| [RecordOccupationBound.lean](../SwarmDiameter/RecordOccupationBound.lean) | The expected visit count before the first regeneration is bounded by record probabilities. |
+| [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from an upper bound on the expected visit count to the almost sure logarithmic upper bound. |
+| [RecordDensity.lean](../SwarmDiameter/RecordDensity.lean) | Positive lower density of simultaneous records under both laws. |
+| [TwoWalkerTrial.lean](../SwarmDiameter/TwoWalkerTrial.lean) | At a simultaneous record the conditional probability of diameter at least $L^2+L$ after $4L+L^3$ steps is at least $e^{-CL}$ for $L\ge8$. |
+| [CubicTrial.lean](../SwarmDiameter/CubicTrial.lean) | For $m\ge N\ge3$, the conditional probability of diameter at least $aL^3$ after $4L+L^3$ steps from a simultaneous record is at least $e^{-CL}$ for large $L$. |
+| [SwarmLowerBounds.lean](../SwarmDiameter/SwarmLowerBounds.lean) | The almost sure lower bound and limiting lower tail of Theorem 1.2 in all three regimes, with one constant for both lower bounds. |
+| [LinearTrial.lean](../SwarmDiameter/LinearTrial.lean) | From a common position at a stopping time $S$, the probability of $\Delta_{S+L}\ge2L$ conditional on the past is at least $(1-p)^{2L}$, expressed by integration on each past event. |
+| [SymmetricConfinement.lean](../SwarmDiameter/SymmetricConfinement.lean), [ReflectionExcursion.lean](../SwarmDiameter/ReflectionExcursion.lean) | Finite symmetric-walk path counts for confinement and for an excursion to $L^2$ in $L^3$ steps above $-L$. |
+| [TailBounds.lean](../SwarmDiameter/TailBounds.lean) | Borel–Cantelli upper bound and lower-tail transfer from an almost sure lower bound, with the finite-horizon probability estimates stated as premises. |
 
-For the swarm application, the intervals and observations must be identified
-with the regeneration times and diameters of the interacting walks. The proof
-still needs this identification, the hypotheses for applying the renewal
-theorem to that law, and the transfer from the process conditioned to stay
-positive to the original process. The sharp occupation and excursion
-estimates in Section 4 and the almost sure bounds also remain open in Lean.
-The exponent $1/16$ in `M4Blk.paperBadBlockProfile` is weaker than the exponents
-required in the revised manuscript.
+The record occupation identity is also available at successive record levels.
+Write $\tau_r$ for the first visit to level $r$ by any walker,
+$W_r=\tau_{r+1}-\tau_r$, and
+$\mathcal E_r(x)=\{\exists\,t\in[\tau_r,\tau_{r+1})\colon\Delta_t\ge x\}$.
+For an integer $u\ge0$, the formalised upper bound for the expected number of
+visits at diameter at least $x$ before $T$ is
+$
+\mathbb E^*D\left(
+u\limsup_{r\to\infty}\mathbb P(\mathcal E_r(x))
++\sum_{v\ge0}\limsup_{r\to\infty}\mathbb P(W_r>u+v)
+\right).
+$
+We truncate each record interval at duration $u$ and sum the integer
+duration tails. Using a stretched exponential bound on the expected visit
+count, `ae_log_pow_upper_of_regeneration_occupation` proves the almost sure
+logarithmic upper bound under the original law.
+
+The sharp upper probability bounds for the record intervals remain open in
+Lean. The existing estimate in `M4Blk.paperBadBlockProfile` has exponent
+$1/16$ and supplies the tightness used for the qualitative limit.
 
 ## Verification
 
-With the pinned Mathlib artifacts available, run
+The GitHub Actions workflow replays the model-dependent modules and runs the
+focused audit. The arithmetic renewal and finite-walk proofs can also be
+replayed with the following command.
 
 ```bash
 bash scripts/verify_diameter_support.sh
 ```
 
-All four new proof modules compiled individually with Lean 4.33.1 and Mathlib
-`0df444a360eaa60ab8c11dca51a86af692955474`. The arithmetic renewal module
-passed a trust-level-zero replay and an axiom check of all 54 declarations
-before the source was recovered from the compilation session. The ten
-verification-tool tests passed. A fresh replay of the combined checkout
-remains pending. The source inventory and full build of the original
-formalisation require its complete checkout.
+With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
+the replay checked 525 declarations in the renewal, trial bounds and
+symmetric-walk modules and 519 in the swarm model check. Every imported
+declaration in the audited modules depends only on standard Lean axioms.
+The source inventory check and all ten verification-tool tests passed.
+[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436842).
+[Earlier swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436251).
 
 ## References
 
