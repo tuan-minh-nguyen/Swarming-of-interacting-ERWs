@@ -8,6 +8,7 @@ open Lean Elab Command
 
 #print axioms Swarming.ArithmeticRenewal.renewalReward_tendsto_mean
 #print axioms Swarming.CycleOccupation.occupationLaw_real_apply
+#print axioms Swarming.CycleOccupation.occupationLaw_real_apply_lintegral
 #print axioms Swarming.CycleOccupation.observation_prob_eq_renewalReward
 #print axioms Swarming.CycleOccupation.tendstoInDistribution_occupationLaw
 #print axioms KacFormula.iIndepFun_of_fresh

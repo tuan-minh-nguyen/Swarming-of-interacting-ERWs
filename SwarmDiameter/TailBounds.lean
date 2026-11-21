@@ -26,7 +26,7 @@ theorem ae_log_pow_upper_of_tail {μ : Measure Ω} [IsProbabilityMeasure μ]
   have ha : 0 < a := div_pos (by norm_num) hc
   let b (n : ℕ) := a * Real.log ((n : ℝ) + 2)
   have hb₀ (n : ℕ) : 0 ≤ b n :=
-    mul_nonneg ha.le (Real.log_nonneg (by positivity))
+    mul_nonneg ha.le (Real.log_nonneg (by linarith [Nat.cast_nonneg (α := ℝ) n]))
   have hβr : (0 : ℝ) < (β : ℝ) := by exact_mod_cast hβ
   let s := max x₀ 1
   let k := ⌈Real.exp (s / a)⌉₊
@@ -71,15 +71,20 @@ theorem ae_log_pow_upper_of_tail {μ : Measure Ω} [IsProbabilityMeasure μ]
         norm_num
   have hinj : Function.Injective (fun n : ℕ => (n + k) + 2) := by
     intro i j h'
+    change i + k + 2 = j + k + 2 at h'
     omega
   have hs : Summable (fun n : ℕ => ((↑(n + k) : ℝ) + 2) ^ (-2 : ℝ)) := by
     have hsum := Real.summable_nat_rpow.mpr (show (-2 : ℝ) < -1 by norm_num)
-    simpa only [Function.comp_apply, Nat.cast_add, Nat.cast_ofNat] using hsum.comp_injective hinj
+    have hh := hsum.comp_injective hinj
+    change Summable (fun n : ℕ => (↑(n + k + 2) : ℝ) ^ (-2 : ℝ)) at hh
+    simpa only [Nat.cast_add, Nat.cast_ofNat] using hh
   have hsum : (∑' n : ℕ, μ (A (n + k))) ≠ ∞ := by
     apply ne_top_of_le_ne_top hs.tsum_ofReal_ne_top
     refine ENNReal.tsum_le_tsum (fun n => ?_)
-    rw [← ofReal_measureReal (measure_ne_top μ (A (n + k)))]
-    exact ENNReal.ofReal_le_ofReal (hprob (n + k) (by omega))
+    calc
+      μ (A (n + k)) = ENNReal.ofReal (μ.real (A (n + k))) :=
+        (ENNReal.ofReal_toReal (measure_ne_top μ (A (n + k)))).symm
+      _ ≤ _ := ENNReal.ofReal_le_ofReal (hprob (n + k) (by omega))
   refine ⟨(2 * a) ^ β, pow_pos (by positivity) _, ?_⟩
   filter_upwards [ae_eventually_notMem hsum] with ω hω
   obtain ⟨j, hj⟩ := eventually_atTop.mp hω

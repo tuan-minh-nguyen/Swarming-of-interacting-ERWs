@@ -34,6 +34,31 @@ applies once the selected first block is identified with the first
 regeneration. We can construct its invariant record law from
 `M4Blk.dT_tight` and use `ActualNeutralCapstone.actual_neutral_regenLaw_of_invariant_derived_level`.
 
-The existing bound in `M4Blk.paperBadBlockProfile` has exponent (1/16).
+The existing bound in `M4Blk.paperBadBlockProfile` has exponent $1/16$.
 The sharp record tails and cycle occupation estimates require the
 separate bounds of Sections 3.1, 3.2 and 4.1.
+
+## Maximum and limiting tail
+
+Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
+Let $\nu$ be the probability measure in equation (4.13) and let $u_s$
+be the probability of a regeneration at time $s$. For every $x\ge0$,
+the last-renewal identity and $0\le u_s\le1$, we have
+$
+\mathbb P^*(\Delta_n\ge x)
+\le \sum_{t\ge0}\mathbb P^*(T>t,\Delta_t\ge x)
+= \mu\,\nu([x,\infty)).
+$$
+By a union bound,
+$$
+\mathbb P^*(M_n\ge x)\le(n+1)\mu\,\nu([x,\infty)).
+$$
+The upper occupation estimate therefore suffices for the almost sure upper
+bound by Borel–Cantelli. For the lower tail, suppose
+$M_n\ge a(\log n)^\beta$ eventually almost surely under $\mathbb P^*$. For
+$n=\lceil\exp((x/a)^{1/\beta})\rceil$, we have
+$\mathbb P^*(M_n\ge x)\ge1/2$ for all large $x$. Thus
+$$
+\nu([x,\infty))\ge\frac{1}{2\mu(n+1)}
+\ge\frac{1}{6\mu}\exp(-(x/a)^{1/\beta}).
+$$

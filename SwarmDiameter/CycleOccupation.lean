@@ -86,6 +86,50 @@ theorem occupationLaw_real_apply (μ : Measure Ω) [IsProbabilityMeasure μ] {T 
     ENNReal.tsum_toReal_eq (fun _ => measure_ne_top μ _), div_eq_mul_inv, mul_comm]
   rfl
 
+/-- The occupation measure is the expectation of the finite count of visits. -/
+theorem occupationMeasure_apply_lintegral (μ : Measure Ω) {T : Ω → ℕ} {Y : ℕ → Ω → E}
+    (hT : Measurable T) (hY : ∀ t, Measurable (Y t)) {A : Set E} (hA : MeasurableSet A) :
+    occupationMeasure μ T Y hT hY A =
+      ∫⁻ ω, ∑ t ∈ range (T ω + 1), A.indicator (fun _ => (1 : ℝ≥0∞)) (Y t ω) ∂μ := by
+  let B (t : ℕ) := {ω | t ≤ T ω ∧ Y t ω ∈ A}
+  have hB (t : ℕ) : MeasurableSet (B t) :=
+    (measurableSet_Ici.preimage hT).inter (hY t hA)
+  have h (ω : Ω) :
+      ∑' t : ℕ, (B t).indicator (fun _ => (1 : ℝ≥0∞)) ω =
+        ∑ t ∈ range (T ω + 1), A.indicator (fun _ => (1 : ℝ≥0∞)) (Y t ω) := by
+    rw [tsum_eq_sum (s := range (T ω + 1))]
+    · refine sum_congr rfl (fun t ht => ?_)
+      have htime := Nat.lt_succ_iff.mp (Finset.mem_range.mp ht)
+      change (B t).indicator _ ω = A.indicator _ (Y t ω)
+      by_cases htA : Y t ω ∈ A
+      · have hmem : ω ∈ B t := ⟨htime, htA⟩
+        rw [indicator_of_mem hmem, indicator_of_mem htA]
+      · have hmem : ω ∉ B t := fun hx => htA hx.2
+        rw [indicator_of_notMem hmem, indicator_of_notMem htA]
+    · intro t ht
+      have hmem : ω ∉ B t := fun hx => ht (Finset.mem_range.mpr (Nat.lt_succ_iff.mpr hx.1))
+      exact indicator_of_notMem hmem _
+  calc
+    _ = ∑' t : ℕ, μ (B t) := occupationMeasure_apply μ hT hY hA
+    _ = ∑' t : ℕ, ∫⁻ ω, (B t).indicator (fun _ => (1 : ℝ≥0∞)) ω ∂μ :=
+      tsum_congr (fun t => (lintegral_indicator_one (hB t)).symm)
+    _ = ∫⁻ ω, ∑' t : ℕ, (B t).indicator (fun _ => (1 : ℝ≥0∞)) ω ∂μ :=
+      (lintegral_tsum fun t => (measurable_const.indicator (hB t)).aemeasurable).symm
+    _ = _ := lintegral_congr h
+
+/-- The probability of a measurable set under the occupation law is its
+expected visit count divided by the mean duration. -/
+theorem occupationLaw_real_apply_lintegral (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {T : Ω → ℕ} {Y : ℕ → Ω → E} (hT : Measurable T) (hY : ∀ t, Measurable (Y t))
+    (hfin : (∫⁻ ω, (↑(T ω + 1) : ℝ≥0∞) ∂μ) ≠ ∞) {A : Set E} (hA : MeasurableSet A) :
+    (occupationLaw μ hT hY hfin).toMeasure.real A =
+      (∫⁻ ω, ∑ t ∈ range (T ω + 1), A.indicator (fun _ => (1 : ℝ≥0∞)) (Y t ω) ∂μ).toReal /
+        (∫⁻ ω, (↑(T ω + 1) : ℝ≥0∞) ∂μ).toReal := by
+  rw [occupationLaw_real_apply μ hT hY hfin hA]
+  rw [← occupationMeasure_apply_lintegral μ hT hY hA, occupationMeasure_apply μ hT hY hA,
+    ENNReal.tsum_toReal_eq (fun _ => measure_ne_top μ _)]
+  simp only [measureReal_def]
+
 /-- The masses of the possible durations sum to one. -/
 theorem tsum_duration_prob (μ : Measure Ω) [IsProbabilityMeasure μ]
     {T : Ω → ℕ} (hT : Measurable T) : ∑' t : ℕ, μ {ω | T ω = t} = 1 := by
