@@ -41,3 +41,56 @@ jobs:
             lean -j1 -o "$output/Swarm/$module.olean" "Swarm/$module.lean"
           done
           lean -j1 draft/DiameterAnchor.lean
+
+  swarm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    concurrency:
+      group: diameter-swarm-build
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install Lean 4.33.1
+        run: |
+          curl -fsSLo "$RUNNER_TEMP/lean.tar.zst" 'https://github.com/leanprover/lean4/releases/download/v4.33.1/lean-4.33.1-linux.tar.zst'
+          printf '%s  %s\n' '890afd185370f85666025b883914ab4f4b339136f8c96167b69cfb62aecaf235' "$RUNNER_TEMP/lean.tar.zst" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/lean"
+          tar --zstd -xf "$RUNNER_TEMP/lean.tar.zst" --strip-components=1 -C "$RUNNER_TEMP/lean"
+          echo "$RUNNER_TEMP/lean/bin" >> "$GITHUB_PATH"
+      - name: Fetch pinned dependency artifacts
+        run: |
+          mapfile -t mathlib < <(python3 - <<'PYTHON'
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, "scripts")
+          from lean_sources import imports
+          paths = [*Path("Swarm").rglob("*.lean"), *Path("SwarmDiameter").glob("*.lean")]
+          print("\n".join(sorted({m for p in paths for m in imports(p.read_text()) if m.startswith("Mathlib.")})))
+          PYTHON
+          )
+          test "${#mathlib[@]}" -gt 0
+          lake exe cache get "${mathlib[@]}"
+      - name: Restore compiled swarm modules
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+        with:
+          path: .scratch/diameter-swarm
+          key: diameter-swarm-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('Swarm.lean', 'Swarm/**/*.lean', 'lake-manifest.json', 'lean-toolchain', 'lakefile.lean', 'scripts/build.py') }}
+      - name: Build the existing swarm proof
+        run: |
+          work=.scratch/diameter-swarm
+          resume=()
+          if test -f "$work/summary.json"; then resume=(--resume); fi
+          python3 scripts/build.py --work "$work" --jobs 2 "${resume[@]}"
+      - name: Check the swarm renewal lemmas
+        run: |
+          if test -f SwarmDiameter/SwarmRenewal.lean; then
+            export LEAN_PATH="$(cat .scratch/diameter-swarm/lean-path.txt)"
+            build=.scratch/diameter-swarm/lib/SwarmDiameter
+            mkdir -p "$build"
+            for module in ArithmeticRenewal CycleOccupation DelayedRenewal FirstInterval SwarmRenewal; do
+              lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
+            done
+            lean -j1 -t0 audit/SwarmRenewal.lean
+          fi

@@ -1,0 +1,39 @@
+# Proof dependencies for Theorem 1.2
+
+The author-approved statement is [Swarming.swarm_diameter](../draft/DiameterAnchor.lean).
+The [manifest](../draft/anchors.json) pins the exact declaration and the version of
+`main_1d_regeneration_revised.tex`. The symbol names and line numbers below
+refer to that version. An edge lists a result used in the indicated proof.
+
+| Result | Source lines and reference | Inputs |
+| --- | --- | --- |
+| Walk law and diameter | 77–94, 104–111, `rule`, `distance-def` | Existing uniform-array trajectory and integer diameter |
+| Positive speed and sublinear diameter | 399–408, 751–831, `ball`, `diameter` | Existing `M4Blk.main_claim_direct` |
+| Simultaneous record geometry | 838–854, `record`, `recordo`, `block` | Walk law, positive speed |
+| Cubic record estimate | 855–1151, `tight`, `max-cubic-prob` | Record geometry, spatial sums, conditional jump and local-time estimates, extremal coalescence |
+| Linear record estimate | 1152–1585, `max-linear-block` | Record geometry, minimum occupation estimate, martingale deviation bounds |
+| Record diameter and duration tails | 1586–1638, `record-tail`, `record-duration-tail` | Cubic and linear record estimates, positive speed |
+| First regeneration and translated future | 1640–1771, `regen`, `freshlaw` | Record tightness, strict positivity, finite first regeneration, stopped uniform-array factorization |
+| Mean duration and record occupation | 1772–1818, `record-average`, `record-moment` | Regeneration, record duration tails, strong law, Tonelli |
+| Two-walker diameter estimate | 1850–1993, `max-two-local-bound` | Dominating potentials, spatial sum bounds, optional stopping, martingale deviation bounds |
+| Upper bound for cycle occupation | 1997–2070, `max-regeneration-occupation` | Record diameter and duration tails, two-walker estimate, record occupation identity |
+| Lower bound on a finite excursion | 2076–2161, `max-trial` | Simultaneous records, uniform jump lower bound, symmetric-walk confinement and reflection, positive speed for fewer walkers |
+| Limiting diameter law | 2165–2189, `max-diameter-distribution` | First regeneration and translated future, finite mean duration, positive mass at time one, arithmetic renewal |
+| Upper tail of the limiting diameter | 2190–2196, `max-diameter-upper` | Limiting diameter law, upper cycle occupation bound |
+| Almost sure upper bound | 2198–2220, proof of `maxdistance-order` | Upper cycle occupation bound, finite first regeneration, first Borel–Cantelli lemma |
+| Almost sure lower bound | 2222–2253, `max-record-density` | Regeneration density, finite excursion bound, conditional failure product, first Borel–Cantelli lemma |
+| Lower tail of the limiting diameter | 2255–2275, proof of `diameter-tail` | Almost sure lower bound, first cycle occupation law, union bound over cycles |
+| `Swarming.swarm_diameter` | 112–126, `maxdistance` | Both almost sure bounds, limiting diameter law, both tails, common constants |
+
+The [renewal and occupation modules](DIAMETER-SUPPORT.md) establish the
+general renewal results. To apply them to this model, we can factor at the
+first regeneration time, sum over its level and duration, and solve the
+renewal equation for each diameter event. For the mean duration, the
+existing `SwarmActualNeutral.integrable_selectedT_zero_of_hfull` also
+applies once the selected first block is identified with the first
+regeneration. We can construct its invariant record law from
+`M4Blk.dT_tight` and use `ActualNeutralCapstone.actual_neutral_regenLaw_of_invariant_derived_level`.
+
+The existing bound in `M4Blk.paperBadBlockProfile` has exponent (1/16).
+The sharp record tails and cycle occupation estimates require the
+separate bounds of Sections 3.1, 3.2 and 4.1.
