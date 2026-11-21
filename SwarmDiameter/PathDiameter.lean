@@ -27,6 +27,39 @@ theorem measurable_pathDiameter (n : ℕ) :
   exact (measurable_of_countable (fun f : Fin N → ℤ => pathDiameter 0 (fun _ => f))).comp
     (measurable_pi_apply n)
 
+/-- The maximum diameter from time zero through time `n`. -/
+noncomputable def runningDiameter (n : ℕ) (X : ℕ → Fin N → ℤ) : ℝ :=
+  (Finset.range (n + 1)).sup' (by simp) (fun t => pathDiameter t X)
+
+theorem runningDiameter_mono {n m : ℕ} (h : n ≤ m) (X : ℕ → Fin N → ℤ) :
+    runningDiameter n X ≤ runningDiameter m X :=
+  Finset.sup'_mono (fun t => pathDiameter t X)
+    (Finset.range_subset_range.mpr (Nat.succ_le_succ h)) (by simp)
+
+theorem pathDiameter_le_runningDiameter {t n : ℕ} (h : t ≤ n) (X : ℕ → Fin N → ℤ) :
+    pathDiameter t X ≤ runningDiameter n X :=
+  Finset.le_sup' (fun s => pathDiameter s X) (Finset.mem_range.mpr (Nat.lt_succ_of_le h))
+
+theorem le_runningDiameter_iff {a : ℝ} (n : ℕ) (X : ℕ → Fin N → ℤ) :
+    a ≤ runningDiameter n X ↔ ∃ t ≤ n, a ≤ pathDiameter t X := by
+  constructor
+  · intro ha
+    obtain ⟨t, ht, he⟩ := Finset.exists_mem_eq_sup' (s := Finset.range (n + 1)) (by simp)
+      (fun s => pathDiameter s X)
+    exact ⟨t, Nat.le_of_lt_succ (Finset.mem_range.mp ht), ha.trans_eq he⟩
+  · rintro ⟨t, ht, h⟩
+    exact h.trans (pathDiameter_le_runningDiameter ht X)
+
+theorem measurable_runningDiameter (n : ℕ) : Measurable (runningDiameter (N := N) n) := by
+  apply measurable_of_Ici
+  intro a
+  have he : runningDiameter (N := N) n ⁻¹' Set.Ici a =
+      ⋃ t : ℕ, ⋃ _ : t ≤ n, pathDiameter t ⁻¹' Set.Ici a := by
+    ext X
+    simp only [Set.mem_preimage, Set.mem_Ici, le_runningDiameter_iff, Set.mem_iUnion, exists_prop]
+  rw [he]
+  exact MeasurableSet.iUnion fun t => MeasurableSet.iUnion fun _ => measurable_pathDiameter t measurableSet_Ici
+
 theorem pathDiameter_shift (X : ℕ → Fin N → ℤ) (t k : ℕ) (d : ℤ) :
     pathDiameter k (fun n i => X (t + n) i - d) = pathDiameter (t + k) X := by
   let f : Fin N → ℤ := X (t + k)
