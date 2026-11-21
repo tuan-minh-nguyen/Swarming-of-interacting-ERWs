@@ -280,6 +280,7 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     have he (t : ℕ) : {U | T U = t} =ᵐ[μstar] {U | firstTime p m U = t + 1} := by
       filter_upwards [hTeq] with U hU
       apply propext
+      change T U + 1 = firstTime p m U at hU
       change T U = t ↔ firstTime p m U = t + 1
       omega
     have heA : {U | T U = t ∧ Δ (t + 1 + k) U ∈ A} =ᵐ[μstar]
@@ -319,13 +320,16 @@ theorem exists_diameter_occupationLaw (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1
     apply measureReal_congr
     filter_upwards [hTeq] with U he
     apply propext
+    change T U + 1 = firstTime p m U at he
     change (t ≤ T U ∧ Δ t U ∈ A) ↔ (t < firstTime p m U ∧ Δ t U ∈ A)
     exact and_congr (by omega) Iff.rfl
   have hnonneg : ∀ᵐ x ∂ν.toMeasure, 0 ≤ x := by
     rw [ae_iff]
     apply (measureReal_eq_zero_iff (measure_ne_top _ _)).mp
-    change ν.toMeasure.real (Set.Iio 0) = 0
-    rw [hformula _ measurableSet_Iio]
+    have hneg : {x : ℝ | ¬ 0 ≤ x} = Set.Iio 0 := by
+      ext x
+      exact not_le
+    rw [hneg, hformula _ measurableSet_Iio]
     have hzero (t : ℕ) : {U : Array N | t < firstTime p m U ∧ Δ t U ∈ Set.Iio 0} = ∅ := by
       ext U
       simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]

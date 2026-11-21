@@ -108,7 +108,7 @@ theorem observation_exceeds_before_prob_le_occupation {μ : Measure Ω} [IsProba
   have heq : {ω : Ω | ∃ t : ℕ, t ≤ n ∧ X t ω ∈ A} =
       ⋃ t ∈ range (n + 1), {ω | X t ω ∈ A} := by
     ext ω
-    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Finset.mem_range, Nat.lt_succ_iff]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Finset.mem_range, Nat.lt_succ_iff, exists_prop]
   rw [heq]
   calc
     _ ≤ ∑ t ∈ range (n + 1), μ.real {ω | X t ω ∈ A} := measureReal_biUnion_finset_le _ _

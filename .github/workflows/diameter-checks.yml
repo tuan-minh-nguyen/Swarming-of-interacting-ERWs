@@ -108,19 +108,3 @@ jobs:
             done
             lean -j1 -t0 audit/SwarmRenewal.lean
           fi
-
-  source-archive:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - name: Archive exact proof sources for local verification
-        run: git archive --format=tar.gz --output="$RUNNER_TEMP/swarm-source.tar.gz" "$GITHUB_SHA"
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: proof-source
-          path: ${{ runner.temp }}/swarm-source.tar.gz
-          retention-days: 1
-          compression-level: 0
