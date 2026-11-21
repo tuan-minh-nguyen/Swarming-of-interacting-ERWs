@@ -25,6 +25,11 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | The normalized occupation law, with its numerator as the expected visit count. |
 | [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean), [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean), [DelayedRenewal.lean](../SwarmDiameter/DelayedRenewal.lean) | Occupation limits from the renewal process or just the first-regeneration factorization, and passage through an almost surely finite initial delay. |
 | [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | Mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
+| [RegenerationProbability.lean](../SwarmDiameter/RegenerationProbability.lean) | First-regeneration factorization in time and level and the law of the translated future. |
+| [RecordIntervals.lean](../SwarmDiameter/RecordIntervals.lean) | First hitting times, invariance by translation at a simultaneous record, and the diameter bound inside each record interval. |
+| [RecordOccupation.lean](../SwarmDiameter/RecordOccupation.lean) | Occupation limits for record-interval events, including exceedances and duration tails. |
+| [RecordOccupationBound.lean](../SwarmDiameter/RecordOccupationBound.lean) | The expected visit count before the first regeneration is bounded by record probabilities. |
+| [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from an upper bound on the expected visit count to the almost sure logarithmic upper bound. |
 | [RecordDensity.lean](../SwarmDiameter/RecordDensity.lean) | Positive lower density of simultaneous records under both laws. |
 | [TwoWalkerTrial.lean](../SwarmDiameter/TwoWalkerTrial.lean) | At a simultaneous record the conditional probability of diameter at least $L^2+L$ after $4L+L^3$ steps is at least $e^{-CL}$ for $L\ge8$. |
 | [CubicTrial.lean](../SwarmDiameter/CubicTrial.lean) | For $m\ge N\ge3$, the conditional probability of diameter at least $aL^3$ after $4L+L^3$ steps from a simultaneous record is at least $e^{-CL}$ for large $L$. |
@@ -33,10 +38,26 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [SymmetricConfinement.lean](../SwarmDiameter/SymmetricConfinement.lean), [ReflectionExcursion.lean](../SwarmDiameter/ReflectionExcursion.lean) | Finite symmetric-walk path counts for confinement and for an excursion to $L^2$ in $L^3$ steps above $-L$. |
 | [TailBounds.lean](../SwarmDiameter/TailBounds.lean) | Borel–Cantelli upper bound and lower-tail transfer from an almost sure lower bound, with the finite-horizon probability estimates stated as premises. |
 
-The upper-bound part of Theorem 1.2 remains open in Lean. The sharp upper
-estimates for the record intervals are needed for the occupation count. The earlier estimate in
-`M4Blk.paperBadBlockProfile` has exponent $1/16$ and supplies the tightness
-used for the qualitative limit.
+The record occupation identity is also available at successive record levels.
+Write $\tau_r$ for the first visit to level $r$ by any walker,
+$W_r=\tau_{r+1}-\tau_r$, and
+$\mathcal E_r(x)=\{\exists\,t\in[\tau_r,\tau_{r+1})\colon\Delta_t\ge x\}$.
+For an integer $u\ge0$, the formalised upper bound for the expected number of
+visits at diameter at least $x$ before $T$ is
+$
+\mathbb E^*D\left(
+u\limsup_{r\to\infty}\mathbb P(\mathcal E_r(x))
++\sum_{v\ge0}\limsup_{r\to\infty}\mathbb P(W_r>u+v)
+\right).
+$
+We truncate each record interval at duration $u$ and sum the integer
+duration tails. Using a stretched exponential bound on the expected visit
+count, `ae_log_pow_upper_of_regeneration_occupation` proves the almost sure
+logarithmic upper bound under the original law.
+
+The sharp upper probability bounds for the record intervals remain open in
+Lean. The existing estimate in `M4Blk.paperBadBlockProfile` has exponent
+$1/16$ and supplies the tightness used for the qualitative limit.
 
 ## Verification
 
@@ -51,11 +72,11 @@ bash scripts/verify_diameter_support.sh
 
 With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
 the replay checked 525 declarations in the renewal, trial bounds and
-symmetric-walk modules and 450 in the swarm model check. Every imported
+symmetric-walk modules and 519 in the swarm model check. Every imported
 declaration in the audited modules depends only on standard Lean axioms.
 The source inventory check and all ten verification-tool tests passed.
 [Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436842).
-[Swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436251).
+[Earlier swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436251).
 
 ## References
 

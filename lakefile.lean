@@ -13,4 +13,5 @@ lean_lib SwarmDiameter where
   roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,
     `SwarmDiameter.FirstIntervalOccupation, `SwarmDiameter.TailBounds,
     `SwarmDiameter.ReflectionExcursion, `SwarmDiameter.SymmetricConfinement,
-    `SwarmDiameter.SwarmLowerBounds]
+    `SwarmDiameter.SwarmLowerBounds, `SwarmDiameter.RecordOccupationBound,
+    `SwarmDiameter.SwarmUpperGrowth]
