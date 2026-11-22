@@ -41,11 +41,15 @@ is not a claim that every sentence of the manuscript has been audited.
    `Filter.atTop`; the initial value has no effect on that limit. See
    `M4Blk.main_claim` in [BlkMeasure.lean](../Swarm/BlkMeasure.lean).
 
-4. **Scope of this repository.** We include the full source dependency
-   closure of Theorem 1.1. We do not claim a separate formal counterpart
-   for every auxiliary statement in the manuscript. The source inventory includes one additional import-support module and
-   is [source-map.json](source-map.json); the root import is
-   [Swarm.lean](../Swarm.lean).
+4. **Scope of Theorem 1.1's original formalisation.** We include the full
+   source dependency closure of Theorem 1.1. We do not claim a separate formal
+   counterpart for every auxiliary statement in the manuscript. The source
+   inventory includes one additional import-support module and is
+   [source-map.json](source-map.json); the root import is
+   [Swarm.lean](../Swarm.lean). The repository now also includes Theorem 1.2,
+   whose approved statement is [Swarming.swarm_diameter](../SwarmDiameter/Main.lean).
+   Its independent supporting modules and checks are described in
+   [DIAMETER-SUPPORT.md](DIAMETER-SUPPORT.md).
 
 ## Proof route and scope
 
