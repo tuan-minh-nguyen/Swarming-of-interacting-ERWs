@@ -1,5 +1,11 @@
 # Elaboration report — 14 November 2026
 
+**Historical scope:** These measurements apply to the 674-module Theorem 1.1
+build at the recorded commit and machine configuration. They do not measure
+the expanded diameter repository, the 23 November cleanup, or a matched
+before/after speed comparison. The latest certification is recorded in
+[VERIFICATION.md](VERIFICATION.md).
+
 ## 1. Setup and provenance
 
 We used Lean 4.33.1 on Linux x86-64, with nine available processors and about
