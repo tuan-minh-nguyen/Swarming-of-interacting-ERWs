@@ -113,6 +113,12 @@ In `record_group_movement_failure_le_cube_root`, the two drift inequalities
 cancel the advance of the leading group's record, as in `locmove`. The
 failure probability is bounded by $3e^{-cL^{1/3}}$.
 
+## Local clauses on the record interval
+
+`record_occupation_estimate_of_local_bounds` takes a potential cutoff `V` and an error bound `E ≥ V ^ 2`. It reuses `SummedSlope.lococc_summed` for the summed occupation inequality. `record_occupation_failure_le_cube_root` applies the spatial and martingale estimates with `V = L ^ (1 / 3)` and `E` proportional to `ε * L`, uniformly over the integer subintervals of the record interval.
+
+`record_local_clauses_failure_le_cube_root` combines the occupation estimate, group potential bounds, movement estimates, and compensated trajectory martingale. The error in `BlkCoin.BlockClauses` and `JoinStep.MartClause` is `ε * L`. The common coefficient `C` is chosen before the time horizon and the error tolerance. The probability that either clause fails on the record carrier is at most `K * exp (-c * L ^ (1 / 3))`.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
