@@ -159,4 +159,31 @@ theorem softMinimum_sub_ge_weighted_sum {θ K : ℝ} (hθ : 0 < θ) (hK : θ * K
   rw [he, le_div_iff₀ hθ]
   linarith only [Real.log_le_sub_one_of_pos hU, hlin]
 
+/-- Nonnegative drifts near the minimum need only be controlled within
+distance `d` of the minimum to bound their weighted average. -/
+theorem softMinimum_weighted_drift_lower {θ d b : ℝ} (hθ : 0 < θ) (hb : 0 ≤ b)
+    {s : Finset ι} (hs : s.Nonempty) {z a : ι → ℝ}
+    (ha : ∀ i ∈ s, 0 ≤ a i)
+    (hnear : ∀ i ∈ s, z i - s.inf' hs z ≤ d → 1 - b ≤ a i) :
+    1 - b - (s.card : ℝ) * Real.exp (-θ * d) ≤
+      ∑ i ∈ s, softMinimumWeight θ s z i * a i := by
+  let w := softMinimumWeight θ s z
+  have hterm (i : ι) (hi : i ∈ s) : w i * (1 - b) - Real.exp (-θ * d) ≤ w i * a i := by
+    have hw := softMinimumWeight_nonneg θ hs z i
+    by_cases h : z i - s.inf' hs z ≤ d
+    · exact (sub_le_self _ (Real.exp_pos _).le).trans
+        (mul_le_mul_of_nonneg_left (hnear i hi h) hw)
+    · have hiw : w i ≤ Real.exp (-θ * d) :=
+        (softMinimumWeight_le_exp θ hs z i).trans
+          (Real.exp_le_exp.mpr (mul_le_mul_of_nonpos_left (le_of_not_ge h) (neg_nonpos.mpr hθ.le)))
+      have hle : w i * (1 - b) ≤ w i := by
+        simpa only [mul_one] using (mul_le_mul_of_nonneg_left (sub_le_self 1 hb) hw)
+      exact (sub_nonpos.mpr (hle.trans hiw)).trans (mul_nonneg hw (ha i hi))
+  calc
+    _ = ∑ i ∈ s, (w i * (1 - b) - Real.exp (-θ * d)) := by
+      rw [Finset.sum_sub_distrib, ← Finset.sum_mul, Finset.sum_const, nsmul_eq_mul]
+      change _ = (∑ i ∈ s, w i) * (1 - b) - _
+      rw [show ∑ i ∈ s, w i = 1 from sum_softMinimumWeight θ hs z, one_mul]
+    _ ≤ _ := Finset.sum_le_sum hterm
+
 end Swarming.Diameter

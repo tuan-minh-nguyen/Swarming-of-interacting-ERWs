@@ -141,6 +141,10 @@ failure probability is bounded by $3e^{-cL^{1/3}}$.
 
 Every walker at the global minimum is excited when the minimum is nonnegative. `minimum_progress_of_compensated_error` sums the compensated paths truncated at the terminal minimum plus the error allowance. Using the record-time martingale bound, `record_minimum_progress_failure_le_exp` controls the failure of minimum progress uniformly over all subintervals. `softMinimum_sub_ge_weighted_sum` controls the increments of the logarithmic approximation of the minimum for the separated-group comparison.
 
+## Bounded comparison functions
+
+`boundedSlope_increment_eq_min` identifies the comparison drift after truncation. It lies in `[0, 1]` and equals one at an excited site when the slope bound is at least `(2 * p - 1)⁻¹`. `boundedSlope_le_window` bounds a truncated slope by the affine recursion restarted at the left endpoint of a finite spatial interval. `softMinimum_weighted_drift_lower` bounds the contribution of walkers farther than the prescribed distance from the minimum.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.

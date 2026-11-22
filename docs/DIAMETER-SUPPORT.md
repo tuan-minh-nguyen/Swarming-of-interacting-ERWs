@@ -59,7 +59,8 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [TwoWalkerTail.lean](../SwarmDiameter/TwoWalkerTail.lean) | Square-root exponential bounds at and between records. |
 | [SwarmDiameterTwoWalker.lean](../SwarmDiameter/SwarmDiameterTwoWalker.lean) | All parts of Theorem 1.2 for `N = 2`. |
 | [MinimumProgress.lean](../SwarmDiameter/MinimumProgress.lean) | Exponential concentration for the advance of the swarm minimum when `m < N`. |
-| [SoftMinimum.lean](../SwarmDiameter/SoftMinimum.lean) | Bounded-increment inequality for the logarithmic approximation of the minimum. |
+| [SoftMinimum.lean](../SwarmDiameter/SoftMinimum.lean) | Bounded increments and weighted drifts for the logarithmic approximation of the minimum. |
+| [BoundedPotential.lean](../SwarmDiameter/BoundedPotential.lean) | Bounded slopes, drift identities, and comparison with a finite spatial interval. |
 | [RecordGroupPotential.lean](../SwarmDiameter/RecordGroupPotential.lean) | The group potential satisfies `loccoord` simultaneously over the prescribed spatial intervals and times. |
 | [RecordGroupMaximum.lean](../SwarmDiameter/RecordGroupMaximum.lean) | The trailing group's maximum potential grows at unit rate up to $\varepsilon L$ on every separated subinterval, with exceptional probability $e^{-cL^{1/3}}$. |
 | [RecordGroupMovement.lean](../SwarmDiameter/RecordGroupMovement.lean) | The local movement estimate `locmove` follows from the spatial, maximum, and advance bounds. Its coefficient depends only on $N,m,p$. |
