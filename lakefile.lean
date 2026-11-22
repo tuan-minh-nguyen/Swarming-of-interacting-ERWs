@@ -15,4 +15,4 @@ lean_lib SwarmDiameter where
     `SwarmDiameter.ReflectionExcursion, `SwarmDiameter.SymmetricConfinement,
     `SwarmDiameter.SwarmLowerBounds, `SwarmDiameter.RecordOccupationBound,
     `SwarmDiameter.SwarmUpperGrowth, `SwarmDiameter.RecordExceedance,
-    `SwarmDiameter.SpatialGapSums]
+    `SwarmDiameter.MarkedSpatialTail]
