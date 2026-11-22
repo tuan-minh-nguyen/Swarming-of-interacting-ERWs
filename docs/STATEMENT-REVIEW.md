@@ -1,5 +1,12 @@
 # Independent statement and model review
 
+> **Historical scope (14 November 2026).** This document is an independent
+> source-level comparison of Theorem 1.1. Its final verdict deliberately does
+> not certify Lean compilation. Subsequent formal verification has succeeded;
+> see [VERIFICATION.md](VERIFICATION.md) for the current certification, including
+> Theorem 1.2, and [README.md](../README.md) for both theorem statements.
+
+
 Review date: 14 November 2026. This is a source review of the supplied
 manuscript and original archive. No Lean build or axiom computation was run by
 this reviewer. Source agreement and successful proof checking are separate
