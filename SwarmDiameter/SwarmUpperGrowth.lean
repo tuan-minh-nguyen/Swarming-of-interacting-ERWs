@@ -94,4 +94,44 @@ theorem ae_log_pow_upper_of_regeneration_occupation
   rw [firstFutureZ_eq_of_rawFirstCell p m q hN₀ hq] at hU
   exact eventually_runningDiameter_le_of_shift (d := (q.1.1 : ℤ)) (t := q.1.2) hβ hC hU
 
+/-- A stretched exponential bound on the first-regeneration visit count
+bounds the upper tail of the limiting diameter law. -/
+theorem exists_diameter_limit_with_upper_tail_of_regeneration_occupation
+    (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1) (hm : 2 ≤ m) (hN : 2 ≤ N)
+    {β : ℕ} (hβ : 0 < β) {c : ℝ} (hc : 0 < c)
+    (h : ∀ᶠ x : ℝ in atTop,
+      (∑' t : ℕ, (SwarmFB.seedCond (p := p) (m := m) (N := N)).real
+        {U | t < firstTime p m U ∧ x ≤ pathDiameter t (posPath p m U)}) ≤
+        Real.exp (-c * x ^ (1 / (β : ℝ)))) :
+    ∃ ν : ProbabilityMeasure ℝ,
+      (∀ᵐ x ∂ν.toMeasure, 0 ≤ x) ∧
+      TendstoInDistribution (fun n (U : Array N) => pathDiameter n (posPath p m U))
+        atTop (id : ℝ → ℝ) (fun _ => arrayMeasure N) ν.toMeasure ∧
+      ∀ᶠ x : ℝ in atTop, ν.toMeasure.real (Ici x) ≤ Real.exp (-(c / 2) * x ^ (1 / (β : ℝ))) := by
+  obtain ⟨ν, hnonneg, hweak, hformula⟩ := exists_diameter_occupationLaw hp₀ hp₁ hm hN
+  let μstar := SwarmFB.seedCond (p := p) (m := m) (N := N)
+  let b := (∫⁻ U, (firstTime p m U : ℝ≥0∞) ∂μstar).toReal
+  have hb : 0 < b := by
+    by_contra! hb₀
+    have he : b = 0 := le_antisymm hb₀ ENNReal.toReal_nonneg
+    have hu := (hformula univ MeasurableSet.univ).1
+    change ν.toMeasure.real univ = _ / b at hu
+    rw [probReal_univ, he, div_zero] at hu
+    exact one_ne_zero hu
+  let r : ℝ := 1 / (β : ℝ)
+  have hr : 0 < r := one_div_pos.mpr (by exact_mod_cast hβ)
+  have ht : Tendsto (fun x : ℝ => Real.exp ((c / 2) * x ^ r)) atTop atTop :=
+    Real.tendsto_exp_atTop.comp ((tendsto_rpow_atTop hr).const_mul_atTop (half_pos hc))
+  refine ⟨ν, hnonneg, hweak, ?_⟩
+  filter_upwards [h, ht.eventually_ge_atTop b⁻¹] with x hx hxb
+  have hf := (hformula (Ici x) measurableSet_Ici).1
+  change ν.toMeasure.real (Ici x) =
+    (∑' t : ℕ, μstar.real {U | t < firstTime p m U ∧ x ≤ pathDiameter t (posPath p m U)}) / b at hf
+  rw [hf, div_eq_mul_inv]
+  calc
+    _ ≤ Real.exp (-c * x ^ r) * b⁻¹ := mul_le_mul_of_nonneg_right hx (inv_pos.mpr hb).le
+    _ ≤ Real.exp (-c * x ^ r) * Real.exp ((c / 2) * x ^ r) :=
+      mul_le_mul_of_nonneg_left hxb (Real.exp_pos _).le
+    _ = _ := by rw [← Real.exp_add]; congr 1; ring
+
 end Swarming.Diameter

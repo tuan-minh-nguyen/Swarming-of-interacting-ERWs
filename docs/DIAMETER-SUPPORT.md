@@ -29,7 +29,8 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [RecordIntervals.lean](../SwarmDiameter/RecordIntervals.lean) | First hitting times, invariance by translation at a simultaneous record, and the diameter bound inside each record interval. |
 | [RecordOccupation.lean](../SwarmDiameter/RecordOccupation.lean) | Occupation limits for record-interval events, including exceedances and duration tails. |
 | [RecordOccupationBound.lean](../SwarmDiameter/RecordOccupationBound.lean) | The expected visit count before the first regeneration is bounded by record probabilities. |
-| [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from an upper bound on the expected visit count to the almost sure logarithmic upper bound. |
+| [OccupationTail.lean](../SwarmDiameter/OccupationTail.lean) | Stretched exponential bound on the expected visit count from bounds on record interval exceedances and durations. |
+| [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from the expected visit count to the almost sure logarithmic upper bound and the limiting upper tail. |
 | [DyadicTail.lean](../SwarmDiameter/DyadicTail.lean) | A dyadic contraction with a stretched exponential error bounds a tail that tends to zero. |
 | [RecordExceedance.lean](../SwarmDiameter/RecordExceedance.lean) | Uniform tightness and the record diameter occupation limit. The initial diameter and duration control exceedances inside each interval, with an additional martingale bound for the two-walker regime. Sharp block estimates suffice for the tails of the initial diameters and durations. |
 | [SpatialGapSums.lean](../SwarmDiameter/SpatialGapSums.lean) | The deterministic bound in the spatial sum estimate. Convexity at marked sites reduces the spatial sum to the initial potential and the sum of powers of the gap lengths. |
@@ -75,7 +76,7 @@ bash scripts/verify_diameter_support.sh
 
 With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
 the replay checked 525 declarations in the renewal, trial bounds and
-symmetric-walk modules and 621 in the swarm model check. Every imported
+symmetric-walk modules and 627 in the swarm model check. Every imported
 declaration in the audited modules depends only on standard Lean axioms.
 The source inventory check and all ten verification-tool tests passed.
 [Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44964146200/job/137029254370).

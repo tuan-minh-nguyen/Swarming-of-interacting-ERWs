@@ -48,8 +48,13 @@ u\limsup_{r\to\infty}\mathbb P(\mathcal E_r(x))
 $$
 where $\mathcal E_r(x)=\{\exists\,t\in[\tau_r,\tau_{r+1})\colon\Delta_t\ge x\}$,
 $W_r=\tau_{r+1}-\tau_r$, and $u$ is any nonnegative integer.
-The logarithmic upper bound follows from a stretched exponential bound
-on the expected visit count by `ae_log_pow_upper_of_regeneration_occupation`.
+Taking $u=\lceil x^3\rceil$, we obtain the stretched exponential bound
+in `eventually_regeneration_occupation_le_of_record_tails`. The assumptions
+are an upper bound with the target exponent for the record exceedances
+and an upper bound with exponent $1/3$ for the record durations.
+Using the expected visit count, we obtain the almost sure logarithmic upper
+bound in `ae_log_pow_upper_of_regeneration_occupation` and the limiting
+upper tail in `exists_diameter_limit_with_upper_tail_of_regeneration_occupation`.
 
 The existing bound in `M4Blk.paperBadBlockProfile` has exponent $1/16$.
 It proves uniform tightness of the diameters at the record times. The
