@@ -1,6 +1,7 @@
 # Verification record
 
-Date: 14 November 2026 (Melbourne).
+Historical verification date: 14 November 2026 (Melbourne).
+Current certification summary appended below for 23 November 2026.
 
 ## Reference and scope
 
@@ -105,3 +106,39 @@ are unchanged.
 We preserved the supplied third-party notices byte for byte. The original
 archive supplied no overall license for the formalisation; no new license or
 repository visibility change is part of this verification.
+
+## Current repository certification — 23 November 2026
+
+This section supersedes the 14 November *status* snapshot, without replacing
+its historical build measurements or independent statement review.
+
+The single branch is **main**. The cleaned mathematical source was checked at
+commit [ea728fa2](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/commit/ea728fa2f3d4796fafcbbdeebdc4ee1ca87f51f7)
+in [GitHub Actions run 45080762725](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/45080762725).
+Both workflow jobs succeeded.
+
+- All 673 Swarm source modules passed the source-inventory and proof-text checks.
+  Ten verification-tool regression tests passed.
+- The approved theorem statement for `Swarming.swarm_diameter` passed the
+  manifest check; the diameter source scan found no proof holes.
+- The independent diameter support replay completed, with **525 declarations**
+  passing its axiom check.
+- The project-only Swarm build compiled **674/674 modules**, without
+  recompiling dependency sources.
+- The diameter theorem replay and `lean -t0` audit passed, checking
+  **1,322 diameter declarations**. All transitive axiom dependencies
+  in that audit belong to `propext`, `Classical.choice`, and `Quot.sound`.
+- The diameter transitive import check counted **89/91** source files:
+  `SwarmDiameter.RenewalProcess` and
+  `SwarmDiameter.RegenerationBlocks` are independent supporting results,
+  separately compiled and included in the renewal/occupation audit.
+
+The original Theorem 1.1 complete axiom audit (18,376 declarations) is
+documented above for the 14 November release. The November 23 workflow
+rebuilt the complete Swarm library and checked the diameter theorem,
+but did not itself repeat that 18,376-declaration `audit/All.lean`
+invocation. We do not conflate these two audit scopes.
+
+Subsequent documentation-only commits must be checked against the
+same mathematical source tree; the preceding record is tied to its
+specific commit and CI run.
