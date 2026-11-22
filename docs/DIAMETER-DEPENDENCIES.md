@@ -77,6 +77,10 @@ and the sum of gap lengths raised to the power $q+1$. The prescribed finite
 gap events have the law of a product of geometric measures. The proof
 combines the truncated exponential estimate for their sum of powers with
 the existing exponential moment for the initial potential.
+Using a finite union bound in `arrayMeasure_local_hof_estimates`, we
+obtain the spatial bounds in `max-cubic-spatial` uniformly over every
+walker, site and subinterval of the prescribed interval. The coefficient of
+the subinterval length depends only on $m,p$.
 
 ## Maximum and limiting tail
 

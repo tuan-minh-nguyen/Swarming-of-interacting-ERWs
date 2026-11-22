@@ -2,9 +2,10 @@ import SwarmDiameter.GeometricGapTail
 import SwarmDiameter.MarkedGapPattern
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.FieldSimp
+import Mathlib.Analysis.Asymptotics.Lemmas
 import Swarm.RawLogRatio
 
-open Finset MeasureTheory Set SwarmMarks
+open Filter Finset MeasureTheory Set SwarmMarks
 open Swarming.Uniform
 open scoped ENNReal
 
@@ -177,5 +178,139 @@ theorem arrayMeasure_sum_hof_pow_tail {p : ℝ} {m : ℕ} (hp₀ : (1 : ℝ) / 2
   change ((arrayMeasure N) ((fun U => SwarmLogRatio.siteMarks p m U i) ⁻¹' A)).toReal ≤ _
   rw [← Measure.map_apply hmap.measurable hA, hmap.map_eq]
   exact h b L u hu
+
+/-- The spatial estimates hold simultaneously for every walker, site, and
+subinterval of a deterministic interval of length at most `T * L + 1`.
+The coefficient of the subinterval length depends only on `m, p`. -/
+theorem arrayMeasure_local_hof_estimates {p : ℝ} {m : ℕ} (hp₀ : (1 : ℝ) / 2 < p)
+    (hp₁ : p < 1) (hm : 2 ≤ m) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (N T : ℕ) {ε : ℝ}, 0 < ε →
+      ∃ c : ℝ, 0 < c ∧ ∀ᶠ L : ℕ in atTop, ∀ b : ℕ,
+        (arrayMeasure N).real {U |
+          (∃ (i : Fin N) (j : ℕ), j ≤ T * L ∧ (L : ℝ) ^ (1 / 3 : ℝ) <
+            hof p (SwarmLogRatio.siteMarks p m U i) (b + j)) ∨
+          (∃ (i : Fin N) (j n : ℕ), j ≤ T * L ∧ n ≤ T * L + 1 ∧
+            C * n + ε * L < ∑ x ∈ Finset.Ico (b + j) (b + j + n),
+              hof p (SwarmLogRatio.siteMarks p m U i) x ^ 2)}
+          ≤ Real.exp (-c * (L : ℝ) ^ (1 / 3 : ℝ)) := by
+  obtain ⟨d, C, hd, hC, hsum⟩ := arrayMeasure_sum_hof_pow_tail hp₀ hp₁ hm 2
+  obtain ⟨a, M, ha, hM, hsite⟩ := markMeasure_hof_initial_tail hp₀ hp₁ hm
+  refine ⟨C, hC, fun N T ε hε => ?_⟩
+  let R (L : ℕ) := (L : ℝ) ^ (1 / 3 : ℝ)
+  let k := min a (d * ε ^ (1 / 3 : ℝ))
+  have hk : 0 < k := lt_min ha (mul_pos hd (Real.rpow_pos_of_pos hε _))
+  let c := k / 2
+  let P : ℝ := (N : ℝ) * ((T : ℝ) + 2) ^ 3 * (M + C)
+  have hP : 0 ≤ P := by dsimp [P]; positivity
+  have hTop : Tendsto R atTop atTop :=
+    (tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 3)).comp tendsto_natCast_atTop_atTop
+  have hsmall := ((isLittleO_exp_mul_rpow_of_lt 9 (show -k < -c by dsimp [c]; linarith)).const_mul_left P).bound
+    (show (0 : ℝ) < 1 by norm_num)
+  refine ⟨c, half_pos hk, ?_⟩
+  filter_upwards [eventually_ge_atTop (1 : ℕ), hTop.eventually hsmall] with L hL hpoly
+  intro b
+  let μ := arrayMeasure N
+  let f (i : Fin N) (j : ℕ) (U : Array N) := hof p (SwarmLogRatio.siteMarks p m U i) (b + j)
+  let s := range (T * L + 1)
+  let t := range (T * L + 2)
+  let A (i : Fin N) (j : ℕ) : Set (Array N) := {U | R L < f i j U}
+  let B (i : Fin N) (j n : ℕ) : Set (Array N) := {U |
+    C * n + ε * L < ∑ x ∈ Finset.Ico (b + j) (b + j + n),
+      hof p (SwarmLogRatio.siteMarks p m U i) x ^ 2}
+  have hA (i : Fin N) (j : ℕ) : μ.real (A i j) ≤ M * Real.exp (-k * R L) := by
+    let E : Set (ℕ → Bool) := {ω | R L < hof p ω (b + j)}
+    have hp : 0 < p := by linarith
+    have he : MeasurableSet E := (measurable_hof hp.ne' (b + j)) measurableSet_Ioi
+    have h := SwarmLogRatio.measurePreserving_siteMarks hp hp₁ m i
+    change (μ ((fun U => SwarmLogRatio.siteMarks p m U i) ⁻¹' E)).toReal ≤ _
+    rw [← Measure.map_apply h.measurable he, h.map_eq]
+    have h₁ := hsite (b + j + 1) (R L)
+    simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, if_false, Nat.add_sub_cancel] at h₁
+    apply h₁.trans
+    exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr
+      (mul_le_mul_of_nonneg_right (neg_le_neg (min_le_left _ _)) (Real.rpow_nonneg (Nat.cast_nonneg _) _))) hM.le
+  have hB (i : Fin N) (j n : ℕ) (hn : n ∈ t) :
+      μ.real (B i j n) ≤ C * ((T * L : ℕ) + 2 : ℝ) * Real.exp (-k * R L) := by
+    have hLp : (0 : ℝ) < L := by exact_mod_cast (zero_lt_one.trans_le hL)
+    have h := hsum N i (b + j) n (ε * L) (mul_pos hε hLp)
+    have hexp : Real.exp (-d * (ε * (L : ℝ)) ^ (1 / ((2 : ℕ) + 1 : ℝ))) ≤ Real.exp (-k * R L) := by
+      norm_num
+      rw [Real.mul_rpow hε.le hLp.le]
+      rw [← mul_assoc]
+      exact mul_le_mul_of_nonneg_right (show k ≤ d * ε ^ (1 / 3 : ℝ) from min_le_right _ _)
+        (Real.rpow_nonneg hLp.le _)
+    have hn' : (n : ℝ) + 1 ≤ ((T * L : ℕ) + 2 : ℝ) := by
+      exact_mod_cast (show n + 1 ≤ T * L + 2 from mem_range.mp hn)
+    exact h.trans (mul_le_mul (mul_le_mul_of_nonneg_left hn' hC.le) hexp
+      (Real.exp_pos _).le (by positivity))
+  let E := Real.exp (-k * R L)
+  let G := ⋃ i ∈ (univ : Finset (Fin N)), ⋃ j ∈ s, A i j
+  let H := ⋃ i ∈ (univ : Finset (Fin N)), ⋃ j ∈ s, ⋃ n ∈ t, B i j n
+  have hG : μ.real G ≤ (N : ℝ) * (s.card : ℝ) * (M * E) := by
+    refine (measureReal_biUnion_finset_le univ (fun i => ⋃ j ∈ s, A i j)).trans ?_
+    have h := sum_le_sum (s := (univ : Finset (Fin N))) fun i _ =>
+      (measureReal_biUnion_finset_le s (A i)).trans
+        (sum_le_sum (g := fun _ => M * E) (fun j _ => hA i j))
+    simpa only [sum_const, card_univ, Fintype.card_fin, nsmul_eq_mul, mul_assoc] using h
+  have hH : μ.real H ≤ (N : ℝ) * (s.card : ℝ) * (t.card : ℝ) * (C * ((T * L : ℕ) + 2 : ℝ) * E) := by
+    refine (measureReal_biUnion_finset_le univ (fun i => ⋃ j ∈ s, ⋃ n ∈ t, B i j n)).trans ?_
+    have h := sum_le_sum (s := (univ : Finset (Fin N))) fun i _ =>
+      (measureReal_biUnion_finset_le s (fun j => ⋃ n ∈ t, B i j n)).trans
+        (sum_le_sum fun j _ => (measureReal_biUnion_finset_le t (B i j)).trans
+          (sum_le_sum (g := fun _ => C * ((T * L : ℕ) + 2 : ℝ) * E) (hB i j)))
+    simpa only [sum_const, card_univ, Fintype.card_fin, nsmul_eq_mul, mul_assoc] using h
+  have hset : {U : Array N | (∃ i j, j ≤ T * L ∧ R L < f i j U) ∨
+      (∃ (i : Fin N) (j n : ℕ), j ≤ T * L ∧ n ≤ T * L + 1 ∧ U ∈ B i j n)} = G ∪ H := by
+    ext U
+    simp only [G, H, s, t, Set.mem_union, mem_ofPred_eq, mem_iUnion, Finset.mem_range,
+      Finset.mem_univ, true_and, Nat.lt_succ_iff, exists_prop]
+    constructor
+    · rintro (h | ⟨i, j, n, hj, hn, hB⟩)
+      · exact Or.inl h
+      · exact Or.inr ⟨i, j, hj, n, hn, hB⟩
+    · rintro (h | ⟨i, j, hj, n, hn, hB⟩)
+      · exact Or.inl h
+      · exact Or.inr ⟨i, j, n, hj, hn, hB⟩
+  change μ.real {U : Array N | (∃ (i : Fin N) (j : ℕ), j ≤ T * L ∧ R L < f i j U) ∨
+    (∃ (i : Fin N) (j n : ℕ), j ≤ T * L ∧ n ≤ T * L + 1 ∧ U ∈ B i j n)} ≤ _
+  rw [hset]
+  refine (measureReal_union_le G H).trans ((add_le_add hG hH).trans ?_)
+  let Q := ((T : ℝ) + 2) * L
+  have hLr : 1 ≤ (L : ℝ) := by exact_mod_cast hL
+  have hQ : 1 ≤ Q := by dsimp [Q]; nlinarith [Nat.cast_nonneg (α := ℝ) T, Nat.cast_nonneg (α := ℝ) L]
+  have hwidth : ((T * L : ℕ) + 2 : ℝ) ≤ Q := by
+    push_cast
+    dsimp [Q]
+    linarith [hLr]
+  have hs : ((s.card : ℕ) : ℝ) ≤ Q := by
+    simp only [s, card_range]
+    push_cast at hwidth ⊢
+    linarith
+  have ht : ((t.card : ℕ) : ℝ) ≤ Q := by simpa [t] using hwidth
+  have hn : 0 ≤ (N : ℝ) := Nat.cast_nonneg _
+  have he : 0 ≤ E := (Real.exp_pos _).le
+  have hqpow : Q ≤ Q ^ (3 : ℕ) := by
+    simpa only [pow_one] using (pow_le_pow_right₀ hQ (by norm_num : (1 : ℕ) ≤ 3))
+  have h₁ : (N : ℝ) * (s.card : ℝ) * (M * E) ≤ (N : ℝ) * Q ^ (3 : ℕ) * (M * E) := by
+    exact mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left (hs.trans hqpow) hn)
+      (mul_nonneg hM.le he)
+  have h₂ : (N : ℝ) * (s.card : ℝ) * (t.card : ℝ) * (C * ((T * L : ℕ) + 2 : ℝ) * E) ≤
+      (N : ℝ) * Q ^ (3 : ℕ) * (C * E) := by
+    calc
+      _ ≤ (N : ℝ) * Q * Q * (C * Q * E) := by gcongr
+      _ = _ := by ring
+  have hR : R L ^ (9 : ℝ) = (L : ℝ) ^ (3 : ℕ) := by
+    dsimp only [R]
+    rw [← Real.rpow_mul (Nat.cast_nonneg _)]
+    norm_num
+  refine (add_le_add h₁ h₂).trans ?_
+  calc
+    _ = P * (Real.exp (-k * R L) * R L ^ (9 : ℝ)) := by rw [hR]; dsimp only [P, Q, E]; ring
+    _ ≤ _ := by
+      change ‖P * (Real.exp (-k * R L) * R L ^ (9 : ℝ))‖ ≤
+        1 * ‖Real.exp (-c * R L)‖ at hpoly
+      rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (by positivity),
+        abs_of_pos (Real.exp_pos _), one_mul] at hpoly
+      exact hpoly
 
 end Swarming.Diameter
