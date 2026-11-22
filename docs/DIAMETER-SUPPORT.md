@@ -30,6 +30,8 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [RecordOccupation.lean](../SwarmDiameter/RecordOccupation.lean) | Occupation limits for record-interval events, including exceedances and duration tails. |
 | [RecordOccupationBound.lean](../SwarmDiameter/RecordOccupationBound.lean) | The expected visit count before the first regeneration is bounded by record probabilities. |
 | [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from an upper bound on the expected visit count to the almost sure logarithmic upper bound. |
+| [DyadicTail.lean](../SwarmDiameter/DyadicTail.lean) | A dyadic contraction with a stretched exponential error bounds a tail that tends to zero. |
+| [RecordExceedance.lean](../SwarmDiameter/RecordExceedance.lean) | Uniform tightness and the record diameter occupation limit. The initial diameter and duration control exceedances inside each interval, with an additional martingale bound for the two-walker regime. Sharp block estimates suffice for the tails of the initial diameters and durations. |
 | [RecordDensity.lean](../SwarmDiameter/RecordDensity.lean) | Positive lower density of simultaneous records under both laws. |
 | [TwoWalkerTrial.lean](../SwarmDiameter/TwoWalkerTrial.lean) | At a simultaneous record the conditional probability of diameter at least $L^2+L$ after $4L+L^3$ steps is at least $e^{-CL}$ for $L\ge8$. |
 | [CubicTrial.lean](../SwarmDiameter/CubicTrial.lean) | For $m\ge N\ge3$, the conditional probability of diameter at least $aL^3$ after $4L+L^3$ steps from a simultaneous record is at least $e^{-CL}$ for large $L$. |
@@ -71,11 +73,11 @@ bash scripts/verify_diameter_support.sh
 
 With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
 the replay checked 525 declarations in the renewal, trial bounds and
-symmetric-walk modules and 519 in the swarm model check. Every imported
+symmetric-walk modules and 538 in the swarm model check. Every imported
 declaration in the audited modules depends only on standard Lean axioms.
 The source inventory check and all ten verification-tool tests passed.
-[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436842).
-[Earlier swarm model check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44935280942/job/136940436251).
+[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44964146200/job/137029254370).
+[Record occupation check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44964146200/job/137029254598).
 
 ## References
 

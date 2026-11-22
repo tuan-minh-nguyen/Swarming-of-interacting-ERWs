@@ -51,8 +51,19 @@ The logarithmic upper bound follows from a stretched exponential bound
 on the expected visit count by `ae_log_pow_upper_of_regeneration_occupation`.
 
 The existing bound in `M4Blk.paperBadBlockProfile` has exponent $1/16$.
-The sharp record probability bounds of Sections 3.1, 3.2 and 4.1 remain
-to be proved and applied to the visit count.
+It proves uniform tightness of the diameters at the record times. The
+probabilities of initial diameter exceedances converge by the record
+occupation identity. Using this convergence in
+`record_diameter_tail_le_of_contraction`, we take the limit in the
+record level at each fixed scale, then iterate the halving estimate.
+`record_duration_limsup_le_of_advance` bounds the duration tail
+from the advance estimate in the same block.
+
+For exceedances within a record interval, we have two bounds.
+`record_interval_exceedance_prob_le_initial_or_duration` uses the
+nearest-neighbour step bound. `record_interval_exceedance_prob_le`
+uses the drift martingale at the first hitting time of the record level.
+The sharp block estimates of Sections 3.1, 3.2 and 4.1 remain to be proved.
 
 ## Maximum and limiting tail
 
