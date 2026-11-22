@@ -82,6 +82,13 @@ obtain the spatial bounds in `max-cubic-spatial` uniformly over every
 walker, site and subinterval of the prescribed interval. The coefficient of
 the subinterval length depends only on $m,p$.
 
+Using this spatial bound and the conditional martingale estimate at each
+first-passage time, `record_projH_oscillation_le_cube_root` bounds projected
+potential oscillations beyond $\varepsilon L$ by $e^{-cL^{1/3}}$.
+`gamma_trial_concentration` bounds the probability of an $\varepsilon L$
+deficit from the trial-count lower estimate by $e^{-cL}$, uniformly over the
+nonempty proper groups and the prescribed subintervals.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
