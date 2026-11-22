@@ -113,7 +113,8 @@ jobs:
                           MarkedGapPattern GeometricGapTail MarkedSpatialTail OccupationTail \
                           ProjectedPotentialOscillation RecordTrialConcentration \
                           RecordOccupationMartingale SeparatedGroupStep RecordGroupDrift \
-                          RecordGroupAdvance; do
+                          RecordGroupAdvance RecordGroupPotential RecordGroupMaximum \
+                          RecordGroupMovement; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean

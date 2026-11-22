@@ -106,6 +106,13 @@ drift estimate with the trial count on the random interval of record levels.
 The finishing times of the successful trials are distinct and each contributes
 a negative correction. This proves `locmove-second` at the cube-root rate.
 
+`record_group_potential_failure_le_cube_root` proves `loccoord` using the
+spatial sum of squared potentials. `record_group_maximum_failure_le_cube_root`
+proves the unit-rate lower bound for the trailing group's maximum potential.
+In `record_group_movement_failure_le_cube_root`, the two drift inequalities
+cancel the advance of the leading group's record, as in `locmove`. The
+failure probability is bounded by $3e^{-cL^{1/3}}$.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.

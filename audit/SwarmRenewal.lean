@@ -6,7 +6,7 @@ import SwarmDiameter.MarkedSpatialTail
 import SwarmDiameter.ProjectedPotentialOscillation
 import SwarmDiameter.RecordTrialConcentration
 import SwarmDiameter.RecordOccupationMartingale
-import SwarmDiameter.RecordGroupAdvance
+import SwarmDiameter.RecordGroupMovement
 import Lean
 
 open Lean Elab Command
@@ -35,6 +35,9 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.record_group_drift_failure_le_cube_root
 #print axioms Swarming.Diameter.record_separated_group_failure_le_cube_root
 #print axioms Swarming.Diameter.record_group_advance_drift_failure_le_cube_root
+#print axioms Swarming.Diameter.record_group_potential_failure_le_cube_root
+#print axioms Swarming.Diameter.record_group_maximum_failure_le_cube_root
+#print axioms Swarming.Diameter.record_group_movement_failure_le_cube_root
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 
