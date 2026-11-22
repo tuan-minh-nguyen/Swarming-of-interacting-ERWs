@@ -115,7 +115,8 @@ jobs:
                           RecordOccupationMartingale SeparatedGroupStep RecordGroupDrift \
                           RecordGroupAdvance RecordGroupPotential RecordGroupMaximum \
                           RecordGroupMovement RecordOccupationEstimate RecordOccupationHighProbability \
-                          RecordLocalClauses; do
+                          RecordLocalClauses RecordFluidLimit RecordHalving RecordCubicBlock RecordTailFromBlock \
+                          SwarmDiameterBounds SwarmDiameterCubic; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean

@@ -69,7 +69,7 @@ For exceedances within a record interval, we have two bounds.
 `record_interval_exceedance_prob_le_initial_or_duration` uses the
 nearest-neighbour step bound. `record_interval_exceedance_prob_le`
 uses the drift martingale at the first hitting time of the record level.
-The sharp block estimates of Sections 3.1, 3.2 and 4.1 remain to be proved.
+The sharp record-block estimate of Section 3.1 is verified. The sharp bounds of Sections 3.2 and 4.1 remain open in Lean.
 The spatial estimate `max-spatial-tail` is formalised in
 `arrayMeasure_sum_hof_pow_tail`. Convexity at each marked site and
 summation over the intervals bound the spatial sum by the initial potential
@@ -118,6 +118,12 @@ failure probability is bounded by $3e^{-cL^{1/3}}$.
 `record_occupation_estimate_of_local_bounds` takes a potential cutoff `V` and an error bound `E ≥ V ^ 2`. It reuses `SummedSlope.lococc_summed` for the summed occupation inequality. `record_occupation_failure_le_cube_root` applies the spatial and martingale estimates with `V = L ^ (1 / 3)` and `E` proportional to `ε * L`, uniformly over the integer subintervals of the record interval.
 
 `record_local_clauses_failure_le_cube_root` combines the occupation estimate, group potential bounds, movement estimates, and compensated trajectory martingale. The error in `BlkCoin.BlockClauses` and `JoinStep.MartClause` is `ε * L`. The common coefficient `C` is chosen before the time horizon and the error tolerance. The probability that either clause fails on the record carrier is at most `K * exp (-c * L ^ (1 / 3))`.
+
+## Cubic record-block estimate
+
+`coalesced_at_of_local_errors` allows the coefficient of `L ^ (3 / 4)` to vary with the scale. Its integer upper bound divided by `L` tends to zero along the sequences appearing in `record_defect_halves_of_local_clauses`. The compactness argument in the latter theorem fixes an error tolerance `ε > 0` before the scale and record level. `record_cubic_block_failure_le` combines halving, record advancement and `record_local_clauses_failure_le_cube_root` at that tolerance. The result proves `max-cubic-prob` on the original probability space.
+
+`record_interval_tails_le_of_block` applies the contraction at scale `2 * L` and controls each record duration by the time to reach the later record. It establishes cube-root bounds for the duration and diameter exceedance. `swarm_diameter_cubic` then proves all parts of Theorem 1.2 when `3 ≤ N ≤ m`. The linear and two-walker upper estimates remain open in Lean.
 
 ## Maximum and limiting tail
 

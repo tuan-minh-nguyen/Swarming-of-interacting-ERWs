@@ -43,6 +43,12 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [RecordOccupationEstimate.lean](../SwarmDiameter/RecordOccupationEstimate.lean) | Deterministic occupation estimate with a variable potential cutoff and a common error bound. |
 | [RecordOccupationHighProbability.lean](../SwarmDiameter/RecordOccupationHighProbability.lean) | Occupation estimate with an error of `ε * L` and failure probability at most `3 * exp (-c * L ^ (1 / 3))`. |
 | [RecordLocalClauses.lean](../SwarmDiameter/RecordLocalClauses.lean) | Joint bound for the local clauses and the trajectory martingale at the actual record time. |
+| [RecordFluidLimit.lean](../SwarmDiameter/RecordFluidLimit.lean) | Coalescence when the local error divided by the spatial scale tends to zero. |
+| [RecordHalving.lean](../SwarmDiameter/RecordHalving.lean) | A fixed sufficiently small error of order `ε * L` suffices for uniform halving at a later record. |
+| [RecordCubicBlock.lean](../SwarmDiameter/RecordCubicBlock.lean) | Proposition 3.1 at rate `exp (-c * L ^ (1 / 3))` on the actual trajectory. |
+| [RecordTailFromBlock.lean](../SwarmDiameter/RecordTailFromBlock.lean) | Transfer from a record-block estimate to record-interval duration and diameter bounds. |
+| [SwarmDiameterBounds.lean](../SwarmDiameter/SwarmDiameterBounds.lean) | Assembly of growth, weak convergence and limiting tail bounds from the record-interval estimates. |
+| [SwarmDiameterCubic.lean](../SwarmDiameter/SwarmDiameterCubic.lean) | Theorem 1.2 for `3 ≤ N` and `N ≤ m`. |
 | [RecordGroupPotential.lean](../SwarmDiameter/RecordGroupPotential.lean) | The group potential satisfies `loccoord` simultaneously over the prescribed spatial intervals and times. |
 | [RecordGroupMaximum.lean](../SwarmDiameter/RecordGroupMaximum.lean) | The trailing group's maximum potential grows at unit rate up to $\varepsilon L$ on every separated subinterval, with exceptional probability $e^{-cL^{1/3}}$. |
 | [RecordGroupMovement.lean](../SwarmDiameter/RecordGroupMovement.lean) | The local movement estimate `locmove` follows from the spatial, maximum, and advance bounds. Its coefficient depends only on $N,m,p$. |
@@ -71,9 +77,7 @@ duration tails. Using a stretched exponential bound on the expected visit
 count, `ae_log_pow_upper_of_regeneration_occupation` proves the almost sure
 logarithmic upper bound under the original law.
 
-The sharp upper probability bounds for the record intervals remain open in
-Lean. The existing estimate in `M4Blk.paperBadBlockProfile` has exponent
-$1/16$ and supplies the tightness used for the qualitative limit.
+Theorem 1.2 is verified for $3\le N\le m$. The linear and two-walker regimes have verified lower bounds and weak convergence. Their sharp upper estimates remain open in Lean.
 
 ## Verification
 

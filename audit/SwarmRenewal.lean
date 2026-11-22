@@ -8,6 +8,7 @@ import SwarmDiameter.RecordTrialConcentration
 import SwarmDiameter.RecordOccupationMartingale
 import SwarmDiameter.RecordGroupMovement
 import SwarmDiameter.RecordLocalClauses
+import SwarmDiameter.SwarmDiameterCubic
 import Lean
 
 open Lean Elab Command
@@ -42,6 +43,11 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.record_occupation_estimate_of_local_bounds
 #print axioms Swarming.Diameter.record_occupation_failure_le_cube_root
 #print axioms Swarming.Diameter.record_local_clauses_failure_le_cube_root
+#print axioms Swarming.Diameter.coalesced_at_of_local_errors
+#print axioms Swarming.Diameter.record_defect_halves_of_local_clauses
+#print axioms Swarming.Diameter.record_cubic_block_failure_le
+#print axioms Swarming.Diameter.record_interval_tails_le_of_block
+#print axioms Swarming.Diameter.swarm_diameter_cubic
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 
