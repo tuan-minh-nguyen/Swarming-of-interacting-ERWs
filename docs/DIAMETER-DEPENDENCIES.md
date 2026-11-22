@@ -95,6 +95,12 @@ The geometric condition holds throughout each first-passage cell. The sum of
 the spatial exceptional masses over the disjoint cells is bounded by the
 unconditional failure probability of the spatial estimate.
 
+`record_group_drift_failure_le_cube_root` keeps the group potential fixed
+at the time before each jump. The linear bound on this increment permits
+an Azuma bound of order $e^{-cL^{1/3}}$ and preserves the conditional drift
+term in `max-fixed-coordinate`. Its sign on separated subintervals yields
+the estimate `locgroup` in `record_separated_group_failure_le_cube_root`.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
