@@ -18,7 +18,9 @@ private theorem measureReal_iUnion_le_card_mul {Ω ι : Type*} [MeasurableSpace 
   simpa only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ] using
     (Finset.sum_le_sum (s := Finset.univ) (fun i _ => hE i))
 
-private theorem record_drift_martingale_failure_le_exp
+/-- Exponential bound for two-endpoint martingale deviations of order `L`
+in the record-time window of length `T * L`. -/
+theorem record_drift_martingale_failure_le_exp
     {N : ℕ} [Nonempty (Fin N)] {p : ℝ} {m : ℕ} (hp₀ : (1 : ℝ) / 2 < p) (hp₁ : p < 1)
     (hm : 2 ≤ m) (hN : 2 ≤ N) (T : ℕ) (hT : 1 ≤ T) {ε : ℝ} (hε : 0 < ε) :
     ∃ c : ℝ, 0 < c ∧ ∀ᶠ L : ℕ in atTop, ∀ r : ℕ, ∀ i : Fin N,

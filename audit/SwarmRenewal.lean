@@ -12,6 +12,8 @@ import SwarmDiameter.SwarmDiameterCubic
 import SwarmDiameter.RecordDownwardCrossing
 import SwarmDiameter.RecordMartingaleAtOffset
 import SwarmDiameter.SwarmDiameterTwoWalker
+import SwarmDiameter.MinimumProgress
+import SwarmDiameter.SoftMinimum
 import Lean
 
 open Lean Elab Command
@@ -62,6 +64,8 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.record_two_walker_halving_failure_le_sqrt
 #print axioms Swarming.Diameter.record_two_walker_exceedance_limsup_le
 #print axioms Swarming.Diameter.swarm_diameter_two_walker
+#print axioms Swarming.Diameter.record_minimum_progress_failure_le_exp
+#print axioms Swarming.Diameter.softMinimum_sub_ge_weighted_sum
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 

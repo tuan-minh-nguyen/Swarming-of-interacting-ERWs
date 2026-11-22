@@ -137,6 +137,10 @@ failure probability is bounded by $3e^{-cL^{1/3}}$.
 
 `record_two_walker_exceedance_limsup_le` uses the cube-root duration bound at times of order $L^2$ for the time cutoff in the record contraction. For the exceedance between two successive records, it balances the duration and martingale estimates at times of order $x^{3/2}$. `swarm_diameter_two_walker` proves the $N=2$ case of Theorem 1.2.
 
+## Minimum progress when `m < N`
+
+Every walker at the global minimum is excited when the minimum is nonnegative. `minimum_progress_of_compensated_error` sums the compensated paths truncated at the terminal minimum plus the error allowance. Using the record-time martingale bound, `record_minimum_progress_failure_le_exp` controls the failure of minimum progress uniformly over all subintervals. `softMinimum_sub_ge_weighted_sum` controls the increments of the logarithmic approximation of the minimum for the separated-group comparison.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
