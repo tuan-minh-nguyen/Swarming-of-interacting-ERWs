@@ -101,6 +101,11 @@ an Azuma bound of order $e^{-cL^{1/3}}$ and preserves the conditional drift
 term in `max-fixed-coordinate`. Its sign on separated subintervals yields
 the estimate `locgroup` in `record_separated_group_failure_le_cube_root`.
 
+`record_group_advance_drift_failure_le_cube_root` combines the group
+drift estimate with the trial count on the random interval of record levels.
+The finishing times of the successful trials are distinct and each contributes
+a negative correction. This proves `locmove-second` at the cube-root rate.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
