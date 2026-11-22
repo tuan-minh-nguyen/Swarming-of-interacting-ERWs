@@ -51,6 +51,13 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [SwarmDiameterCubic.lean](../SwarmDiameter/SwarmDiameterCubic.lean) | Theorem 1.2 for `3 ≤ N` and `N ≤ m`. |
 | [RecordDownwardCrossing.lean](../SwarmDiameter/RecordDownwardCrossing.lean) | Downward-crossing probability after a record and the square-root bound at the two-walker horizon. |
 | [RecordMartingaleAtOffset.lean](../SwarmDiameter/RecordMartingaleAtOffset.lean) | Martingale deviations after a fixed offset from the record time and the front-walker excursion bound. |
+| [RecordExitTime.lean](../SwarmDiameter/RecordExitTime.lean) | Exit-time estimate below the other walker's attained level. |
+| [TwoWalkerPassage.lean](../SwarmDiameter/TwoWalkerPassage.lean) | Probability of reaching the higher level before the trailing walker exits. |
+| [TwoWalkerGap.lean](../SwarmDiameter/TwoWalkerGap.lean) | Reduction from a large diameter to the ordered passage event. |
+| [TwoWalkerMeeting.lean](../SwarmDiameter/TwoWalkerMeeting.lean) | Control at the first time the second walker reaches the initial record. |
+| [TwoWalkerBlock.lean](../SwarmDiameter/TwoWalkerBlock.lean) | Proposition 4.1 on the actual law. |
+| [TwoWalkerTail.lean](../SwarmDiameter/TwoWalkerTail.lean) | Square-root exponential bounds at and between records. |
+| [SwarmDiameterTwoWalker.lean](../SwarmDiameter/SwarmDiameterTwoWalker.lean) | All parts of Theorem 1.2 for `N = 2`. |
 | [RecordGroupPotential.lean](../SwarmDiameter/RecordGroupPotential.lean) | The group potential satisfies `loccoord` simultaneously over the prescribed spatial intervals and times. |
 | [RecordGroupMaximum.lean](../SwarmDiameter/RecordGroupMaximum.lean) | The trailing group's maximum potential grows at unit rate up to $\varepsilon L$ on every separated subinterval, with exceptional probability $e^{-cL^{1/3}}$. |
 | [RecordGroupMovement.lean](../SwarmDiameter/RecordGroupMovement.lean) | The local movement estimate `locmove` follows from the spatial, maximum, and advance bounds. Its coefficient depends only on $N,m,p$. |
@@ -79,7 +86,7 @@ duration tails. Using a stretched exponential bound on the expected visit
 count, `ae_log_pow_upper_of_regeneration_occupation` proves the almost sure
 logarithmic upper bound under the original law.
 
-Theorem 1.2 is verified for $3\le N\le m$. The linear and two-walker regimes have verified lower bounds and weak convergence. Their sharp upper estimates remain open in Lean.
+Theorem 1.2 is verified for $N=2$ and for $3\le N\le m$. In the regime $2\le m<N$, the lower bounds and weak convergence are verified. The exponential upper bound remains open in Lean.
 
 ## Verification
 

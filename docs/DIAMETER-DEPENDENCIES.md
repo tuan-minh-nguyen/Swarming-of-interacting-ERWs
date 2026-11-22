@@ -69,7 +69,7 @@ For exceedances within a record interval, we have two bounds.
 `record_interval_exceedance_prob_le_initial_or_duration` uses the
 nearest-neighbour step bound. `record_interval_exceedance_prob_le`
 uses the drift martingale at the first hitting time of the record level.
-The sharp record-block estimate of Section 3.1 is verified. The sharp bounds of Sections 3.2 and 4.1 remain open in Lean.
+The sharp record estimates of Sections 3.1 and 4.1 are verified. The estimate of Section 3.2 remains open in Lean.
 The spatial estimate `max-spatial-tail` is formalised in
 `arrayMeasure_sum_hof_pow_tail`. Convexity at each marked site and
 summation over the intervals bound the spatial sum by the initial potential
@@ -123,13 +123,19 @@ failure probability is bounded by $3e^{-cL^{1/3}}$.
 
 `coalesced_at_of_local_errors` allows the coefficient of `L ^ (3 / 4)` to vary with the scale. Its integer upper bound divided by `L` tends to zero along the sequences appearing in `record_defect_halves_of_local_clauses`. The compactness argument in the latter theorem fixes an error tolerance `ε > 0` before the scale and record level. `record_cubic_block_failure_le` combines halving, record advancement and `record_local_clauses_failure_le_cube_root` at that tolerance. The result proves `max-cubic-prob` on the original probability space.
 
-`record_interval_tails_le_of_block` applies the contraction at scale `2 * L` and controls each record duration by the time to reach the later record. It establishes cube-root bounds for the duration and diameter exceedance. `swarm_diameter_cubic` then proves all parts of Theorem 1.2 when `3 ≤ N ≤ m`. The linear and two-walker upper estimates remain open in Lean.
+`record_interval_tails_le_of_block` applies the contraction at scale `2 * L` and controls each record duration by the time to reach the later record. It establishes cube-root bounds for the duration and diameter exceedance. `swarm_diameter_cubic` then proves all parts of Theorem 1.2 when `3 ≤ N ≤ m`. The cubic duration bound also applies to two walkers.
 
 ## Two-walker crossing estimates
 
 `record_downward_crossing_prob_le` partitions the event by the first-passage time to the initial record level. On each measurable part, the existing frozen-walk crossing estimate bounds the probability by the integral of the product of site ratios. The disjoint parts are summed before taking the expectation of the product. `record_downward_excursion_failure_le_sqrt` uses this estimate and a finite union bound over the interval in `max-two-downward`.
 
 `record_offset_martingale_window_prob_le` shifts the same partition by a fixed offset. `two_walker_front_excursion_prob_le` applies it to `max-two-front-new`. The excitation count is constant during an excursion above a level that the other walker has yet to reach.
+
+## Two-walker record and diameter bounds
+
+`record_offset_interval_survival_prob_le` iterates the potential exit-time estimate on the disjoint record-time events. `two_walker_passage_order_prob_le` combines that estimate with the martingale bound on excursions. `two_walker_meeting_of_no_deviations` controls the first time both walkers have reached the initial level. `exists_passage_order_of_large_diameter` reduces a later exceedance to a passage before the trailing walker exits. Together with the downward-crossing and spatial probability bounds, these prove `max-two-local-bound` in `record_two_walker_halving_failure_le_sqrt`.
+
+`record_two_walker_exceedance_limsup_le` uses the cube-root duration bound at times of order $L^2$ for the time cutoff in the record contraction. For the exceedance between two successive records, it balances the duration and martingale estimates at times of order $x^{3/2}$. `swarm_diameter_two_walker` proves the $N=2$ case of Theorem 1.2.
 
 ## Maximum and limiting tail
 

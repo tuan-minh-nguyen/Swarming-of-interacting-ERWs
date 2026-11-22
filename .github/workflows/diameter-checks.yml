@@ -116,7 +116,9 @@ jobs:
                           RecordGroupAdvance RecordGroupPotential RecordGroupMaximum \
                           RecordGroupMovement RecordOccupationEstimate RecordOccupationHighProbability \
                           RecordLocalClauses RecordFluidLimit RecordHalving RecordCubicBlock RecordTailFromBlock \
-                          SwarmDiameterBounds SwarmDiameterCubic RecordDownwardCrossing RecordMartingaleAtOffset; do
+                          SwarmDiameterBounds SwarmDiameterCubic RecordDownwardCrossing RecordMartingaleAtOffset \
+                          RecordExitTime TwoWalkerPassage TwoWalkerGap TwoWalkerMeeting TwoWalkerBlock \
+                          TwoWalkerTail SwarmDiameterTwoWalker; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean

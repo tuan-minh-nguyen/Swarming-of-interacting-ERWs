@@ -11,6 +11,7 @@ import SwarmDiameter.RecordLocalClauses
 import SwarmDiameter.SwarmDiameterCubic
 import SwarmDiameter.RecordDownwardCrossing
 import SwarmDiameter.RecordMartingaleAtOffset
+import SwarmDiameter.SwarmDiameterTwoWalker
 import Lean
 
 open Lean Elab Command
@@ -54,6 +55,13 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.record_downward_excursion_failure_le_sqrt
 #print axioms Swarming.Diameter.record_offset_martingale_window_prob_le
 #print axioms Swarming.Diameter.two_walker_front_excursion_prob_le
+#print axioms Swarming.Diameter.record_offset_interval_survival_prob_le
+#print axioms Swarming.Diameter.two_walker_passage_order_prob_le
+#print axioms Swarming.Diameter.exists_passage_order_of_large_diameter
+#print axioms Swarming.Diameter.two_walker_meeting_of_no_deviations
+#print axioms Swarming.Diameter.record_two_walker_halving_failure_le_sqrt
+#print axioms Swarming.Diameter.record_two_walker_exceedance_limsup_le
+#print axioms Swarming.Diameter.swarm_diameter_two_walker
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 
