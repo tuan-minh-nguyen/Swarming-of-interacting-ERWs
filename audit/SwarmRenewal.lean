@@ -23,6 +23,7 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.sum_hof_pow_le_marked_gaps
 #print axioms Swarming.Diameter.measure_union_markedGapEvent
 #print axioms Swarming.Diameter.arrayMeasure_sum_hof_pow_tail
+#print axioms Swarming.Diameter.arrayMeasure_local_hof_estimates
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 
