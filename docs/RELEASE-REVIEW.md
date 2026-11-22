@@ -1,4 +1,10 @@
-# Release review
+# Release review — Theorem 1.1 (14 November 2026)
+
+This is a historical review of the original Theorem 1.1 release, not a
+current whole-repository certification or a new performance benchmark.
+For the successful 23 November 2026 checks of Theorems 1.1 and 1.2, see
+[the current verification record](VERIFICATION.md#current-repository-certification--23-november-2026)
+and the [repository README](../README.md).
 
 We independently reviewed the main theorem and model against the supplied
 manuscript, and separately reviewed the proposed release files and verification
