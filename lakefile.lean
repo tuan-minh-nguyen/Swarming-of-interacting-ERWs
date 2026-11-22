@@ -16,4 +16,4 @@ lean_lib SwarmDiameter where
     `SwarmDiameter.SwarmLowerBounds, `SwarmDiameter.OccupationTail,
     `SwarmDiameter.SwarmUpperGrowth, `SwarmDiameter.RecordExceedance,
     `SwarmDiameter.MarkedSpatialTail, `SwarmDiameter.ProjectedPotentialOscillation,
-    `SwarmDiameter.RecordTrialConcentration]
+    `SwarmDiameter.RecordTrialConcentration, `SwarmDiameter.RecordOccupationMartingale]

@@ -5,6 +5,7 @@ import SwarmDiameter.RecordExceedance
 import SwarmDiameter.MarkedSpatialTail
 import SwarmDiameter.ProjectedPotentialOscillation
 import SwarmDiameter.RecordTrialConcentration
+import SwarmDiameter.RecordOccupationMartingale
 import Lean
 
 open Lean Elab Command
@@ -28,6 +29,8 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.arrayMeasure_local_hof_estimates
 #print axioms Swarming.Diameter.record_projH_oscillation_le_cube_root
 #print axioms Swarming.Diameter.gamma_trial_concentration
+#print axioms Swarming.Diameter.record_Qpl_maximal_deviation_le_cube_root
+#print axioms Swarming.Diameter.record_Qpl_oscillation_le_cube_root
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 
