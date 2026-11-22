@@ -14,4 +14,4 @@ lean_lib SwarmDiameter where
     `SwarmDiameter.FirstIntervalOccupation, `SwarmDiameter.TailBounds,
     `SwarmDiameter.ReflectionExcursion, `SwarmDiameter.SymmetricConfinement,
     `SwarmDiameter.SwarmLowerBounds, `SwarmDiameter.RecordOccupationBound,
-    `SwarmDiameter.SwarmUpperGrowth]
+    `SwarmDiameter.SwarmUpperGrowth, `SwarmDiameter.RecordExceedance]

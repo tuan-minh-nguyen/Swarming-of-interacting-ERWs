@@ -1,6 +1,7 @@
 import SwarmDiameter.SwarmLowerBounds
 import SwarmDiameter.RecordOccupationBound
 import SwarmDiameter.SwarmUpperGrowth
+import SwarmDiameter.RecordExceedance
 import Lean
 
 open Lean Elab Command
@@ -15,6 +16,9 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.tendsto_record_event_occupation
 #print axioms Swarming.Diameter.first_regeneration_diameter_occupation_le_record_limsup
 #print axioms Swarming.Diameter.ae_log_pow_upper_of_regeneration_occupation
+#print axioms Swarming.Diameter.record_interval_exceedance_prob_le
+#print axioms Swarming.Diameter.record_diameter_tail_le_of_contraction
+#print axioms Swarming.Diameter.record_duration_limsup_le_of_advance
 
 elab "#audit_swarm_renewal_axioms" : command => do
   let env ← getEnv
