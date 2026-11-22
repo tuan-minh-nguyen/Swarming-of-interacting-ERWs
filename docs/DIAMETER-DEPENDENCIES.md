@@ -125,6 +125,12 @@ failure probability is bounded by $3e^{-cL^{1/3}}$.
 
 `record_interval_tails_le_of_block` applies the contraction at scale `2 * L` and controls each record duration by the time to reach the later record. It establishes cube-root bounds for the duration and diameter exceedance. `swarm_diameter_cubic` then proves all parts of Theorem 1.2 when `3 ≤ N ≤ m`. The linear and two-walker upper estimates remain open in Lean.
 
+## Two-walker crossing estimates
+
+`record_downward_crossing_prob_le` partitions the event by the first-passage time to the initial record level. On each measurable part, the existing frozen-walk crossing estimate bounds the probability by the integral of the product of site ratios. The disjoint parts are summed before taking the expectation of the product. `record_downward_excursion_failure_le_sqrt` uses this estimate and a finite union bound over the interval in `max-two-downward`.
+
+`record_offset_martingale_window_prob_le` shifts the same partition by a fixed offset. `two_walker_front_excursion_prob_le` applies it to `max-two-front-new`. The excitation count is constant during an excursion above a level that the other walker has yet to reach.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
