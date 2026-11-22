@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from check_proof_holes import check
+from lean_sources import imports
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPORT = "Swarming.swarm_diameter"
@@ -27,6 +28,27 @@ def main():
     files = [ROOT / "SwarmDiameter.lean", *sorted((ROOT / "SwarmDiameter").rglob("*.lean"))]
     if sum(check(file) for file in files):
         raise SystemExit("Unexpected proof hole or compiler-trust bypass")
+    # Compute the transitive imports of the public theorem, independently of
+    # the explicitly enumerated modules in the CI compilation workflow.
+    project = {
+        ".".join(path.relative_to(ROOT).with_suffix("").parts): path
+        for path in files
+    }
+    reachable = set()
+    def visit(module):
+        if module in reachable or module not in project:
+            return
+        reachable.add(module)
+        for dependency in imports(project[module].read_text(encoding="utf-8")):
+            visit(dependency)
+
+    visit("SwarmDiameter")
+    unreachable = sorted(set(project) - reachable)
+    print(f"DIAMETER IMPORT CLOSURE: {len(reachable)}/{len(project)} source files")
+    if unreachable:
+        print("DIAMETER UNREACHABLE SOURCES: " + ", ".join(unreachable))
+    else:
+        print("DIAMETER IMPORT CLOSURE COMPLETE")
     print(f"DIAMETER STATEMENT OK: {EXPORT}")
     print(f"DIAMETER SOURCES OK: {len(files)} files")
 
