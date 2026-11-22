@@ -65,11 +65,13 @@ For exceedances within a record interval, we have two bounds.
 nearest-neighbour step bound. `record_interval_exceedance_prob_le`
 uses the drift martingale at the first hitting time of the record level.
 The sharp block estimates of Sections 3.1, 3.2 and 4.1 remain to be proved.
-The deterministic part of `max-spatial-tail` is proved in
-`sum_hof_pow_le_marked_gaps`. Convexity at each marked site and
+The spatial estimate `max-spatial-tail` is formalised in
+`arrayMeasure_sum_hof_pow_tail`. Convexity at each marked site and
 summation over the intervals bound the spatial sum by the initial potential
-and the sum of gap lengths raised to the power $q+1$. The geometric gap
-law and its truncated exponential estimate remain to be formalised.
+and the sum of gap lengths raised to the power $q+1$. The prescribed finite
+gap events have the law of a product of geometric measures. The proof
+combines the truncated exponential estimate for their sum of powers with
+the existing exponential moment for the initial potential.
 
 ## Maximum and limiting tail
 

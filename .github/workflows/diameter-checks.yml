@@ -109,7 +109,8 @@ jobs:
                           SymmetricTrial TwoWalkerTrial RecordDensity TailBounds MaxGrowth \
                           LeadingWalkTrial CubicTrial SwarmLowerBounds RecordIntervals \
                           RecordOccupation RecordOccupationBound SwarmUpperGrowth \
-                          DyadicTail RecordExceedance SpatialGapSums; do
+                          DyadicTail RecordExceedance SpatialGapSums TruncatedPowerTail \
+                          MarkedGapPattern GeometricGapTail MarkedSpatialTail; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean
