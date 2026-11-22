@@ -118,7 +118,9 @@ jobs:
                           RecordLocalClauses RecordFluidLimit RecordHalving RecordCubicBlock RecordTailFromBlock \
                           SwarmDiameterBounds SwarmDiameterCubic RecordDownwardCrossing RecordMartingaleAtOffset \
                           RecordExitTime TwoWalkerPassage TwoWalkerGap TwoWalkerMeeting TwoWalkerBlock \
-                          TwoWalkerTail SwarmDiameterTwoWalker SoftMinimum MinimumProgress BoundedPotential; do
+                          TwoWalkerTail SwarmDiameterTwoWalker SoftMinimum MinimumProgress BoundedPotential \
+                          MarkBlockConcentration BoundedSlopeWindow BoundedSpatial RecordBoundedSpatial \
+                          RecordWeightedMartingale MinimumOccupationTest SparseSets RecordMinimumOccupation; do
               lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
             done
             lean -j1 -t0 audit/SwarmRenewal.lean

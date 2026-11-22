@@ -15,6 +15,8 @@ import SwarmDiameter.SwarmDiameterTwoWalker
 import SwarmDiameter.MinimumProgress
 import SwarmDiameter.SoftMinimum
 import SwarmDiameter.BoundedPotential
+import SwarmDiameter.RecordBoundedSpatial
+import SwarmDiameter.RecordMinimumOccupation
 import Lean
 
 open Lean Elab Command
@@ -70,6 +72,13 @@ open Lean Elab Command
 #print axioms Swarming.Diameter.softMinimum_weighted_drift_lower
 #print axioms Swarming.Diameter.boundedSlope_le_window
 #print axioms Swarming.Diameter.boundedPotential_mean_increment
+#print axioms Swarming.Diameter.arrayMeasure_Q_intervals_gt
+#print axioms Swarming.Diameter.arrayMeasure_Pz_sq_intervals_gt
+#print axioms Swarming.Diameter.boundedHA_sub_le_of_Q_sum
+#print axioms Swarming.Diameter.card_boundedExceptionSites_le
+#print axioms Swarming.Diameter.record_weighted_jump_failure_le_exp
+#print axioms Swarming.Diameter.record_minimum_occupation_failure_le_exp
+#print axioms Swarming.Diameter.record_small_set_minimum_occupation_failure_le_exp
 #print axioms Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails
 #print axioms Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation
 

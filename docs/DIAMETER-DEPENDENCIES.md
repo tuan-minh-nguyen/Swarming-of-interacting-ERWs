@@ -145,6 +145,12 @@ Every walker at the global minimum is excited when the minimum is nonnegative. `
 
 `boundedSlope_increment_eq_min` identifies the comparison drift after truncation. It lies in `[0, 1]` and equals one at an excited site when the slope bound is at least `(2 * p - 1)⁻¹`. `boundedSlope_le_window` bounds a truncated slope by the affine recursion restarted at the left endpoint of a finite spatial interval. `softMinimum_weighted_drift_lower` bounds the contribution of walkers farther than the prescribed distance from the minimum.
 
+## Spatial estimates and minimum occupation when `m < N`
+
+The affine recursion started at `K = 8 * k` is bounded by `10 * Q` for the truncation to `k` consecutive sites. A slope exceeding `K - 2` requires the product of the last `k` ratios to exceed one half. The two spatial sums have exponential concentration by applying Hoeffding's inequality on each residue class modulo `k`.
+
+The occupation test is a sum over the sites of a fixed finite set. Its increment is controlled by a predictable sum of the walkers' compensated steps and a strictly negative term when an excited minimizer occupies the set. `record_small_set_minimum_occupation_failure_le_exp` applies a union bound over subsets of sufficiently small cardinality. The estimate applies to the exceptional sites selected from the array.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
