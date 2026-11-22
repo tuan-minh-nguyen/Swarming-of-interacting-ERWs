@@ -4,10 +4,7 @@
   dependence of constants. The main lower bound is chosen before the population
   size. Do not replace intermediate proof obligations with main-theorem premises.
 - Do not add proof holes, custom axioms, or compiler-trust shortcuts to proofs.
-  The diameter development branch allows exactly the author-approved draft
-  in `draft/anchors.json`. Its declaration and any provider stay outside both
-  Lake libraries. Only this registered draft may contain its registered
-  proof body. A release must have a complete proof and pass the full checks.
+  A release must have a complete proof and pass the full checks.
 - Keep the toolchain and dependency revisions pinned. Never remove dependency
   artifacts or run `lake clean` to invalidate project files.
 - Import specific Mathlib modules; keep the umbrella `import Mathlib` out of

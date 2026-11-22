@@ -1,9 +1,10 @@
 # Proof dependencies for Theorem 1.2
 
-The author-approved statement is [Swarming.swarm_diameter](../draft/DiameterAnchor.lean).
-The [manifest](../draft/anchors.json) pins the exact declaration and the version of
+The author-approved statement is [Swarming.swarm_diameter](../SwarmDiameter/Main.lean).
+The [manifest](diameter-statement.json) pins the exact declaration and the version of
 `main_1d_regeneration_revised.tex`. The symbol names and line numbers below
-refer to that version. An edge lists a result used in the indicated proof.
+refer to that version. The Lean declaration has the exact signature of the
+approved draft. Its proof uses all three established parameter regimes. An edge lists a result used in the indicated proof.
 
 | Result | Source lines and reference | Inputs |
 | --- | --- | --- |
@@ -69,7 +70,7 @@ For exceedances within a record interval, we have two bounds.
 `record_interval_exceedance_prob_le_initial_or_duration` uses the
 nearest-neighbour step bound. `record_interval_exceedance_prob_le`
 uses the drift martingale at the first hitting time of the record level.
-The sharp record estimates of Sections 3.1 and 4.1 are verified. The estimate of Section 3.2 remains open in Lean.
+
 The spatial estimate `max-spatial-tail` is formalised in
 `arrayMeasure_sum_hof_pow_tail`. Convexity at each marked site and
 summation over the intervals bound the spatial sum by the initial potential
@@ -175,3 +176,38 @@ $$
 \nu([x,\infty))\ge\frac{1}{2\mu(n+1)}
 \ge\frac{1}{6\mu}\exp(-(x/a)^{1/\beta}).
 $$
+
+## Record estimate for $2\le m<N$
+
+In `record_minimum_progress_failure_le_exp`, for each fixed
+$\varepsilon>0$, we establish
+$$
+\min_{1\le i\le N}X_t^i-\min_{1\le i\le N}X_s^i
+\ge \frac{2p-1}{N}(t-s)-\varepsilon L,
+\quad \tau_r\le s\le t\le \tau_r+TL,
+$$
+outside an event of probability at most $C e^{-cL}$ on the event
+$\{\Delta_{\tau_r}\le L\}$, for all sufficiently large $L$ and
+$r\ge(T+3)L$. The estimate `record_small_set_minimum_occupation_failure_le_exp`
+controls the time for which the minimum belongs to any subset of at most
+$\delta L$ sites in the prescribed interval. We apply it to the sites
+near slopes exceeding the cutoff in the comparison potential.
+
+In `linearBlockClauses_of_inputs`, we compare the average comparison
+potential of a group to a smooth minimum over the walkers behind it.
+The predictable weighted sum of the compensated jumps is controlled in
+`record_weighted_jump_failure_le_exp`. Successful trials from
+`record_strictTimes_lower` contribute strictly negative drift. With
+the bound on the advance of the minimum, we bound the time during which
+two groups can remain separated.
+
+In `coalesced_at_of_linear_errors`, we pass the position comparisons to
+the scaling limit. The paths at the minimum remain at the minimum, and
+the bound on the separation time forces the set of these paths to grow
+until all paths agree. Using compactness in
+`record_defect_halves_of_linear_clauses`, we obtain a uniform halving
+estimate for the diameter at the later record. We combine it with the
+exponential exceptional probability in
+`record_linear_clauses_failure_le_exp` to prove
+`record_linear_block_failure_le`. The record occupation argument then
+proves `swarm_diameter_linear`, which covers this regime of Theorem 1.2.

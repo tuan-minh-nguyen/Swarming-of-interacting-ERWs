@@ -1,0 +1,17 @@
+{
+  "export": "Swarming.swarm_diameter",
+  "path": "SwarmDiameter/Main.lean",
+  "module": "SwarmDiameter.Main",
+  "source": {
+    "file": "main_1d_regeneration_revised.tex",
+    "sha256": "1ea00e1c34ca56655cf84d8307d74247cb135dbbda61295038256505f2b44e6b",
+    "theorem": "1.2",
+    "lines": [
+      104,
+      126
+    ],
+    "tex_reference": "maxdistance"
+  },
+  "statement_sha256": "d08c4e4836c1e967e6453380496727b007f884db15a5f6f451ff319e310b0507",
+  "approved_draft_declaration_sha256": "53d383f6121d7e72332bec32eb51cfc543a7092e0cee9864a4308b698d64ae40"
+}

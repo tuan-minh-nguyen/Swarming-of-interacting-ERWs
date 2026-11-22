@@ -22,17 +22,17 @@ jobs:
           mkdir -p "$RUNNER_TEMP/lean"
           tar --zstd -xf "$RUNNER_TEMP/lean.tar.zst" --strip-components=1 -C "$RUNNER_TEMP/lean"
           echo "$RUNNER_TEMP/lean/bin" >> "$GITHUB_PATH"
-      - name: Check source inventory and draft isolation
+      - name: Check the source inventory and approved statements
         run: |
           python3 scripts/check_sources.py
           python3 -m unittest discover -s tests
-          python3 draft/check.py
+          python3 scripts/check_diameter_statement.py
       - name: Fetch pinned dependency artifacts
         run: |
-          lake exe cache get $(awk '/^import Mathlib\./ {print $2}' Swarm/Imports.lean Swarm/Swarming.lean SwarmDiameter/*.lean draft/DiameterAnchor.lean | sort -u)
+          lake exe cache get $(awk '/^import Mathlib\./ {print $2}' Swarm/Imports.lean Swarm/Swarming.lean SwarmDiameter/*.lean | sort -u)
       - name: Replay renewal and occupation proofs
         run: bash scripts/verify_diameter_support.sh
-      - name: Elaborate the approved diameter statement
+      - name: Elaborate the diameter definitions
         run: |
           output="$RUNNER_TEMP/diameter-model"
           mkdir -p "$output/Swarm"
@@ -40,7 +40,6 @@ jobs:
           for module in Imports Swarming LocalTime UniformArray Trajectory LeaderDescent; do
             lean -j1 -o "$output/Swarm/$module.olean" "Swarm/$module.lean"
           done
-          lean -j1 draft/DiameterAnchor.lean
           lean -j1 SwarmDiameter/PathDiameter.lean
 
   swarm:
@@ -80,7 +79,7 @@ jobs:
           from pathlib import Path
           path = Path("lakefile.lean")
           current = path.read_text(encoding="utf-8")
-          expected = "import Lake\nopen Lake DSL\n\npackage swarming\n\nrequire mathlib from git\n  \"https://github.com/leanprover-community/mathlib4.git\" @ \"0df444a360eaa60ab8c11dca51a86af692955474\"\n\n@[default_target]\nlean_lib Swarm\n\nlean_lib SwarmDiameter where\n  roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,\n    `SwarmDiameter.FirstIntervalOccupation]\n"
+          expected = "import Lake\nopen Lake DSL\n\npackage swarming\n\nrequire mathlib from git\n  \"https://github.com/leanprover-community/mathlib4.git\" @ \"0df444a360eaa60ab8c11dca51a86af692955474\"\n\n@[default_target]\nlean_lib Swarm\n\nlean_lib SwarmDiameter where\n  roots := #[`SwarmDiameter, `SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,\n    `SwarmDiameter.FirstIntervalOccupation]\n"
           if current != expected:
               raise SystemExit("Unexpected Lake configuration for the existing Swarm build")
           path.write_text("import Lake\nopen Lake DSL\n\npackage swarming\n\nrequire mathlib from git\n  \"https://github.com/leanprover-community/mathlib4.git\" @ \"0df444a360eaa60ab8c11dca51a86af692955474\"\n\n@[default_target]\nlean_lib Swarm\n\nlean_lib SwarmDiameter where\n  roots := #[`SwarmDiameter.RenewalProcess, `SwarmDiameter.RegenerationBlocks,\n    `SwarmDiameter.FirstInterval]\n", encoding="utf-8")
@@ -96,32 +95,37 @@ jobs:
           resume=()
           if test -f "$work/summary.json"; then resume=(--resume); fi
           python3 scripts/build.py --work "$work" --jobs 2 "${resume[@]}"
-      - name: Check the swarm renewal lemmas
+      - name: Replay and audit the diameter theorem
         run: |
           mv "$RUNNER_TEMP/diameter-lakefile.lean" lakefile.lean
-          if test -f SwarmDiameter/SwarmRenewal.lean; then
-            export LEAN_PATH="$(cat .scratch/diameter-swarm/lean-path.txt)"
-            build=.scratch/diameter-swarm/lib/SwarmDiameter
-            mkdir -p "$build"
-            for module in ArithmeticRenewal CycleOccupation DelayedRenewal FirstInterval \
-                          FirstIntervalOccupation PathDiameter RegenerationProbability SwarmRenewal LinearTrial \
-                          BinomialEndpoint ReflectionExcursion SymmetricConfinement TrialBounds \
-                          SymmetricTrial TwoWalkerTrial RecordDensity TailBounds MaxGrowth \
-                          LeadingWalkTrial CubicTrial SwarmLowerBounds RecordIntervals \
-                          RecordOccupation RecordOccupationBound SwarmUpperGrowth \
-                          DyadicTail RecordExceedance SpatialGapSums TruncatedPowerTail \
-                          MarkedGapPattern GeometricGapTail MarkedSpatialTail OccupationTail \
-                          ProjectedPotentialOscillation RecordTrialConcentration \
-                          RecordOccupationMartingale SeparatedGroupStep RecordGroupDrift \
-                          RecordGroupAdvance RecordGroupPotential RecordGroupMaximum \
-                          RecordGroupMovement RecordOccupationEstimate RecordOccupationHighProbability \
-                          RecordLocalClauses RecordFluidLimit RecordHalving RecordCubicBlock RecordTailFromBlock \
-                          SwarmDiameterBounds SwarmDiameterCubic RecordDownwardCrossing RecordMartingaleAtOffset \
-                          RecordExitTime TwoWalkerPassage TwoWalkerGap TwoWalkerMeeting TwoWalkerBlock \
-                          TwoWalkerTail SwarmDiameterTwoWalker SoftMinimum MinimumProgress BoundedPotential \
-                          MarkBlockConcentration BoundedSlopeWindow BoundedSpatial RecordBoundedSpatial \
-                          RecordWeightedMartingale MinimumOccupationTest SparseSets RecordMinimumOccupation; do
-              lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
-            done
-            lean -j1 -t0 audit/SwarmRenewal.lean
-          fi
+          export LEAN_PATH="$(cat .scratch/diameter-swarm/lean-path.txt)"
+          build=.scratch/diameter-swarm/lib/SwarmDiameter
+          mkdir -p "$build"
+          for module in ArithmeticRenewal CycleOccupation DelayedRenewal FirstInterval \
+                        FirstIntervalOccupation RenewalProcess RegenerationBlocks PathDiameter \
+                        RegenerationProbability SwarmRenewal LinearTrial \
+                        BinomialEndpoint ReflectionExcursion SymmetricConfinement TrialBounds \
+                        SymmetricTrial TwoWalkerTrial RecordDensity TailBounds MaxGrowth \
+                        LeadingWalkTrial CubicTrial SwarmLowerBounds RecordIntervals \
+                        RecordOccupation RecordOccupationBound SwarmUpperGrowth \
+                        DyadicTail RecordExceedance SpatialGapSums TruncatedPowerTail \
+                        MarkedGapPattern GeometricGapTail MarkedSpatialTail OccupationTail \
+                        ProjectedPotentialOscillation RecordTrialConcentration \
+                        RecordOccupationMartingale SeparatedGroupStep RecordGroupDrift \
+                        RecordGroupAdvance RecordGroupPotential RecordGroupMaximum \
+                        RecordGroupMovement RecordOccupationEstimate RecordOccupationHighProbability \
+                        RecordLocalClauses RecordFluidLimit RecordHalving RecordCubicBlock RecordTailFromBlock \
+                        SwarmDiameterBounds SwarmDiameterCubic RecordDownwardCrossing RecordMartingaleAtOffset \
+                        RecordExitTime TwoWalkerPassage TwoWalkerGap TwoWalkerMeeting TwoWalkerBlock \
+                        TwoWalkerTail SwarmDiameterTwoWalker SoftMinimum MinimumProgress BoundedPotential \
+                        MarkBlockConcentration BoundedSlopeWindow BoundedSpatial RecordBoundedSpatial \
+                        RecordWeightedMartingale MinimumOccupationTest SparseSets RecordMinimumOccupation \
+                        BoundedGroupComparison BoundedGroupStep BoundedGroupMean BoundedGroupMeasurable \
+                        FluidLeaderPersistence LinearCutoff LinearBlockGeometry RecordBoundedGroup \
+                        RecordSpatialConcentration RecordLinearTrialCount RecordLinearClauses \
+                        RecordLinearConcentration LinearRecordFluid LinearRecordHalving RecordLinearBlock \
+                        SwarmDiameterLinear Main; do
+            lean -j1 -o "$build/$module.olean" "SwarmDiameter/$module.lean"
+          done
+          lean -j1 -o "$build/../SwarmDiameter.olean" SwarmDiameter.lean
+          lean -j1 -t0 audit/SwarmRenewal.lean

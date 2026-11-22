@@ -1,6 +1,6 @@
 # Swarming of interacting excited random walks
 
-Lean formalisation of Theorem 1.1 of Tuan-Minh Nguyen's manuscript,
+Lean formalisation of Theorems 1.1 and 1.2 of Tuan-Minh Nguyen's manuscript,
 *Swarming of interacting excited random walks*.
 
 For every threshold $m\ge2$ and parameter $1/2\lt p\lt1$, we prove that all
@@ -30,21 +30,20 @@ lake exe cache get
 bash scripts/verify.sh
 ```
 
-The verification script runs a fresh project-only build with bounded concurrency.
+This script verifies Theorem 1.1 in a fresh project-only build with bounded concurrency.
 For a separate build with recorded timings:
 
 ```bash
 python3 scripts/build.py --work .scratch/source-build --jobs 2
 ```
 
-Choose a new work directory for every such build. This command compiles all
-project sources using only the pinned dependency artifacts and the new output
-directory. It does not compile or remove dependency artifacts. Ordinary
+Choose a new work directory for every such build. This command compiles the sources for Theorem 1.1 using the pinned dependency
+artifacts and the new output directory. It does not compile or remove dependency artifacts. Ordinary
 incremental builds remain available through `lake build`.
 
-The verification script checks the complete source inventory, builds the
-project, checks both main statements from a separate importing module, and
-audits the transitive axiom dependencies of every project declaration. Its
+The verification script checks the source inventory for Theorem 1.1 and both
+exports of that theorem from a separate importing module. It audits the
+transitive axiom dependencies of every declaration in the imported project modules. Its
 last Lean invocation uses trust level zero to recheck imported proofs. The
 permitted axioms are `propext`, `Classical.choice`, and `Quot.sound`.
 Diagnostic commands belong to the separate `audit` directory. The build
@@ -57,15 +56,29 @@ import improvement and the full-build methodology.
 
 ## Diameter theorem
 
-The [renewal and occupation proofs](docs/DIAMETER-SUPPORT.md) support the
-formalisation of Theorem 1.2. The swarm-specific application and the sharp
-diameter estimates remain to be proved in Lean.
+Theorem 1.2 is [`Swarming.swarm_diameter`](SwarmDiameter/Main.lean).
+It proves the almost sure order of the maximum diameter, convergence in
+distribution of the diameter, and two-sided bounds on the limiting tail.
+
+| Parameters | Order of the maximum through time $n$ | Power of $x$ in the exponential tail bounds |
+| --- | --- | --- |
+| $N=2$ | $(\log n)^2$ | $x^{1/2}$ |
+| $2\le m<N$ | $\log n$ | $x$ |
+| $3\le N\le m$ | $(\log n)^3$ | $x^{1/3}$ |
+
+Build the theorem with `lake build SwarmDiameter` and import it with
+`import SwarmDiameter`. Run `python3 scripts/check_diameter_statement.py`
+to compare its signature with the approved statement. The diameter workflow
+replays the proof and checks its transitive axiom dependencies with trust
+level zero. See the [proof dependencies](docs/DIAMETER-DEPENDENCIES.md)
+and the [renewal and occupation proofs](docs/DIAMETER-SUPPORT.md).
 
 ## Source correspondence
 
-The reference is the supplied `main_1d_revised.tex`, identified by SHA-256
+The source for Theorem 1.1 is `main_1d_revised.tex`, identified by SHA-256
 `65afa8e87670bcf9c9d8261c6b23a5323ae41c51c33794c42dd26c49a0603a37`.
-The manuscript is not included in this code repository.
+The [diameter statement manifest](docs/diameter-statement.json) records the
+source for Theorem 1.2.
 
 [docs/source-map.json](docs/source-map.json) records each original source path
 and hash, its present module, and a hash of the proof text excluding comments,

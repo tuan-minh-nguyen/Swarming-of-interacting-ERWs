@@ -17,9 +17,19 @@ import SwarmDiameter.SoftMinimum
 import SwarmDiameter.BoundedPotential
 import SwarmDiameter.RecordBoundedSpatial
 import SwarmDiameter.RecordMinimumOccupation
+import SwarmDiameter.RenewalProcess
+import SwarmDiameter.RegenerationBlocks
+import SwarmDiameter
 import Lean
 
 open Lean Elab Command
+
+#print axioms Swarming.swarm_diameter
+#print axioms Swarming.Diameter.record_linear_clauses_failure_le_exp
+#print axioms Swarming.Diameter.coalesced_at_of_linear_errors
+#print axioms Swarming.Diameter.record_defect_halves_of_linear_clauses
+#print axioms Swarming.Diameter.record_linear_block_failure_le
+#print axioms Swarming.Diameter.swarm_diameter_linear
 
 #print axioms Swarming.Diameter.exists_diameter_occupationLaw
 #print axioms Swarming.Diameter.linear_trial_at_stopping_time_mass_ge
@@ -97,6 +107,6 @@ elab "#audit_swarm_renewal_axioms" : command => do
           throwError "{name}: unexpected axioms {unexpected}"
   unless checked > 0 do
     throwError "No swarm renewal declarations were checked"
-  logInfo m!"SWARM RENEWAL AXIOMS OK: {checked} declarations"
+  logInfo m!"SWARM DIAMETER AXIOMS OK: {checked} declarations"
 
 #audit_swarm_renewal_axioms
