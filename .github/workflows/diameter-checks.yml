@@ -2,7 +2,7 @@ name: Diameter proof checks
 
 on:
   push:
-    branches: [diameter-proof-development]
+    branches: [main]
 
 permissions:
   contents: read
