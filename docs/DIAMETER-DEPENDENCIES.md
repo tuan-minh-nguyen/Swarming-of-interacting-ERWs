@@ -10,6 +10,7 @@ refer to that version. An edge lists a result used in the indicated proof.
 | Walk law and diameter | 77–94, 104–111, `rule`, `distance-def` | Existing uniform-array trajectory and integer diameter |
 | Positive speed and sublinear diameter | 399–408, 751–831, `ball`, `diameter` | Existing `M4Blk.main_claim_direct` |
 | Simultaneous record geometry | 838–854, `record`, `recordo`, `block` | Walk law, positive speed |
+| Spatial sum estimate | 341–398, `max-spatial-tail` | Marked-site recurrence and exponential moment, independent geometric gaps |
 | Cubic record estimate | 855–1151, `tight`, `max-cubic-prob` | Record geometry, spatial sums, conditional jump and local-time estimates, extremal coalescence |
 | Linear record estimate | 1152–1585, `max-linear-block` | Record geometry, minimum occupation estimate, martingale deviation bounds |
 | Record diameter and duration tails | 1586–1638, `record-tail`, `record-duration-tail` | Cubic and linear record estimates, positive speed |
@@ -64,6 +65,11 @@ For exceedances within a record interval, we have two bounds.
 nearest-neighbour step bound. `record_interval_exceedance_prob_le`
 uses the drift martingale at the first hitting time of the record level.
 The sharp block estimates of Sections 3.1, 3.2 and 4.1 remain to be proved.
+The deterministic part of `max-spatial-tail` is proved in
+`sum_hof_pow_le_marked_gaps`. Convexity at each marked site and
+summation over the intervals bound the spatial sum by the initial potential
+and the sum of gap lengths raised to the power $q+1$. The geometric gap
+law and its truncated exponential estimate remain to be formalised.
 
 ## Maximum and limiting tail
 
