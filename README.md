@@ -7,14 +7,8 @@ Lean formalisation of Theorems 1.1 and 1.2 of the manuscript
 
 All $N$ walkers start at zero on the integers, where $N\ge2$.
 For walker $j$, let $L_n^j(x)$ count its visits to $x$ up to and including time $n$.
-At time $n$, walker $i$ at $x$ jumps right with probability
-
-```math
-\begin{cases}
-p,& \text{if }\sum_{j\ne i}L_n^j(x)\ge m,\\
-\frac12,&\text{otherwise},
-\end{cases}
-```
+At time $n$, walker $i$ at $x$ jumps right with probability $p$ if
+$\sum_{j\ne i}L_n^j(x)\ge m$, and with probability $1/2$ otherwise.
 
 where $m\ge 2$ is an integer and $\frac12<p<1$. All walkers jump
 simultaneously. Independent uniform random variables drive their jumps.
@@ -46,20 +40,16 @@ D_n=\max_{1\le i,j\le N}|X_n^i-X_n^j|,
 \qquad M_n=\max_{0\le k\le n}D_k.
 ```
 
-Set
+The exponent $\beta$ depends on $N$ and $m$ as follows:
 
-```math
-\beta=
-\begin{cases}
-2,&N=2,\\
-1,&2\le m<N,\\
-3,&3\le N\le m.
-\end{cases}
-```
+| Parameters | $\beta$ |
+| --- | ---: |
+| $N=2$ | $2$ |
+| $2\le m<N$ | $1$ |
+| $3\le N\le m$ | $3$ |
 
-There exist constants $c>0$, $C\ge1$, and a probability measure
-$\nu$ on $[0,\infty)$ such that, almost surely, for all sufficiently
-large $n$,
+There exist constants $c>0$ and $C\ge 1$, and a probability measure
+$\nu$ supported on $[0,\infty)$, such that, almost surely, for all sufficiently large $n$,
 
 ```math
 C^{-1}(\log n)^\beta\le M_n\le C(\log n)^\beta.
