@@ -18,9 +18,9 @@ text was modified during the November 23 repository cleanup.
 
 ## Model
 
-All N walkers start at zero on the integers, where N is at least 2.
-For walker j, let L_n^j(x) count its visits to x up to and including time n.
-At time n, walker i at x jumps right with probability
+All $N$ walkers start at zero on the integers, where $N\ge2$.
+For walker $j$, let $L_n^j(x)$ count its visits to $x$ up to and including time $n$.
+At time $n$, walker $i$ at $x$ jumps right with probability
 
 $$
 \begin{cases}
@@ -29,15 +29,15 @@ p,& \text{if }\sum_{j\ne i}L_n^j(x)\ge m,\\
 \end{cases}
 $$
 
-where m is an integer at least 2 and 1/2 < p < 1. All walkers jump
+where $m\ge2$ is an integer and $1/2<p<1$. All walkers jump
 simultaneously. Independent uniform random variables drive their jumps.
 The definitions are in [UniformArray.lean](Swarm/UniformArray.lean)
 and [Trajectory.lean](Swarm/Trajectory.lean).
 
 ## Theorem 1.1 — Common deterministic speed
 
-For every m >= 2 and 1/2 < p < 1, there exists a deterministic
-constant $\kappa(m,p)>0$, independent of N, such that for every N >= 2
+For every integer $m\ge2$ and $1/2<p<1$, there exists a deterministic
+constant $\kappa(m,p)>0$, independent of $N$, such that for every $N\ge2$
 there exists a deterministic speed $v_N(m,p)$ satisfying
 
 $$
@@ -47,11 +47,62 @@ $$
 \quad\text{almost surely for every }1\le i\le N.
 $$
 
-The formal declarations are **M4Blk.main_claim** and
-**M4Blk.main_claim_direct** in [BlkMeasure.lean](Swarm/BlkMeasure.lean).
+The formal declarations are `M4Blk.main_claim` and
+`M4Blk.main_claim_direct` in [BlkMeasure.lean](Swarm/BlkMeasure.lean).
 These are two final proof assemblies sharing intermediate results.
 All 672 original proof modules and one import-support module belong to
 the transitive import closure of Theorem 1.1.
+
+## Theorem 1.2 — Swarm diameter
+
+Define the diameter and running maximum by
+
+$$
+D_n=\max_{1\le i,j\le N}|X_n^i-X_n^j|,
+\qquad M_n=\max_{0\le k\le n}D_k.
+$$
+
+Set
+
+$$
+\beta=
+\begin{cases}
+2,&N=2,\\
+1,&2\le m<N,\\
+3,&3\le N\le m.
+\end{cases}
+$$
+
+There exist constants $c>0$, $C\ge1$, and a probability measure
+$\nu$ on $[0,\infty)$ such that, almost surely, for all sufficiently
+large $n$,
+
+$$
+C^{-1}(\log n)^\beta\le M_n\le C(\log n)^\beta.
+$$
+
+Moreover, $D_n$ converges in distribution to $\nu$, and for all
+sufficiently large $x$,
+
+$$
+\exp(-Cx^{1/\beta})\le \nu([x,\infty))
+\le \exp(-cx^{1/\beta}).
+$$
+
+The theorem is [Swarming.swarm_diameter](SwarmDiameter/Main.lean).
+Its proof covers all three parameter regimes. The
+[proof dependencies](docs/DIAMETER-DEPENDENCIES.md) and
+[renewal/occupation support results](docs/DIAMETER-SUPPORT.md)
+document the mathematical argument.
+
+The certified workflow
+[diameter-checks.yml](.github/workflows/diameter-checks.yml)
+compiles the full diameter formalisation and rechecks imported proofs
+at trust level zero. The source import audit reports **89 of 91**
+diameter source files reachable from the public theorem. 
+The additional modules SwarmDiameter.RenewalProcess and
+SwarmDiameter.RegenerationBlocks are separately compiled and
+axiom-checked as supporting results, and therefore remain in the repository.
 
 ## Build and verify
 
@@ -88,65 +139,13 @@ logs and per-module timing records are written under `.scratch`.
 
 The dated [verification record](docs/VERIFICATION.md) describes Theorem 1.1 statement checks,
 axiom coverage, and [release review](docs/RELEASE-REVIEW.md). The
-[elaboration report](docs/ELABORATION_REPORT_2026-11-14.md) records the measured
-import improvement and the full-build methodology.
-
-## Theorem 1.2 — Swarm diameter
-
-Define the diameter and running maximum by
-
-$$
-D_n=\max_{1\le i,j\le N}|X_n^i-X_n^j|,
-\qquad M_n=\max_{0\le k\le n}D_k.
-$$
-
-Set
-
-$$
-\beta=
-\begin{cases}
-2,&N=2,\\
-1,&2\le m<N,\\
-3,&3\le N\le m.
-\end{cases}
-$$
-
-There exist constants $c>0$, $C\ge1$, and a probability measure
-$\nu$ on $[0,\infty)$ such that, almost surely, for all sufficiently
-large n,
-
-$$
-C^{-1}(\log n)^\beta\le M_n\le C(\log n)^\beta.
-$$
-
-Moreover, $D_n$ converges in distribution to $\nu$, and for all
-sufficiently large x,
-
-$$
-\exp(-Cx^{1/\beta})\le \nu([x,\infty))
-\le \exp(-cx^{1/\beta}).
-$$
-
-The theorem is [Swarming.swarm_diameter](SwarmDiameter/Main.lean).
-Its proof covers all three parameter regimes. The
-[proof dependencies](docs/DIAMETER-DEPENDENCIES.md) and
-[renewal/occupation support results](docs/DIAMETER-SUPPORT.md)
-document the mathematical argument.
-
-The certified workflow
-[diameter-checks.yml](.github/workflows/diameter-checks.yml)
-compiles the full diameter formalisation and rechecks imported proofs
-at trust level zero. The source import audit reports **89 of 91**
-diameter source files reachable from the public theorem.
-The additional modules SwarmDiameter.RenewalProcess and
-SwarmDiameter.RegenerationBlocks are separately compiled and
-axiom-checked as supporting results, and therefore remain in the repository.
+[14 November elaboration report](docs/ELABORATION_REPORT_2026-11-14.md) records historical Theorem 1.1 measurements only; it is not a matched before/after timing study for the expanded diameter repository.
 
 ## Source correspondence
 
 The source for Theorem 1.1 is `main_1d_revised.tex`, identified by SHA-256
 `65afa8e87670bcf9c9d8261c6b23a5323ae41c51c33794c42dd26c49a0603a37`.
-The [diameter statement manifest](docs/diameter-statement.json) identifies the source of Theorem 1.2 as main_1d_regeneration_revised.tex and pins its approved signature.
+The [diameter statement manifest](docs/diameter-statement.json) identifies the source of Theorem 1.2 as `main_1d_regeneration_revised.tex` and pins its approved signature.
 
 [docs/source-map.json](docs/source-map.json) records each original source path
 and hash, its present module, and a hash of the proof text excluding comments,
@@ -163,10 +162,10 @@ exact real-valued histories can concern events of probability zero.
 
 ## Errata and deviations
 
-The [record](docs/ERRATA-AND-DEVIATIONS.md) lists zero manuscript errata and
+The [dated review](docs/ERRATA-AND-DEVIATIONS.md) identified no manuscript errata in the statements and definitions it examined and records
 four deviations or scope conventions: `Fin N` indexing, unused zeroth array
-coordinates, total division at time zero, and the restriction to the main
-theorem's proof closure. The main mathematical statement is unchanged.
+coordinates, total division at time zero, and the scope of the original Theorem 1.1
+proof closure. Both main theorem statements are preserved.
 
 ## Attribution and license
 
