@@ -49,6 +49,8 @@ These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
 | [RecordTailFromBlock.lean](../SwarmDiameter/RecordTailFromBlock.lean) | Transfer from a record-block estimate to record-interval duration and diameter bounds. |
 | [SwarmDiameterBounds.lean](../SwarmDiameter/SwarmDiameterBounds.lean) | Assembly of growth, weak convergence and limiting tail bounds from the record-interval estimates. |
 | [SwarmDiameterCubic.lean](../SwarmDiameter/SwarmDiameterCubic.lean) | Theorem 1.2 for `3 ≤ N` and `N ≤ m`. |
+| [RecordDownwardCrossing.lean](../SwarmDiameter/RecordDownwardCrossing.lean) | Downward-crossing probability after a record and the square-root bound at the two-walker horizon. |
+| [RecordMartingaleAtOffset.lean](../SwarmDiameter/RecordMartingaleAtOffset.lean) | Martingale deviations after a fixed offset from the record time and the front-walker excursion bound. |
 | [RecordGroupPotential.lean](../SwarmDiameter/RecordGroupPotential.lean) | The group potential satisfies `loccoord` simultaneously over the prescribed spatial intervals and times. |
 | [RecordGroupMaximum.lean](../SwarmDiameter/RecordGroupMaximum.lean) | The trailing group's maximum potential grows at unit rate up to $\varepsilon L$ on every separated subinterval, with exceptional probability $e^{-cL^{1/3}}$. |
 | [RecordGroupMovement.lean](../SwarmDiameter/RecordGroupMovement.lean) | The local movement estimate `locmove` follows from the spatial, maximum, and advance bounds. Its coefficient depends only on $N,m,p$. |
