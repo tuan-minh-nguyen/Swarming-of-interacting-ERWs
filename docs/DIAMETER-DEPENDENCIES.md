@@ -89,6 +89,12 @@ potential oscillations beyond $\varepsilon L$ by $e^{-cL^{1/3}}$.
 deficit from the trial-count lower estimate by $e^{-cL}$, uniformly over the
 nonempty proper groups and the prescribed subintervals.
 
+`record_Qpl_oscillation_le_cube_root` establishes the same oscillation bound
+for the occupation martingale on every pair of times in the record interval.
+The geometric condition holds throughout each first-passage cell. The sum of
+the spatial exceptional masses over the disjoint cells is bounded by the
+unconditional failure probability of the spatial estimate.
+
 ## Maximum and limiting tail
 
 Write $T=\tau_D$, $\mu=\mathbb E^*T$ and $M_n=\max_{0\le j\le n}\Delta_j$.
