@@ -88,9 +88,8 @@ proof checks. See [Theorem 1.2 proof dependencies](docs/DIAMETER-DEPENDENCIES.md
 [renewal and occupation results](docs/DIAMETER-SUPPORT.md), and the
 [statement review](docs/STATEMENT-REVIEW.md) for further details.
 
-## Attribution and license
+## License
 
-The supplied [third-party notices](THIRD_PARTY_LICENSES.txt) are preserved.
-Mathlib and its dependencies retain their own licenses and attribution.
-The original archive contained no overall license for this formalisation;
-no new license has been assigned to it here. The manuscript is a separate work.
+This formalisation is licensed under the [Apache License 2.0](LICENSE).
+Third-party components retain their respective licenses; see
+[third-party notices](THIRD_PARTY_LICENSES.txt).
