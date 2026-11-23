@@ -147,4 +147,4 @@ specific commit and CI run.
 
 The formalisation is now distributed under [Apache License 2.0](../LICENSE).
 Third-party licenses and attribution remain in
-[THIRD_PARTY_LICENSES.txt](../THIRD_PARTY_LICENSES.txt).
+[THIRD_PARTY_LICENSES.txt](../Swarm/THIRD_PARTY_LICENSES.txt).
