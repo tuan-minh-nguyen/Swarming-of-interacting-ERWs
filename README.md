@@ -1,7 +1,8 @@
 # Swarming of interacting excited random walks
 
 Lean formalisation of Theorems 1.1 and 1.2 of the manuscript
-*Swarming of interacting excited random walks*.
+*Swarming of interacting excited random walks* by
+[Tuan-Minh Nguyen](https://sites.google.com/site/minhbsu/).
 
 ## Model
 
