@@ -90,7 +90,7 @@ proof checks. See [Theorem 1.2 proof dependencies](docs/DIAMETER-DEPENDENCIES.md
 
 ## Contributors
 
-- Tuan-Minh Nguyen
+- [Tuan-Minh Nguyen](https://sites.google.com/site/minhbsu/)
 - [Open Math OS](https://www.openmathmodel.org/)
 
 ## License
