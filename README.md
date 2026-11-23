@@ -88,6 +88,11 @@ proof checks. See [Theorem 1.2 proof dependencies](docs/DIAMETER-DEPENDENCIES.md
 [renewal and occupation results](docs/DIAMETER-SUPPORT.md), and the
 [statement review](docs/STATEMENT-REVIEW.md) for further details.
 
+## Contributors
+
+- Tuan-Minh Nguyen
+- [Open Math OS](https://www.openmathmodel.org/)
+
 ## License
 
 This formalisation is licensed under the [Apache License 2.0](LICENSE).
