@@ -92,4 +92,4 @@ proof checks. See [Theorem 1.2 proof dependencies](docs/DIAMETER-DEPENDENCIES.md
 
 This formalisation is licensed under the [Apache License 2.0](LICENSE).
 Third-party components retain their respective licenses; see
-[third-party notices](THIRD_PARTY_LICENSES.txt).
+[third-party notices](Swarm/THIRD_PARTY_LICENSES.txt).
