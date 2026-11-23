@@ -9,12 +9,8 @@ Lean formalisation of Theorems 1.1 and 1.2 of the manuscript
 All $N$ walkers start at zero on the integers, where $N\ge2$.
 For walker $j$, let $L_n^j(x)$ count its visits to $x$ up to and including time $n$.
 At time $n$, walker $i$ at $x$ jumps right with probability $p$ if
-$\sum_{j\ne i}L_n^j(x)\ge m$, and with probability $1/2$ otherwise.
-
-where $m\ge 2$ is an integer and $\frac12<p<1$. All walkers jump
-simultaneously. Independent uniform random variables drive their jumps.
-The definitions are in [UniformArray.lean](Swarm/UniformArray.lean)
-and [Trajectory.lean](Swarm/Trajectory.lean).
+$\sum_{j\ne i}L_n^j(x)\ge m$, and with probability $1/2$ otherwise, where $m\ge 2$ is an integer and $\frac12<p<1$. All walkers jump simultaneously. 
+The definitions are in [UniformArray.lean](Swarm/UniformArray.lean) and [Trajectory.lean](Swarm/Trajectory.lean).
 
 ## Theorem 1.1 — Common deterministic speed
 
