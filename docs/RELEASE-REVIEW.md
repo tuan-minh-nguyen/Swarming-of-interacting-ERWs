@@ -2,6 +2,9 @@
 
 This is a historical review of the original Theorem 1.1 release, not a
 current whole-repository certification or a new performance benchmark.
+The project subsequently adopted [Apache License 2.0](../LICENSE);
+statements about the absence of a project license below describe only
+this earlier review.
 For the successful 23 November 2026 checks of Theorems 1.1 and 1.2, see
 [the current verification record](VERIFICATION.md#current-repository-certification--23-november-2026)
 and the [repository README](../README.md).
