@@ -103,9 +103,9 @@ are proved in `Swarming.Enl.enl_fresh_law` and
 `Swarming.Enl.condExp_pattern_enl`. Their mathematical statements and proofs
 are unchanged.
 
-We preserved the supplied third-party notices byte for byte. The original
-archive supplied no overall license for the formalisation; no new license or
-repository visibility change is part of this verification.
+At the time of this 14 November review, the supplied archive had no overall
+license. The third-party notices were preserved separately. The project's
+current license is [Apache License 2.0](../LICENSE), added subsequently.
 
 ## Current repository certification — 23 November 2026
 
@@ -142,3 +142,9 @@ invocation. We do not conflate these two audit scopes.
 Subsequent documentation-only commits must be checked against the
 same mathematical source tree; the preceding record is tied to its
 specific commit and CI run.
+
+## License
+
+The formalisation is now distributed under [Apache License 2.0](../LICENSE).
+Third-party licenses and attribution remain in
+[THIRD_PARTY_LICENSES.txt](../THIRD_PARTY_LICENSES.txt).
