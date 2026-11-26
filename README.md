@@ -81,9 +81,14 @@ level zero. The project checks permit only the foundational axioms
 `propext`, `Classical.choice`, and `Quot.sound`.
 
 The [verification record](docs/VERIFICATION.md) documents the successful
-proof checks. See [Theorem 1.2 proof dependencies](docs/DIAMETER-DEPENDENCIES.md),
-[renewal and occupation results](docs/DIAMETER-SUPPORT.md), and the
-[statement review](docs/STATEMENT-REVIEW.md) for further details.
+proof checks. A fresh local build verified **674/674 Swarm modules** and
+**91 diameter modules**. The trust-zero audits checked **18,376** declarations
+in the main project and **1,322** diameter declarations, and the independent
+support replay checked **525** declarations. See the
+[fresh verification report](docs/VERIFICATION-94cc7117.md) and the
+[three-export consumer](audit/TwoTheorems.lean). For the mathematical scope,
+see [renewal and occupation results](docs/DIAMETER-SUPPORT.md) and the
+[statement review](docs/STATEMENT-REVIEW.md).
 
 ## Contributors
 
