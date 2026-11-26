@@ -1,0 +1,37 @@
+{
+  "github_revision": "94cc7117c363aaa51a72d88d7afabd711025d4fa",
+  "manuscript": "attachments/improving-and-polishing-the-wcjf/main_1d-3.tex",
+  "manuscript_sha256": "b1727fd4da2a57742e79dcab6944c2d3e491ab5fcb93ad06036ca656bfa34ec1",
+  "toolchain": "Lean 4.33.1, compiler commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6",
+  "mathlib_revision": "0df444a360eaa60ab8c11dca51a86af692955474",
+  "edited_source_count": 0,
+  "main_build_fresh_and_non_resumed": true,
+  "commands": [
+    "python3 scripts/check_sources.py",
+    "python3 scripts/check_diameter_statement.py",
+    "python3 -m unittest discover -s tests",
+    "lake exe cache get",
+    "SWARM_BUILD_JOBS=2 bash scripts/verify.sh",
+    "bash scripts/verify_diameter_support.sh",
+    "diameter module replay in the order of .github/workflows/diameter-checks.yml",
+    "lean -j1 -t0 -M 8000 audit/SwarmRenewal.lean",
+    "lean -j1 -t0 -M 8000 audit/TwoTheorems.lean"
+  ],
+  "counts": {
+    "main_project_modules": 674,
+    "main_project_axioms": 18376,
+    "diameter_support_axioms": 525,
+    "diameter_declarations": 1322,
+    "focused_export_reports": 3,
+    "replayed_modules": 91
+  },
+  "verifier_regression_tests_passed": 10,
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "unexpected_axioms": 0,
+  "scope": "The two named theorems and their source dependencies; not a whole-paper independent editorial review.",
+  "publication_note": "Lean verification only. README.md and all theorem/verifier sources are unchanged from 94cc7117c363aaa51a72d88d7afabd711025d4fa."
+}

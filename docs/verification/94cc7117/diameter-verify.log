@@ -1,0 +1,183 @@
+DIAMETER IMPORT CLOSURE: 89/91 source files
+DIAMETER UNREACHABLE SOURCES: SwarmDiameter.RegenerationBlocks, SwarmDiameter.RenewalProcess
+DIAMETER STATEMENT OK: Swarming.swarm_diameter
+DIAMETER SOURCES OK: 91 files
+REPLAY ArithmeticRenewal
+REPLAY CycleOccupation
+REPLAY DelayedRenewal
+REPLAY FirstInterval
+REPLAY FirstIntervalOccupation
+REPLAY RenewalProcess
+REPLAY RegenerationBlocks
+REPLAY PathDiameter
+REPLAY RegenerationProbability
+REPLAY SwarmRenewal
+REPLAY LinearTrial
+REPLAY BinomialEndpoint
+REPLAY ReflectionExcursion
+REPLAY SymmetricConfinement
+REPLAY TrialBounds
+REPLAY SymmetricTrial
+REPLAY TwoWalkerTrial
+REPLAY RecordDensity
+REPLAY TailBounds
+REPLAY MaxGrowth
+REPLAY LeadingWalkTrial
+REPLAY CubicTrial
+REPLAY SwarmLowerBounds
+REPLAY RecordIntervals
+REPLAY RecordOccupation
+REPLAY RecordOccupationBound
+REPLAY SwarmUpperGrowth
+REPLAY DyadicTail
+REPLAY RecordExceedance
+REPLAY SpatialGapSums
+REPLAY TruncatedPowerTail
+REPLAY MarkedGapPattern
+REPLAY GeometricGapTail
+REPLAY MarkedSpatialTail
+REPLAY OccupationTail
+REPLAY ProjectedPotentialOscillation
+REPLAY RecordTrialConcentration
+REPLAY RecordOccupationMartingale
+REPLAY SeparatedGroupStep
+REPLAY RecordGroupDrift
+REPLAY RecordGroupAdvance
+REPLAY RecordGroupPotential
+REPLAY RecordGroupMaximum
+REPLAY RecordGroupMovement
+REPLAY RecordOccupationEstimate
+REPLAY RecordOccupationHighProbability
+REPLAY RecordLocalClauses
+REPLAY RecordFluidLimit
+REPLAY RecordHalving
+REPLAY RecordCubicBlock
+REPLAY RecordTailFromBlock
+REPLAY SwarmDiameterBounds
+REPLAY SwarmDiameterCubic
+REPLAY RecordDownwardCrossing
+REPLAY RecordMartingaleAtOffset
+REPLAY RecordExitTime
+REPLAY TwoWalkerPassage
+REPLAY TwoWalkerGap
+REPLAY TwoWalkerMeeting
+REPLAY TwoWalkerBlock
+REPLAY TwoWalkerTail
+REPLAY SwarmDiameterTwoWalker
+REPLAY SoftMinimum
+REPLAY MinimumProgress
+REPLAY BoundedPotential
+REPLAY MarkBlockConcentration
+REPLAY BoundedSlopeWindow
+REPLAY BoundedSpatial
+REPLAY RecordBoundedSpatial
+REPLAY RecordWeightedMartingale
+REPLAY MinimumOccupationTest
+REPLAY SparseSets
+REPLAY RecordMinimumOccupation
+REPLAY BoundedGroupComparison
+REPLAY BoundedGroupStep
+REPLAY BoundedGroupMean
+REPLAY BoundedGroupMeasurable
+REPLAY FluidLeaderPersistence
+REPLAY LinearCutoff
+REPLAY LinearBlockGeometry
+REPLAY RecordBoundedGroup
+REPLAY RecordSpatialConcentration
+REPLAY RecordLinearTrialCount
+REPLAY RecordLinearClauses
+REPLAY RecordLinearConcentration
+REPLAY LinearRecordFluid
+REPLAY LinearRecordHalving
+REPLAY RecordLinearBlock
+REPLAY SwarmDiameterLinear
+REPLAY Main
+'Swarming.swarm_diameter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_linear_clauses_failure_le_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.coalesced_at_of_linear_errors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_defect_halves_of_linear_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_linear_block_failure_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.swarm_diameter_linear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_diameter_occupationLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.linear_trial_at_stopping_time_mass_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.two_walker_trial_at_stopping_time_mass_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_positive_simultaneousRecordDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_leading_walk_trial_mass_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_cubic_trial_mass_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_diameter_lower_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.tendsto_record_event_occupation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.first_regeneration_diameter_occupation_le_record_limsup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.ae_log_pow_upper_of_regeneration_occupation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_interval_exceedance_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_diameter_tail_le_of_contraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_duration_limsup_le_of_advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.sum_hof_pow_le_marked_gaps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.measure_union_markedGapEvent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.arrayMeasure_sum_hof_pow_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.arrayMeasure_local_hof_estimates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_projH_oscillation_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.gamma_trial_concentration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_Qpl_maximal_deviation_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_Qpl_oscillation_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_group_drift_failure_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_separated_group_failure_le_cube_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_group_advance_drift_failure_le_cube_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_group_potential_failure_le_cube_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_group_maximum_failure_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_group_movement_failure_le_cube_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_occupation_estimate_of_local_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.record_occupation_failure_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_local_clauses_failure_le_cube_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.coalesced_at_of_local_errors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_defect_halves_of_local_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_cubic_block_failure_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_interval_tails_le_of_block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.swarm_diameter_cubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_downward_crossing_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_downward_excursion_failure_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_offset_martingale_window_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.two_walker_front_excursion_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_offset_interval_survival_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.two_walker_passage_order_prob_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.exists_passage_order_of_large_diameter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.two_walker_meeting_of_no_deviations' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_two_walker_halving_failure_le_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_two_walker_exceedance_limsup_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.swarm_diameter_two_walker' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_minimum_progress_failure_le_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.softMinimum_sub_ge_weighted_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.softMinimum_weighted_drift_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.boundedSlope_le_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.boundedPotential_mean_increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.arrayMeasure_Q_intervals_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.arrayMeasure_Pz_sq_intervals_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.boundedHA_sub_le_of_Q_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.card_boundedExceptionSites_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_weighted_jump_failure_le_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_minimum_occupation_failure_le_exp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.Diameter.record_small_set_minimum_occupation_failure_le_exp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.eventually_regeneration_occupation_le_of_record_tails' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Swarming.Diameter.exists_diameter_limit_with_upper_tail_of_regeneration_occupation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+SWARM DIAMETER AXIOMS OK: 1322 declarations
+
+DIAMETER_VERIFY_EXIT=0

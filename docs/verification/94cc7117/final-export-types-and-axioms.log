@@ -1,0 +1,55 @@
+M4Blk.main_claim : ∀ (p : ℝ) (m : ℕ),
+  1 / 2 < p →
+    p < 1 →
+      2 ≤ m →
+        ∃ κ,
+          0 < κ ∧
+            ∀ (N : ℕ),
+              2 ≤ N →
+                ∃ v,
+                  κ ≤ v ∧
+                    v ≤ 2 * p - 1 ∧
+                      ∀ᵐ (U : Swarming.Uniform.Array N) ∂Swarming.Uniform.arrayMeasure N,
+                        ∀ (i : Fin N),
+                          Filter.Tendsto (fun n => ↑((Swarming.Trajectory.trajectory p m U n).pos i) / ↑n) Filter.atTop
+                            (nhds v)
+M4Blk.main_claim_direct : ∀ (p : ℝ) (m : ℕ),
+  1 / 2 < p →
+    p < 1 →
+      2 ≤ m →
+        ∃ κ,
+          0 < κ ∧
+            ∀ (N : ℕ),
+              2 ≤ N →
+                ∃ v,
+                  κ ≤ v ∧
+                    v ≤ 2 * p - 1 ∧
+                      ∀ᵐ (U : Swarming.Uniform.Array N) ∂Swarming.Uniform.arrayMeasure N,
+                        ∀ (i : Fin N),
+                          Filter.Tendsto (fun n => ↑((Swarming.Trajectory.trajectory p m U n).pos i) / ↑n) Filter.atTop
+                            (nhds v)
+Swarming.swarm_diameter : ∀ (N m : ℕ) (p : ℝ) (hN : 2 ≤ N),
+  2 ≤ m →
+    1 / 2 < p →
+      p < 1 →
+        have β := if N = 2 then 2 else if m < N then 1 else 3;
+        have Δ := fun n U => ↑(LeaderDescent.spreadZ (fun i j => (Swarming.Trajectory.trajectory p m U j).pos i) n);
+        ∃ c C ν,
+          0 < c ∧
+            1 ≤ C ∧
+              (∀ᵐ (U : Swarming.Uniform.Array N) ∂Swarming.Uniform.arrayMeasure N,
+                  ∀ᶠ (n : ℕ) in Filter.atTop,
+                    have M := (Finset.range (n + 1)).sup' ⋯ fun j => Δ j U;
+                    C⁻¹ * Real.log ↑n ^ β ≤ M ∧ M ≤ C * Real.log ↑n ^ β) ∧
+                (∀ᵐ (x : ℝ) ∂↑ν, 0 ≤ x) ∧
+                  MeasureTheory.TendstoInDistribution Δ Filter.atTop id (fun x => Swarming.Uniform.arrayMeasure N) ↑ν ∧
+                    ∀ᶠ (x : ℝ) in Filter.atTop,
+                      Real.exp (-C * x ^ (1 / ↑β)) ≤ (↑ν).real (Set.Ici x) ∧
+                        (↑ν).real (Set.Ici x) ≤ Real.exp (-c * x ^ (1 / ↑β))
+'M4Blk.main_claim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M4Blk.main_claim_direct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Swarming.swarm_diameter' depends on axioms: [propext, Classical.choice, Quot.sound]
+def SwarmRestart.posPath : {N : ℕ} → ℝ → ℕ → Swarming.Uniform.Array N → ℕ → Fin N → ℤ :=
+fun {N} p m U n i => (Swarming.Trajectory.trajectory p m U n).pos i
+
+FOCUSED TRUST-0 CHECK: 3 named exports exactly, all only propext / Classical.choice / Quot.sound
