@@ -1,130 +1,32 @@
-# Swarm diameter formalisation
+# Diameter: essential supporting facts
 
-The source is Theorem 1.2 of `main_1d_regeneration_revised.tex`, with
-SHA-256 `1ea00e1c34ca56655cf84d8307d74247cb135dbbda61295038256505f2b44e6b`.
+For the swarm's diameter $\Delta_t$, use the actual trajectory positions.
+The principal export is
+[`Swarming.swarm_diameter`](../SwarmDiameter/Main.lean). Its three regimes are
+proved: $N=2$, $N\ge3,m<N$, and $N\ge3,m\ge N$. In particular,
+[`swarm_diameter_linear`](../SwarmDiameter/SwarmDiameterLinear.lean) supplies
+the full exponential estimate in the second regime; it is **not** an open case.
 
-Write $\Delta_t$ for the diameter at time $t$ and $T=\tau_D$ for the first
-positive regeneration time. Under the law $\mathbb P^*$ conditioned on strict
-positivity, $\mathbb P^*(T=1)>0$ and $\mathbb E^*T<\infty$.
-For every Borel set $A\subseteq\mathbb R$, the formalised limiting law satisfies
+Write $T=\tau_D$ for the first positive regeneration time and
+$\mathbb P^*$ for the law conditioned on strict positivity, with expectation
+$\mathbb E^*$. The limiting law has the occupation formula
 $$
-\nu(A)=\frac{1}{\mathbb E^*T}\sum_{t\ge0}\mathbb P^*(T>t,\ \Delta_t\in A).
+\nu(A)=\frac1{\mathbb E^*T}\sum_{t\ge0}
+\mathbb P^*(T>t,\ \Delta_t\in A),
 $$
-The probabilities of $\{\Delta_n\in A\}$ under $\mathbb P$ and $\mathbb P^*$
-both converge to $\nu(A)$. Under $\mathbb P^*$, for each $n$,
-$$
-\mathbb P^*(\exists t\le n,\ \Delta_t\in A)
-\le (n+1)\sum_{t\ge0}\mathbb P^*(T>t,\ \Delta_t\in A).
-$$
-These conclusions are in `Swarming.Diameter.exists_diameter_occupationLaw`.
+for Borel $A\subseteq\mathbb R$. This is the conclusion supplied by
+`Swarming.Diameter.exists_diameter_occupationLaw`. The renewal construction
+also yields $\mathbb P^*(T=1)>0$ and $\mathbb E^*T<\infty$.
 
-| Module | Result |
-| --- | --- |
-| [SwarmRenewal.lean](../SwarmDiameter/SwarmRenewal.lean) | Weak convergence to a law on $[0,\infty)$, the first-regeneration occupation formula, and the finite-horizon bound above. |
-| [ArithmeticRenewal.lean](../SwarmDiameter/ArithmeticRenewal.lean) | The arithmetic renewal limit and its convolution with an absolutely summable sequence. |
-| [CycleOccupation.lean](../SwarmDiameter/CycleOccupation.lean) | The normalized occupation law, with its numerator as the expected visit count. |
-| [RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean), [FirstIntervalOccupation.lean](../SwarmDiameter/FirstIntervalOccupation.lean), [DelayedRenewal.lean](../SwarmDiameter/DelayedRenewal.lean) | Occupation limits from the renewal process or just the first-regeneration factorization, and passage through an almost surely finite initial delay. |
-| [RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean) | Mutual independence from the finite product identities in [Swarm/RegenIid.lean](../Swarm/RegenIid.lean). |
-| [RegenerationProbability.lean](../SwarmDiameter/RegenerationProbability.lean) | First-regeneration factorization in time and level and the law of the translated future. |
-| [RecordIntervals.lean](../SwarmDiameter/RecordIntervals.lean) | First hitting times, invariance by translation at a simultaneous record, and the diameter bound inside each record interval. |
-| [RecordOccupation.lean](../SwarmDiameter/RecordOccupation.lean) | Occupation limits for record-interval events, including exceedances and duration tails. |
-| [RecordOccupationBound.lean](../SwarmDiameter/RecordOccupationBound.lean) | The expected visit count before the first regeneration is bounded by record probabilities. |
-| [OccupationTail.lean](../SwarmDiameter/OccupationTail.lean) | Stretched exponential bound on the expected visit count from bounds on record interval exceedances and durations. |
-| [SwarmUpperGrowth.lean](../SwarmDiameter/SwarmUpperGrowth.lean) | Transfer from the expected visit count to the almost sure logarithmic upper bound and the limiting upper tail. |
-| [DyadicTail.lean](../SwarmDiameter/DyadicTail.lean) | A dyadic contraction with a stretched exponential error bounds a tail that tends to zero. |
-| [RecordExceedance.lean](../SwarmDiameter/RecordExceedance.lean) | Uniform tightness and the record diameter occupation limit. The initial diameter and duration control exceedances inside each interval, with an additional martingale bound for the two-walker regime. Sharp block estimates suffice for the tails of the initial diameters and durations. |
-| [SpatialGapSums.lean](../SwarmDiameter/SpatialGapSums.lean) | The deterministic bound in the spatial sum estimate. Convexity at marked sites reduces the spatial sum to the initial potential and the sum of powers of the gap lengths. |
-| [MarkedSpatialTail.lean](../SwarmDiameter/MarkedSpatialTail.lean) | The spatial tail bound in `max-spatial-tail` for the actual row of each walker. The proof uses prescribed geometric gaps and an exponential estimate for the truncated sum of powers. The local bounds apply simultaneously to all sites and subintervals in an interval of length proportional to the scale. |
-| [ProjectedPotentialOscillation.lean](../SwarmDiameter/ProjectedPotentialOscillation.lean) | At each record, the projected potential at fixed sites has an $\varepsilon L$ oscillation bound with exceptional probability $e^{-cL^{1/3}}$. The start-time cells are disjoint, and the spatial exceptional event is counted once. |
-| [RecordTrialConcentration.lean](../SwarmDiameter/RecordTrialConcentration.lean) | The lower bound for the number of successful trials holds for every nonempty proper group and each subinterval, at a deficit of $\varepsilon L$ and exceptional probability $e^{-cL}$. |
-| [RecordOccupationMartingale.lean](../SwarmDiameter/RecordOccupationMartingale.lean) | The occupation martingale has the $\varepsilon L$ oscillation bound with exceptional probability $e^{-cL^{1/3}}$. The geometric condition holds throughout each adapted record cell, and summing the spatial exceptional masses over those cells costs at most the mass of one spatial event. |
-| [RecordGroupDrift.lean](../SwarmDiameter/RecordGroupDrift.lean) | On all separated subintervals of the record interval, the group observable changes by at most the accumulated conditional drift plus $\varepsilon L$, with exceptional probability $e^{-cL^{1/3}}$. The centred increment keeps the potential fixed at the time before the jump, and its bound is linear in the local potential bound. |
-| [RecordGroupAdvance.lean](../SwarmDiameter/RecordGroupAdvance.lean) | Successful trials give the negative drift proportional to the leading group's record advance in `locmove-second`. The bound has additive error $\varepsilon L$ and exceptional probability $e^{-cL^{1/3}}$. |
-| [RecordOccupationEstimate.lean](../SwarmDiameter/RecordOccupationEstimate.lean) | Deterministic occupation estimate with a variable potential cutoff and a common error bound. |
-| [RecordOccupationHighProbability.lean](../SwarmDiameter/RecordOccupationHighProbability.lean) | Occupation estimate with an error of `ε * L` and failure probability at most `3 * exp (-c * L ^ (1 / 3))`. |
-| [RecordLocalClauses.lean](../SwarmDiameter/RecordLocalClauses.lean) | Joint bound for the local clauses and the trajectory martingale at the actual record time. |
-| [RecordFluidLimit.lean](../SwarmDiameter/RecordFluidLimit.lean) | Coalescence when the local error divided by the spatial scale tends to zero. |
-| [RecordHalving.lean](../SwarmDiameter/RecordHalving.lean) | A fixed sufficiently small error of order `ε * L` suffices for uniform halving at a later record. |
-| [RecordCubicBlock.lean](../SwarmDiameter/RecordCubicBlock.lean) | Proposition 3.1 at rate `exp (-c * L ^ (1 / 3))` on the actual trajectory. |
-| [RecordTailFromBlock.lean](../SwarmDiameter/RecordTailFromBlock.lean) | Transfer from a record-block estimate to record-interval duration and diameter bounds. |
-| [SwarmDiameterBounds.lean](../SwarmDiameter/SwarmDiameterBounds.lean) | Assembly of growth, weak convergence and limiting tail bounds from the record-interval estimates. |
-| [SwarmDiameterCubic.lean](../SwarmDiameter/SwarmDiameterCubic.lean) | Theorem 1.2 for `3 ≤ N` and `N ≤ m`. |
-| [RecordDownwardCrossing.lean](../SwarmDiameter/RecordDownwardCrossing.lean) | Downward-crossing probability after a record and the square-root bound at the two-walker horizon. |
-| [RecordMartingaleAtOffset.lean](../SwarmDiameter/RecordMartingaleAtOffset.lean) | Martingale deviations after a fixed offset from the record time and the front-walker excursion bound. |
-| [RecordExitTime.lean](../SwarmDiameter/RecordExitTime.lean) | Exit-time estimate below the other walker's attained level. |
-| [TwoWalkerPassage.lean](../SwarmDiameter/TwoWalkerPassage.lean) | Probability of reaching the higher level before the trailing walker exits. |
-| [TwoWalkerGap.lean](../SwarmDiameter/TwoWalkerGap.lean) | Reduction from a large diameter to the ordered passage event. |
-| [TwoWalkerMeeting.lean](../SwarmDiameter/TwoWalkerMeeting.lean) | Control at the first time the second walker reaches the initial record. |
-| [TwoWalkerBlock.lean](../SwarmDiameter/TwoWalkerBlock.lean) | Proposition 4.1 on the actual law. |
-| [TwoWalkerTail.lean](../SwarmDiameter/TwoWalkerTail.lean) | Square-root exponential bounds at and between records. |
-| [SwarmDiameterTwoWalker.lean](../SwarmDiameter/SwarmDiameterTwoWalker.lean) | All parts of Theorem 1.2 for `N = 2`. |
-| [MinimumProgress.lean](../SwarmDiameter/MinimumProgress.lean) | Exponential concentration for the advance of the swarm minimum when `m < N`. |
-| [SoftMinimum.lean](../SwarmDiameter/SoftMinimum.lean) | Bounded increments and weighted drifts for the logarithmic approximation of the minimum. |
-| [BoundedPotential.lean](../SwarmDiameter/BoundedPotential.lean) | Bounded slopes, drift identities, and comparison with a finite spatial interval. |
-| [MarkBlockConcentration.lean](../SwarmDiameter/MarkBlockConcentration.lean), [BoundedSpatial.lean](../SwarmDiameter/BoundedSpatial.lean) | Exponential concentration for fixed-length functions of consecutive Bernoulli marks. |
-| [BoundedSlopeWindow.lean](../SwarmDiameter/BoundedSlopeWindow.lean), [RecordBoundedSpatial.lean](../SwarmDiameter/RecordBoundedSpatial.lean) | Spatial bound for the comparison function and cardinality bound for the exceptional sites. |
-| [RecordWeightedMartingale.lean](../SwarmDiameter/RecordWeightedMartingale.lean) | Exponential concentration at the record clock for predictable combinations of the compensated steps. |
-| [RecordMinimumOccupation.lean](../SwarmDiameter/RecordMinimumOccupation.lean) | Minimum occupation of fixed sets and uniformly over sufficiently small subsets. |
-| [RecordGroupPotential.lean](../SwarmDiameter/RecordGroupPotential.lean) | The group potential satisfies `loccoord` simultaneously over the prescribed spatial intervals and times. |
-| [RecordGroupMaximum.lean](../SwarmDiameter/RecordGroupMaximum.lean) | The trailing group's maximum potential grows at unit rate up to $\varepsilon L$ on every separated subinterval, with exceptional probability $e^{-cL^{1/3}}$. |
-| [RecordGroupMovement.lean](../SwarmDiameter/RecordGroupMovement.lean) | The local movement estimate `locmove` follows from the spatial, maximum, and advance bounds. Its coefficient depends only on $N,m,p$. |
-| [RecordDensity.lean](../SwarmDiameter/RecordDensity.lean) | Positive lower density of simultaneous records under both laws. |
-| [TwoWalkerTrial.lean](../SwarmDiameter/TwoWalkerTrial.lean) | At a simultaneous record the conditional probability of diameter at least $L^2+L$ after $4L+L^3$ steps is at least $e^{-CL}$ for $L\ge8$. |
-| [CubicTrial.lean](../SwarmDiameter/CubicTrial.lean) | For $m\ge N\ge3$, the conditional probability of diameter at least $aL^3$ after $4L+L^3$ steps from a simultaneous record is at least $e^{-CL}$ for large $L$. |
-| [SwarmLowerBounds.lean](../SwarmDiameter/SwarmLowerBounds.lean) | The almost sure lower bound and limiting lower tail of Theorem 1.2 in all three regimes, with one constant for both lower bounds. |
-| [LinearTrial.lean](../SwarmDiameter/LinearTrial.lean) | From a common position at a stopping time $S$, the probability of $\Delta_{S+L}\ge2L$ conditional on the past is at least $(1-p)^{2L}$, expressed by integration on each past event. |
-| [SymmetricConfinement.lean](../SwarmDiameter/SymmetricConfinement.lean), [ReflectionExcursion.lean](../SwarmDiameter/ReflectionExcursion.lean) | Finite symmetric-walk path counts for confinement and for an excursion to $L^2$ in $L^3$ steps above $-L$. |
-| [TailBounds.lean](../SwarmDiameter/TailBounds.lean) | Borel–Cantelli upper bound and lower-tail transfer from an almost sure lower bound, with the finite-horizon probability estimates stated as premises. |
+The two supplementary implementations,
+[RenewalProcess.lean](../SwarmDiameter/RenewalProcess.lean) and
+[RegenerationBlocks.lean](../SwarmDiameter/RegenerationBlocks.lean), are
+covered by the separate renewal/occupation supporting audit, while the
+remaining diameter modules are covered by the theorem replay. The common
+witness for the almost-sure bounds, limiting law and both tails is in
+[Main.lean](../SwarmDiameter/Main.lean).
 
-The record occupation identity is also available at successive record levels.
-Write $\tau_r$ for the first visit to level $r$ by any walker,
-$W_r=\tau_{r+1}-\tau_r$, and
-$\mathcal E_r(x)=\{\exists\,t\in[\tau_r,\tau_{r+1})\colon\Delta_t\ge x\}$.
-For an integer $u\ge0$, the formalised upper bound for the expected number of
-visits at diameter at least $x$ before $T$ is
-$
-\mathbb E^*D\left(
-u\limsup_{r\to\infty}\mathbb P(\mathcal E_r(x))
-+\sum_{v\ge0}\limsup_{r\to\infty}\mathbb P(W_r>u+v)
-\right).
-$
-We truncate each record interval at duration $u$ and sum the integer
-duration tails. Using a stretched exponential bound on the expected visit
-count, `ae_log_pow_upper_of_regeneration_occupation` proves the almost sure
-logarithmic upper bound under the original law.
-
-Theorem 1.2 is verified for $N=2$ and for $3\le N\le m$. In the regime $2\le m<N$, the lower bounds and weak convergence are verified. The exponential upper bound remains open in Lean.
-
-## Verification
-
-The GitHub Actions workflow replays the model-dependent modules and runs the
-focused audit. The arithmetic renewal and finite-walk proofs can also be
-replayed with the following command.
-
-```bash
-bash scripts/verify_diameter_support.sh
-```
-
-With Lean 4.33.1 and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`,
-the replay checked 525 declarations in the renewal, trial bounds and
-symmetric-walk modules and 636 in the swarm model check. Every imported
-declaration in the audited modules depends only on standard Lean axioms.
-The source inventory check and all ten verification-tool tests passed.
-[Renewal and symmetric-walk check](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44964146200/job/137029254370).
-[Record interval and deterministic spatial sum checks](https://github.com/tuan-minh-nguyen/Swarming-of-interacting-ERWs/actions/runs/44965381467).
-
-## References
-
-We prove the positive-mass-at-one case of P. Erdős, W. Feller and H. Pollard,
-*A property of power series with positive coefficients*, Bull. Amer. Math. Soc.
-55 (1949), 201–204, using the renewal equation and square summability of its
-successive differences. For the passage to weak convergence we use Mathlib's
-Portmanteau theorem.
-
-We reviewed the Lean repositories below for reusable probability, ergodic
-theory and renewal results. The modules in this branch use the existing
-Mathlib dependency and the formalisation's own regeneration results.
-
-- [wkshum/ProbabilityTheory](https://github.com/wkshum/ProbabilityTheory/tree/e6387d4fd8005d627d2aec40d10f039ddb4e4b40)
-- [marcmorningstar/lean4-ergodic-theory](https://github.com/marcmorningstar/lean4-ergodic-theory/tree/040fec2e0ddf4fcba49af9f76c866d295308dd7f)
-- [or4nge19/MCMC](https://github.com/or4nge19/MCMC/tree/b874137741fbdf23eaac83540b9f79a912a2bc0d)
+For reproduction use the verification commands in the root
+[README](../README.md#verification). The current counts and raw logs are kept
+in [VERIFICATION-94cc7117.md](VERIFICATION-94cc7117.md), rather than repeated
+in this note.

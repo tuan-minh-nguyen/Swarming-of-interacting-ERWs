@@ -1,85 +1,71 @@
-# Verification of the two principal theorems
+# Verification of both principal theorems
 
-**Result: passed at GitHub commit `94cc7117c363aaa51a72d88d7afabd711025d4fa`.**
+Verified at proof-source commit
+`94cc7117c363aaa51a72d88d7afabd711025d4fa`, from a fresh detached checkout
+of the connected GitHub repository. Subsequent changes to this documentation
+do not change the mathematical or verifier sources.
 
-Checked locally from a fresh detached checkout of the connected GitHub
-repository, not inferred from its historical verification report. This commit
-adds only Lean verification evidence; README.md and the mathematical source
-remain unchanged.
-The mathematical and verifier sources were unchanged during these checks. No Ultramath run was used.
+## Statements checked
 
-## Paper and exports
+Reference manuscript: `main_1d-3.tex`, SHA-256
+`b1727fd4da2a57742e79dcab6944c2d3e491ab5fcb93ad06036ca656bfa34ec1`.
 
-Manuscript: `attachments/improving-and-polishing-the-wcjf/main_1d-3.tex`,
-SHA-256 `b1727fd4da2a57742e79dcab6944c2d3e491ab5fcb93ad06036ca656bfa34ec1`.
-
-| Paper statement | Lean export | Verification scope |
+| Statement | Lean export | Result |
 |---|---|---|
-| `\label{main}`: common deterministic positive speed, with one positive lower bound before $N$ | `M4Blk.main_claim` and `M4Blk.main_claim_direct`, `Swarm/BlkMeasure.lean` | Both exact consumer statements, no additional premises, all axiom checks |
-| `\label{maxdistance}`: running logarithmic diameter bounds, nonnegative limiting law, convergence in distribution and tail bounds | `Swarming.swarm_diameter`, `SwarmDiameter/Main.lean` | Complete diameter build, independent support replay and axiom checks |
+| Common deterministic positive speed with one lower bound before $N$ | `M4Blk.main_claim`, `M4Blk.main_claim_direct` in [Swarm/BlkMeasure.lean](../Swarm/BlkMeasure.lean) | Exact consumer statements passed; no additional premises |
+| Running diameter logarithmic bounds, nonnegative limiting law and both tail bounds | `Swarming.swarm_diameter` in [SwarmDiameter/Main.lean](../SwarmDiameter/Main.lean) | Complete diameter replay and axiom check passed |
 
-The two `M4Blk` declarations are alternative final assemblies from shared
-dependencies; they are not called independent proofs of all intermediate
-lemmas. The positive lower bound precedes $N$ and both speed declarations use
-the actual trajectory under `Swarming.Uniform.arrayMeasure N`.
+The two speed declarations are alternative final assemblies from shared
+dependencies. Both use the actual trajectory under
+`Swarming.Uniform.arrayMeasure N`. For the diameter, the actual path witness
+`posPath p m U n i` is `(Swarming.Trajectory.trajectory p m U n).pos i`.
+The running maximum ranges over $0,\ldots,n$; the three regimes are
+$N=2$, $N\ge3,m<N$, and $N\ge3,m\ge N$, with exponents $2,1,3$.
 
-For the diameter export, `spreadZ` computes the maximum position minus the
-minimum. Its running maximum ranges exactly over times $0,\ldots,n$. The
-printed `posPath` definition is
-`(Swarming.Trajectory.trajectory p m U n).pos i`, so its population is not a
-surrogate process. The three branches match the paper:
+See [statement and model correspondence](STATEMENT-REVIEW.md) and the
+[auxiliary-process distinction](PROOF-ROUTE-NOTE.md) for the scope of the
+correspondence checks. This record does not claim a separate audit of every
+auxiliary theorem in the manuscript.
 
-* $N=2$: logarithmic exponent $2$ and tail exponent $1/2$;
-* $N\ge3$, $m<N$: exponent $1$ and tail exponent $1$;
-* $N\ge3$, $m\ge N$: logarithmic exponent $3$ and tail exponent $1/3$.
+## Completed checks
 
-The limiting law, convergence and tail inequalities share one witness, as
-required. These correspondences were also read against the attached
-manuscript, not inferred only from declaration names.
+Toolchain: Lean 4.33.1. Mathlib pinned at
+`0df444a360eaa60ab8c11dca51a86af692955474`.
+The core build was fresh and non-resumed, using the restored pinned dependency
+cache but no pre-existing project objects.
 
-## Fresh checks actually completed
-
-Toolchain: **Lean 4.33.1**. Mathlib: pinned commit
-`0df444a360eaa60ab8c11dca51a86af692955474`. No existing project compiled
-object was supplied: the core build was fresh and non-resumed.
-
-| Check | Completed result |
+| Check | Result |
 |---|---|
-| Source inventory / proof text | **673 modules; complete closure** |
-| Diameter declaration and source scan | **91 files; 89/91 in main import closure; other two covered separately** |
-| Verifier tests | **10/10 passed** |
-| Fresh Swarm build | **674/674 project modules** |
-| Named main statement and axiom checks | **10 reports; two exact consumers passed** |
-| Trust-zero complete Swarm axiom audit | **18,376 declarations** |
-| Independent renewal/occupation supporting audit | **525 declarations** |
-| Diameter replay using the repository's CI order | **91 modules** |
-| Trust-zero diameter axiom audit | **1,322 declarations** |
-| Final check of the three named exports | **3/3 only allowed foundational axioms** |
+| Source inventory and proof-text preservation | 673 modules; complete closure |
+| Main project build | 674/674 project modules |
+| Main named axiom and statement checks | 10 reports; both exact consumers passed |
+| Complete Swarm axiom audit at trust zero | 18,376 declarations |
+| Independent renewal/occupation supporting audit | 525 declarations |
+| Diameter replay using the repository's CI order | 91 modules; 89/91 in the main import closure and two separate support modules |
+| Diameter axiom audit at trust zero | 1,322 declarations |
+| Final three-export check | 3/3 only allowed foundational axioms |
+| Verifier regression tests | 10/10 passed |
 
-All inspected transitive axiom dependencies use only `propext`,
-`Classical.choice`, and `Quot.sound`. There are no extra assumptions or
-custom axioms in these results. The directed import checks for the diameter
-cover `RenewalProcess` and `RegenerationBlocks` with their distinct
-renewal/occupation supporting replay rather than silently omitting them.
+The allowed axiom set is exactly `propext`, `Classical.choice`, and
+`Quot.sound`. No custom axioms or proof holes were accepted in these
+declarations or their inspected transitive dependencies.
 
-## Scope
+The source inventories, mathematical exports and reproduction commands are in
+the root [README](../README.md). The proofs are not two independent
+reconstructions of all supporting lemmas.
 
-This certifies **both named statements and their Lean source dependency
-closures** through elaboration and kernel checking. It is not a separate
-rewriting, formal reconstruction, or whole-paper editorial audit of every
-auxiliary proposition. Historical verification notes in the repository may
-name different commits; this audit is specifically for the revision above.
+## Reproduction and evidence
 
-## Evidence
+Follow the root [verification commands](../README.md#verification) and
+[CI definition](../.github/workflows/diameter-checks.yml). Use
+[audit/TwoTheorems.lean](../audit/TwoTheorems.lean) to re-check the three
+principal exports.
 
-- `certificate.json`: machine-readable revision, commands and counts.
-- `TwoTheorems.lean`: exact final consumer/print module.
-- `final-export-types-and-axioms.log`: exact exported types, actual `posPath`
-  definition and the three final axiom closures.
-- `main-verify.log`: complete fresh main-project verifier.
-- `diameter-support-verify.log`: independent supporting replay
-- `diameter-verify.log`: module-by-module replay and final diameter audit.
+Evidence retained on GitHub:
 
-To reproduce, check out the named repository revision and run its
-`scripts/verify.sh`, `scripts/verify_diameter_support.sh`, and the build/audit
-stages specified in `.github/workflows/diameter-checks.yml`.
+- [machine-readable certificate](verification-94cc7117.json).
+- [full main verifier log](verification/94cc7117/main-verify.log).
+- [supporting replay log](verification/94cc7117/diameter-support-verify.log).
+- [diameter replay and audit log](verification/94cc7117/diameter-verify.log).
+- [exported statements and final axiom log](verification/94cc7117/final-export-types-and-axioms.log),
+including the printed `posPath` definition.

@@ -16,8 +16,8 @@
   `python3 scripts/check_diameter_statement.py` and the complete GitHub Actions
   workflow `.github/workflows/diameter-checks.yml`. Its final step replays the
   diameter theorem with Lean trust level zero. Require both workflow jobs to pass.
-  The 14 November complete axiom audit for Theorem 1.1 and the 23 November
-  diameter axiom audit have distinct scopes; do not conflate them.
+  The full Swarm, diameter, and renewal/occupation support audits have
+  distinct scopes; do not conflate them.
 - Use fresh build directories for release measurements. Development resumes must
   validate source and artifact hashes and invalidate changed dependency closures.
 - Measure elaboration changes with serial, interleaved comparisons. Do not raise
@@ -27,6 +27,7 @@
   mathematical statement, and updated verification evidence.
 
 - Maintain only the `main` branch. Retain modules in the main theorem import
-  closures and independently certified supporting results. Remove obsolete
-  files only after source and proof-dependency checks; keep dated mathematical
-  verification and benchmark records clearly identified as historical.
+  closures and independently certified supporting results. Verify dependencies
+  before cleanup. Limit documentation to current model/theorem definitions,
+  reproduction instructions, scope caveats, and verification evidence. Use Git
+  history for superseded reports and historical measurements.
