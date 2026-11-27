@@ -33,5 +33,5 @@
   ],
   "unexpected_axioms": 0,
   "scope": "The two named theorems and their source dependencies; not a whole-paper independent editorial review.",
-  "publication_note": "Lean verification only. README.md and all theorem/verifier sources are unchanged from 94cc7117c363aaa51a72d88d7afabd711025d4fa."
+  "publication_note": "The mathematical source and the pre-existing verifier implementations were checked at the stated revision. Subsequent changes are limited to documentation and added check/evidence files."
 }

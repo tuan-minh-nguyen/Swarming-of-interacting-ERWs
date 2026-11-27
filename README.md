@@ -77,10 +77,12 @@ bash scripts/verify.sh
 Verify the diameter theorem and its independent supporting results with:
 
 ```bash
+python3 scripts/check_diameter_statement.py
 lake build SwarmDiameter
 bash scripts/verify_diameter_support.sh
 export LEAN_PATH="$(lake env printenv LEAN_PATH)"
 lean -j1 -t0 audit/SwarmRenewal.lean
+lean -j1 -t0 -M 8000 audit/TwoTheorems.lean
 ```
 
 The [GitHub Actions workflow](.github/workflows/diameter-checks.yml) specifies

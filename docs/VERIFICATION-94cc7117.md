@@ -50,9 +50,11 @@ The allowed axiom set is exactly `propext`, `Classical.choice`, and
 `Quot.sound`. No custom axioms or proof holes were accepted in these
 declarations or their inspected transitive dependencies.
 
-The source inventories, mathematical exports and reproduction commands are in
-the root [README](../README.md). The proofs are not two independent
-reconstructions of all supporting lemmas.
+The [source inventory](source-map.json) and
+[diameter-statement manifest](diameter-statement.json) record the proof text
+and the diameter export respectively. Reproduction commands are in the root
+[README](../README.md). The proofs are not two independent reconstructions of
+all supporting lemmas.
 
 ## Reproduction and evidence
 
