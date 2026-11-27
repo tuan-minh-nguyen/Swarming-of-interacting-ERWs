@@ -26,8 +26,8 @@ def proof_text(text):
 def main():
     rows = json.loads((ROOT / "docs/source-map.json").read_text())
     sources = {row["module"]: ROOT / row["path"] for row in rows}
-    require(len(rows) == len(sources) == 673, "incorrect source inventory")
-    require(sum(row["original"] is not None for row in rows) == 672, "incorrect original inventory")
+    require(len(rows) == len(sources) == 672, "incorrect source inventory")
+    require(sum(row["original"] is not None for row in rows) == 671, "incorrect original inventory")
     require(set(sources.values()) == set((ROOT / "Swarm").rglob("*.lean")), "unlisted source file")
     facade = (ROOT / "Swarm.lean").read_text()
     require(imports(facade) == ["Swarm.BlkMeasure"] and proof_text(facade) == "",

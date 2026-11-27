@@ -8,8 +8,8 @@ elab "#audit_project_axioms" : command => do
   let env ← getEnv
   let modules := env.header.moduleNames
   let projectModules := modules.filter fun name => name.getRoot == `Swarm
-  unless projectModules.size == 673 do
-    throwError "Expected 673 project modules, imported {projectModules.size}"
+  unless projectModules.size == 672 do
+    throwError "Expected 672 project modules, imported {projectModules.size}"
   let mut checked : Nat := 0
   let mut failures : Nat := 0
   for (name, _) in env.constants.toList do

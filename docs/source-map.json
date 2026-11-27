@@ -3010,13 +3010,6 @@
     "proof_sha256": "ccf599d36b7e7166986346a98eba7ed32d26d0ab048484fbe99c5e0fdf381274"
   },
   {
-    "module": "Swarm.AuditCoarse",
-    "original": "results/lean/areas/tightness/AuditCoarse.lean",
-    "original_sha256": "e1e6db641fa412e1c60fc8b21ac67acebc89f52e12a4248d7aaf27a1c38de142",
-    "path": "Swarm/AuditCoarse.lean",
-    "proof_sha256": "0f3c66d87a0fe0c1ea54ca2f7cd15827f306df7d313485ffd7f4a7ae6e7cccb7"
-  },
-  {
     "module": "Swarm.AuditSummable",
     "original": "results/lean/areas/tightness/AuditSummable.lean",
     "original_sha256": "d52c4ae1eb4cda266aa622415be79587e2934d8bb2410dd466c20c410254ea1e",

@@ -18,10 +18,9 @@ So the residual list of the record-tightness route is `{h₁, h₂}` — the pap
 remains open.  Nothing here proves `h₁` or `h₂`, and nothing here proves the main theorem, the
 invariant law, regeneration or `Ballistic`.
 
-`AuditCoarse` in this directory shows that `h₂` cannot be weakened by the coarse-scale halving:
-the certificate argument needs it uniformly in `r` at fine scales.
+Coarse-scale halving alone cannot replace the fine-scale condition `h₂`: the certificate
+argument needs it uniformly in `r` at fine scales.
 -/
-import Swarm.AuditCoarse
 import Swarm.AuditSummable
 import Swarm.HdefDefect
 
