@@ -10,10 +10,11 @@ the full exponential estimate in the second regime; it is **not** an open case.
 Write $T=\tau_D$ for the first positive regeneration time and
 $\mathbb P^*$ for the law conditioned on strict positivity, with expectation
 $\mathbb E^*$. The limiting law has the occupation formula
-$$
+
+```math
 \nu(A)=\frac1{\mathbb E^*T}\sum_{t\ge0}
 \mathbb P^*(T>t,\ \Delta_t\in A),
-$$
+```
 for Borel $A\subseteq\mathbb R$. This is the conclusion supplied by
 `Swarming.Diameter.exists_diameter_occupationLaw`. The renewal construction
 also yields $\mathbb P^*(T=1)>0$ and $\mathbb E^*T<\infty$.
