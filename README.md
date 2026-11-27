@@ -67,28 +67,28 @@ Its proof covers all three parameter regimes.
 
 The project uses Lean 4.33.1 with dependencies pinned in
 [lean-toolchain](lean-toolchain) and [lake-manifest.json](lake-manifest.json).
-After restoring the Mathlib cache, verify Theorem 1.1 with:
+Restore the dependency cache and verify Theorem 1.1 with:
 
 ```bash
 lake exe cache get
 bash scripts/verify.sh
 ```
 
-Theorem 1.2 can be built with `lake build SwarmDiameter`. The
-[GitHub Actions workflow](.github/workflows/diameter-checks.yml)
-also checks its approved statement and replays the proofs with Lean trust
-level zero. The project checks permit only the foundational axioms
-`propext`, `Classical.choice`, and `Quot.sound`.
+Verify the diameter theorem and its independent supporting results with:
 
-The [verification record](docs/VERIFICATION.md) documents the successful
-proof checks. A fresh local build verified **674/674 Swarm modules** and
-**91 diameter modules**. The trust-zero audits checked **18,376** declarations
-in the main project and **1,322** diameter declarations, and the independent
-support replay checked **525** declarations. See the
-[fresh verification report](docs/VERIFICATION-94cc7117.md) and the
-[three-export consumer](audit/TwoTheorems.lean). For the mathematical scope,
-see [renewal and occupation results](docs/DIAMETER-SUPPORT.md) and the
-[statement review](docs/STATEMENT-REVIEW.md).
+```bash
+lake build SwarmDiameter
+bash scripts/verify_diameter_support.sh
+export LEAN_PATH="$(lake env printenv LEAN_PATH)"
+lean -j1 -t0 audit/SwarmRenewal.lean
+```
+
+The [GitHub Actions workflow](.github/workflows/diameter-checks.yml) specifies
+the diameter build and audit stages. The checks permit only the foundational
+axioms `propext`, `Classical.choice`, and `Quot.sound`.
+
+See the [verification report for both theorems](docs/VERIFICATION-94cc7117.md)
+and the [three-export consumer](audit/TwoTheorems.lean).
 
 ## Contributors
 
